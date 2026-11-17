@@ -319,7 +319,7 @@ footer .wrap { padding-block: 22px 40px; font-size: calc(14px * var(--fs, 1)); c
   border: 1px dashed var(--gold-lo); color: var(--ink-dim); font-size: calc(16px * var(--fs, 1)); background: rgba(201,164,92,.04);
 }
 .await .hourglass { font-size: calc(22px * var(--fs, 1)); color: var(--gold); flex: none; }
-.equip { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(118px * var(--fs, 1))), 1fr)); gap: 10px; }
+.equip { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(118px * var(--fs, 1))), 1fr)); gap: 10px; }
 .eslot {
   display: grid; gap: 4px; justify-items: center; text-align: center; padding: 14px 8px 12px;
   background: radial-gradient(circle at 50% 35%, #2c2430, #120f14); border: 1px solid var(--gold-lo);
@@ -415,9 +415,8 @@ section.collapsed .section-head h2 { color: var(--ink-dim); }
 .bslot svg { width: 60%; height: 60%; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .bslot .cnt { position: absolute; right: 3px; bottom: 1px; font-family: var(--display); font-size: calc(12px * var(--fs, 1)); font-weight: 600; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; font-variant-numeric: tabular-nums; }
 .bslot.uncommon { border-color: #4f8f42; } .bslot.rare { border-color: #3f6fa6; } .bslot.veryrare { border-color: #7a4fa6; }
-.camp { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-.camp .eslot { width: min(100%, calc(118px * var(--fs, 1))); }
-.camp-label { width: 100%; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
+.camp { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(118px * var(--fs, 1))), 1fr)); gap: 10px; margin-top: 10px; }
+.camp-label { grid-column: 1 / -1; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
 .tip .t-count { font-family: var(--display); font-size: calc(12px * var(--fs, 1)); color: var(--gold-hi); margin-left: 6px; }
 .switcher .refresh { flex: none; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-hi); background: var(--panel); border: 1px solid var(--gold); padding: 6px 10px; cursor: pointer; white-space: nowrap; }
 .switcher .refresh:hover { background: var(--panel-2); }
@@ -595,6 +594,10 @@ html.dv15 { --fs: 1.5; } html.dv2 { --fs: 2; }
 @media (max-width: 1500px) { .switcher .dv-word, .switcher .rf-word { display: none; } .switcher .dv-short { display: inline; } .switcher .refresh { font-size: calc(14px * var(--fs, 1)); padding: 4px 9px; } }
 html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-x: visible; row-gap: 6px; }
 @media (min-width: 1400px) { .hero .wrap { grid-template-columns: minmax(0, 360px) minmax(0, 1fr); } }
+/* Equipment slots: every box the same height (icon + label + up to three lines of name) */
+:is(.equip, .camp) .eslot { grid-template-rows: calc(46px * var(--fs, 1)) auto calc(3 * 1.25 * 14px * var(--fs, 1)); align-content: start; }
+:is(.equip, .camp) .eslot .ic { display: flex; align-items: center; justify-content: center; height: calc(46px * var(--fs, 1)); }
+:is(.equip, .camp) .eslot .sv { line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
 </style>
 
 <div class="switcher" role="navigation" aria-label="Party members">
@@ -5402,4 +5405,13 @@ var FALLEN = [
 function cur(){return r.classList.contains('dv2')?'2':r.classList.contains('dv15')?'1.5':'1';}
 function show(){var c=cur();t.textContent=c+'×';b.setAttribute('aria-pressed',c==='1'?'false':'true');b.setAttribute('aria-label','Dave Vision, text size '+c+' times. Click to change');}
 b.addEventListener('click',function(){var n=L[(L.indexOf(cur())+1)%L.length];r.classList.remove('dv15','dv2');if(n==='1.5')r.classList.add('dv15');if(n==='2')r.classList.add('dv2');try{localStorage.setItem('davevision',n);}catch(e){}show();});show();})();
+</script>
+<script>
+/* Camp clothes use the same column widths as the equipment grid above them */
+(function(){
+  function sync(){ document.querySelectorAll('.camp[data-camp]').forEach(function(c){ var e=c.previousElementSibling; while(e && !(e.classList && e.classList.contains('equip'))) e=e.previousElementSibling; if(!e||!e.offsetWidth) return; var cols=getComputedStyle(e).gridTemplateColumns; if(cols && cols!=='none') c.style.gridTemplateColumns=cols; }); }
+  sync(); window.addEventListener('resize',sync); window.addEventListener('hashchange',function(){setTimeout(sync,0)});
+  if (window.ResizeObserver) document.querySelectorAll('.equip').forEach(function(e){ new ResizeObserver(sync).observe(e); });
+  new MutationObserver(function(){setTimeout(sync,0)}).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+})();
 </script>
