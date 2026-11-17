@@ -634,6 +634,21 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
   .switcher .pick select { width: 100%; font-family: var(--display); font-size: 14px; letter-spacing: .06em; color: var(--gold-hi); background: var(--panel) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%278%27%3E%3Cpath d=%27M1 1l5 5 5-5%27 fill=%27none%27 stroke=%27%23c9a45c%27 stroke-width=%271.5%27/%3E%3C/svg%3E") no-repeat right 10px center; border: 1px solid var(--gold); padding: 8px 30px 8px 10px; appearance: none; -webkit-appearance: none; border-radius: 0; }
   .switcher .meta { flex: none; }
 }
+/* Quest status in the top bar */
+@media (max-width: 1500px) { .switcher .long { display: none; } .switcher .who { padding-right: 6px; gap: 5px; letter-spacing: .01em; } .switcher .divider { margin: 2px 1px; } .switcher .meta.quest { padding-right: 8px; } .switcher .wrap { gap: 3px; } }
+.switcher .meta.quest { margin-left: auto; align-items: flex-end; padding-right: 10px; border-right: 1px solid var(--gold-lo); }
+.switcher .meta.quest + .meta { margin-left: 0; }
+.switcher .meta.quest .row:first-child { color: var(--gold-hi); }
+.switcher .q-diff.honour { color: var(--blood-hi); }
+.switcher .meta { align-items: flex-end; }
+@media (max-width: 640px) {
+  .switcher .wrap, html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; row-gap: 6px; }
+  .switcher .pick { order: 0; } .switcher .refresh { order: 1; }
+  .switcher .wrap .brk { display: block; order: 2; flex-basis: 100%; height: 0; }
+  .switcher .meta.quest { order: 3; margin: 0; padding: 0 8px 0 0; flex-direction: row; gap: 6px; align-items: center; }
+  .switcher .meta.quest .row:first-child { display: flex; }
+  .switcher .meta.quest + .meta { order: 4; margin: 0; padding-left: 4px; }
+}
 /* Long words never push the page wider than the screen */
 body { overflow-wrap: break-word; }
 h2, h3, h4, .pill, .tag, .chip { overflow-wrap: break-word; min-width: 0; }
@@ -657,7 +672,8 @@ h1 { overflow-wrap: normal; min-width: 0; }
     <a class="who" href="#journal" data-sheet="journal"><span class="glyphbox" aria-hidden="true">✒</span><span>Journal<small>Our adventure</small></span></a>
     <a class="who" href="#fallen" data-sheet="fallen"><span class="glyphbox" aria-hidden="true">☠</span><span>The Fallen<small>Our victims</small></span></a>
     <span class="brk" aria-hidden="true"></span>
-    <div class="meta"><span class="row">Last uploaded save</span><span class="row"><b id="savestamp">16 Nov, 23:09</b> · <span class="gold-amt" title="Party gold"><svg class="coins" aria-hidden="true"><use href="#i-coins"></use></svg><b id="partygold">135</b></span></span></div>
+    <div class="meta quest" title="Where the party is and the difficulty"><span class="row" id="q-act">Act 1</span><span class="row q-diff" id="q-diff">Honour<span class="long"> mode</span></span></div>
+    <div class="meta"><span class="row">Last<span class="long"> uploaded</span> save</span><span class="row"><b id="savestamp">16 Nov, 23:09</b> · <span class="gold-amt" title="Party gold"><svg class="coins" aria-hidden="true"><use href="#i-coins"></use></svg><b id="partygold">135</b></span></span></div>
     <button type="button" class="dv" id="dv-btn" aria-pressed="false" title="Dave Vision: make the text bigger"><span class="dv-word">Dave Vision</span><span class="dv-short" aria-hidden="true">Aa</span><b id="dv-lvl">1×</b></button>
     <button type="button" class="refresh" id="refresh-btn" title="Refresh data" aria-label="Refresh data" aria-haspopup="dialog" aria-controls="refresh-pop"><span aria-hidden="true">⟳</span><span class="rf-word"> Refresh</span></button>
   </div>
@@ -713,8 +729,6 @@ h1 { overflow-wrap: normal; min-width: 0; }
         <span class="chip">Entertainer</span>
         <span class="chip lvl">Bard · Level <span data-level="nyx"></span></span>
         <span class="chip">Next: Subclass at Level 3</span>
-        <span class="chip">Act 1</span>
-        <span class="chip" style="border-color:var(--blood-hi);color:var(--blood-hi)">Honour Mode</span>
       </div>
       <div class="stats" data-stats="nyx" aria-label="Ability scores"></div>
       <div class="stats-note">From the latest save. The gold boxes are the two that matter for a Swords bard.</div>
@@ -1200,7 +1214,6 @@ h1 { overflow-wrap: normal; min-width: 0; }
         <span class="chip">Dragonborn · Blue</span>
         <span class="chip lvl">Druid · Level <span data-level="azurae"></span></span>
         <span class="chip">Circle of the Stars</span>
-        <span class="chip" style="border-color:var(--blood-hi);color:var(--blood-hi)">Honour Mode</span>
       </div>
       <div class="stats" data-stats="azurae" aria-label="Ability scores"></div>
       <div class="stats-note">From the latest save. Wisdom powers her spells.</div>
@@ -1345,7 +1358,6 @@ h1 { overflow-wrap: normal; min-width: 0; }
         <span class="chip">Half-Orc</span>
         <span class="chip lvl">Hexblade Warlock · Level <span data-level="hagra"></span></span>
         <span class="chip">Pact: picks at level 3</span>
-        <span class="chip" style="border-color:var(--blood-hi);color:var(--blood-hi)">Honour Mode</span>
       </div>
       <div class="stats" data-stats="hagra" aria-label="Ability scores"></div>
       <div class="stats-note">From the latest save. Hexblades swing and cast with Charisma, so Strength 8 is fine.</div>
@@ -5145,6 +5157,10 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
     el.innerHTML = ['nyx', 'azurae', 'hagra'].map(function (p) { var v = ap[p] || 0, w = Math.min(50, Math.abs(v) / 2);
       return '<div><span>' + esc(CH[p] ? CH[p].name.split(' ')[0] : p) + '</span><span class="bar"><i' + (v < 0 ? ' class="neg" style="right:50%;left:auto;width:' + w + '%"' : ' style="width:' + w + '%"') + '></i></span><b>' + (v > 0 ? '+' : '') + v + '</b></div>'; }).join(''); });
   var g = document.getElementById('partygold'); if (g) g.textContent = PARTY.partyGold;
+  var lvl = PARTY.level || '', act = /^TUT/.test(lvl) ? 'Prologue' : /^(WLD|CRE)/.test(lvl) ? 'Act 1' : /^SCL/.test(lvl) ? 'Act 2' : /^(INT|BGO|CTY|END)/.test(lvl) ? 'Act 3' : '';
+  var qa = document.getElementById('q-act'); if (qa && act) qa.textContent = act;
+  var dmap = { RulesetHonour: 'Honour mode', RulesetTactician: 'Tactician', RulesetBalanced: 'Balanced', RulesetExplorer: 'Explorer', RulesetCustom: 'Custom' };
+  var qd = document.getElementById('q-diff'); if (qd && PARTY.difficulty) { qd.innerHTML = (dmap[PARTY.difficulty] || PARTY.difficulty.replace(/^Ruleset/, '')).replace(' mode', '<span class="long"> mode</span>'); qd.classList.toggle('honour', /Honour/.test(PARTY.difficulty)); }
   var PLACES = { CHA: 'the ruined chapel', DEN: 'the Emerald Grove', GOB: 'the goblin camp', UND: 'the Underdark', CRE: "Crèche Y'llek", SCL: 'the Shadow-Cursed Lands', MOO: 'Moonrise Towers', BGO: "Baldur's Gate", CAMP: 'camp', TUT: 'the nautiloid', HAG: "Auntie Ethel's teahouse", WYR: "Wyrm's Rock", RIV: 'Rivington' };
   var nyx = CH.nyx || {}; var sub = (Object.keys(CH).map(function (k) { return CH[k].subregion; }).filter(Boolean)[0] || '');
   var where = PLACES[sub.split('_')[0]] || (PARTY.level === 'TUT_Avernus_C' ? 'the nautiloid' : '');
