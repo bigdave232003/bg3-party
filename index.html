@@ -5224,7 +5224,7 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
   }
   Array.prototype.forEach.call(document.querySelectorAll('.equip[data-char]'), function (box) {
     var cid = box.getAttribute('data-char'), c = CH[cid]; if (!c) return;
-    SLOTS.forEach(function (s) { if (s[0] === 16 && !c.equip[16]) return; box.appendChild(slotEl(cid, s[0], s[1], s[2], c.equip[s[0]])); });
+    SLOTS.forEach(function (s) { box.appendChild(slotEl(cid, s[0], s[1], s[2], c.equip[s[0]])); });
   });
   Array.prototype.forEach.call(document.querySelectorAll('.camp[data-camp]'), function (box) {
     var cid = box.getAttribute('data-camp'), c = CH[cid]; if (!c) return;
