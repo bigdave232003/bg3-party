@@ -1721,9 +1721,9 @@ h1 { overflow-wrap: normal; min-width: 0; }
 <div class="sheet" id="sheet-journal">
 <header class="journal-hero" id="jhero">
   <div class="wrap">
-    <div class="eyebrow">Adventure Journal · Azurae, Nyx &amp; Hagra</div>
+    <div class="eyebrow">Adventure Journal</div>
     <h1>Storm, Song &amp; Steel</h1>
-    <p class="tagline" id="j-where">Where the party is, what we're chasing, and who's still standing.</p>
+    <p class="tagline">Azurae, Nyx &amp; Hagra</p>
     <div class="jstats" id="jstats"></div>
   </div>
 </header>
@@ -5650,8 +5650,6 @@ b.addEventListener('click',function(){var n=L[(L.indexOf(cur())+1)%L.length];r.c
 
   var hero = document.getElementById('jhero');
   if (hero && loc.img) { hero.style.setProperty('--place', 'url("' + loc.img + '")'); hero.classList.add('has-img'); }
-  var where = document.getElementById('j-where');
-  if (where && loc.name) where.textContent = 'Last seen at ' + loc.name + (loc.area ? ', ' + loc.area : '') + (act ? ' · ' + act : '') + '.';
 
   var tiles = [
     ['Where we are', loc.name || '–', [act, loc.area].filter(Boolean).join(' · ')],
