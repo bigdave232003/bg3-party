@@ -712,6 +712,19 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .switcher .meta.quest { padding-right: 14px; margin-right: 10px; }
 @media (max-width: 1400px) { .switcher .meta.quest { padding-right: 10px; margin-right: 6px; } .switcher .meta.quest + .meta { padding-right: 10px; } }
 @media (max-width: 640px) { .switcher .meta.quest { margin-right: 0; padding-right: 8px; } .switcher .meta.quest + .meta { padding-right: 0; } }
+/* Fun stats */
+.fun { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(190px * var(--fs, 1))), 1fr)); gap: 10px; }
+@media (max-width: 640px) { .fun { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .funt { padding: 10px; } .funt .fl { letter-spacing: .08em; } }
+nav.toc a.line-start::before { display: none; }
+.funt { padding: 12px 14px; background: linear-gradient(180deg, var(--panel-2), var(--panel)); border: 1px solid var(--gold-lo); min-width: 0; overflow-wrap: normal; word-break: normal; }
+.funt .fi { display: inline-block; width: 1.4em; font-size: calc(15px * var(--fs, 1)); color: var(--gold); line-height: 1; vertical-align: -1px; }
+.funt .fl { display: inline; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
+.funt .fl sup { color: var(--gold-lo); margin-left: 2px; }
+.funt b { display: block; margin-top: 6px; font-family: var(--display); font-weight: 600; font-size: calc(19px * var(--fs, 1)); color: var(--gold-hi); line-height: 1.25; }
+.funt small { display: block; font-size: calc(13px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; margin-top: 2px; }
+.funt.hand { border-style: dashed; }
+.fun-note { margin-top: 10px; font-size: calc(13px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; }
+.fun-note span { color: var(--gold-lo); font-style: normal; }
 /* Long words never push the page wider than the screen */
 body { overflow-wrap: break-word; }
 h2, h3, h4, .pill, .tag, .chip { overflow-wrap: break-word; min-width: 0; }
@@ -1894,6 +1907,12 @@ var PARTY = {
     "eyes": null,
     "hair": null,
     "extras": []
+   },
+   "kills": [],
+   "smashed": [],
+   "romance": {
+    "stage": 0,
+    "with": []
    }
   },
   "nyx": {
@@ -2113,6 +2132,16 @@ var PARTY = {
       }
      }
     ]
+   },
+   "kills": [
+    "Skeleton",
+    "Skeleton",
+    "Mind Flayer"
+   ],
+   "smashed": [],
+   "romance": {
+    "stage": 0,
+    "with": []
    }
   },
   "hagra": {
@@ -2296,6 +2325,16 @@ var PARTY = {
       "colour": null
      }
     ]
+   },
+   "kills": [
+    "Intellect Devourer",
+    "Intellect Devourer",
+    "Skeleton"
+   ],
+   "smashed": [],
+   "romance": {
+    "stage": 0,
+    "with": []
    }
   },
   "laezel": {
@@ -2339,6 +2378,12 @@ var PARTY = {
     "eyes": null,
     "hair": null,
     "extras": []
+   },
+   "kills": [],
+   "smashed": [],
+   "romance": {
+    "stage": 0,
+    "with": []
    }
   },
   "shadowheart": {
@@ -2437,6 +2482,12 @@ var PARTY = {
     "eyes": null,
     "hair": null,
     "extras": []
+   },
+   "kills": [],
+   "smashed": [],
+   "romance": {
+    "stage": 0,
+    "with": []
    }
   },
   "gale": {
@@ -2539,6 +2590,14 @@ var PARTY = {
     "eyes": null,
     "hair": null,
     "extras": []
+   },
+   "kills": [
+    "Lae'zel"
+   ],
+   "smashed": [],
+   "romance": {
+    "stage": 0,
+    "with": []
    }
   },
   "azurae": {
@@ -2807,6 +2866,18 @@ var PARTY = {
       }
      }
     ]
+   },
+   "kills": [
+    "Intellect Devourer",
+    "Skeleton",
+    "Skeleton"
+   ],
+   "smashed": [
+    "Cage Bottom"
+   ],
+   "romance": {
+    "stage": 0,
+    "with": []
    }
   }
  },
@@ -5416,6 +5487,59 @@ var SAVE = { time: PARTY.saveTime };
   var el = document.getElementById('savestamp'); if (!el) return;
   try { el.textContent = new Date(SAVE.time * 1000).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }); } catch (e) {}
 })();
+/* FUN STATS. Kills, smashed things, romance and fans come from the save (PARTY).
+   The game doesn't record the rest, so they're kept here by hand: tell Claude and it updates TALLY.
+   { ko: knocked out (non-lethal), downed, died, bribes: gold paid in bribes + fines, jailed } */
+var TALLY = {
+  nyx: {}, azurae: {}, hagra: {}, gale: {}, shadowheart: {}, astarion: {}
+};
+(function () {
+  if (typeof PARTY === 'undefined') return;
+  var CH = PARTY.chars, PLAYERS = ['nyx', 'azurae', 'hagra'];
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var first = function (id) { return CH[id] ? CH[id].name.split(' ')[0] : id; };
+  function group(list) { var n = {}, order = []; (list || []).forEach(function (x) { if (!n[x]) { n[x] = 0; order.push(x); } n[x]++; }); return order.map(function (x) { return x + (n[x] > 1 ? ' ×' + n[x] : ''); }).join(', '); }
+  var BASES = ['Not even a wink', 'Kissed', 'Dating', 'Partnered'];
+  var BASE_SUB = ['Still waiting for the tiefling party.', 'First base reached.', 'It’s official(ish).', 'It’s serious.'];
+  Object.keys(CH).forEach(function (id) {
+    var c = CH[id], sheet = document.getElementById('sheet-' + id); if (!sheet) return;
+    var t = TALLY[id] || {}, kills = c.kills || [], smashed = c.smashed || [], rom = c.romance || { stage: 0, with: [] };
+    // biggest fan: for a player, the companion who likes them most; for a companion, the player they like most
+    var fan = null;
+    if (PLAYERS.indexOf(id) >= 0) Object.keys(CH).forEach(function (k) { var a = CH[k].approval; if (a && a[id] != null && (!fan || a[id] > fan.v) && a[id] > 0) fan = { who: first(k), v: a[id] }; });
+    else if (c.approval) Object.keys(c.approval).forEach(function (p) { var v = c.approval[p]; if (v > 0 && (!fan || v > fan.v)) fan = { who: first(p), v: v }; });
+    var bagN = (c.bag || []).length;
+    var hand = function (v) { return v == null ? 0 : v; };
+    var tiles = [
+      ['☠', 'Kills', kills.length, kills.length ? group(kills) : 'Clean hands. For now.'],
+      ['✊', 'Knocked out', hand(t.ko), 'Non-lethal. Mostly.', true],
+      ['↓', 'Times downed', hand(t.downed), '', true],
+      ['⚰', 'Times died', hand(t.died), '', true],
+      ['⚖', 'Bribes & fines', hand(t.bribes) + ' gold', '', true],
+      ['⛓', 'Times jailed', hand(t.jailed), '', true],
+      ['♥', 'Furthest base', BASES[rom.stage] || BASES[0], rom.with.length ? 'With ' + rom.with.join(', ') : BASE_SUB[rom.stage] || ''],
+      ['❦', 'Romance partners', rom.with.length, rom.with.length ? rom.with.join(', ') : 'None yet'],
+      ['⚒', 'Things smashed', smashed.length, smashed.length ? group(smashed) : 'Nothing yet'],
+      ['♛', PLAYERS.indexOf(id) >= 0 ? 'Biggest fan' : 'Favourite', fan ? fan.who : 'Nobody, yet', fan ? 'Approval +' + fan.v : ''],
+      ['⛁', 'Pack mule', bagN + ' items', 'In the backpack']
+    ];
+    var sec = document.createElement('section'); sec.id = id + '-fun';
+    sec.innerHTML = '<div class="section-head"><span class="glyph">◆</span><h2>Fun stats</h2></div>' +
+      '<div class="fun">' + tiles.map(function (x) {
+        return '<div class="funt' + (x[4] ? ' hand' : '') + '"><span class="fi" aria-hidden="true">' + x[0] + '︎</span><span class="fl">' + esc(x[1]) + (x[4] ? '<sup title="Logged by hand">†</sup>' : '') + '</span><b>' + esc(x[2]) + '</b>' + (x[3] ? '<small>' + esc(x[3]) + '</small>' : '') + '</div>';
+      }).join('') + '</div>' +
+      '<p class="fun-note">From the save: kills, things smashed, romance, fans and backpack. <span>†</span> The game doesn’t count these, so tell Claude when they happen.</p>';
+    var eq = sheet.querySelector('main .wrap > section .equip');
+    var gear = (eq && eq.closest('section')) || sheet.querySelector('main .wrap > section');
+    if (gear && gear.nextSibling) gear.parentNode.insertBefore(sec, gear.nextSibling); else if (gear) gear.parentNode.appendChild(sec);
+    var toc = sheet.querySelector('nav.toc .wrap');
+    if (toc && gear) { var a = document.createElement('a'); a.href = '#' + sec.id; a.textContent = 'Fun stats'; var after = toc.querySelector('a[href="#' + gear.id + '"]'); if (after && after.nextSibling) toc.insertBefore(a, after.nextSibling); else toc.appendChild(a); }
+  });
+  // party totals on the Journal
+  var jc = document.getElementById('jcamp');
+  if (jc) { var total = 0, sm = 0; Object.keys(CH).forEach(function (k) { total += (CH[k].kills || []).length; sm += (CH[k].smashed || []).length; });
+    var p = document.createElement('p'); p.className = 'jcamp'; p.textContent = 'Party body count: ' + total + '. Things smashed: ' + sm + '.'; jc.parentNode.insertBefore(p, jc.nextSibling); }
+})();
 /* Collapsible sections: every section with a heading can be folded; remembered per viewer. */
 (function () {
   Array.prototype.forEach.call(document.querySelectorAll('section[id]'), function (sec) {
@@ -5451,10 +5575,11 @@ var FALLEN = [
     name: "Lae'zel",
     what: "Githyanki warrior. Survivor of the nautiloid. Briefly.",
     img: "fallen/laezel.jpg",
-    killer: "nyx",
-    cause: "Friendly fire. Nyx went to shoot the lock, fired a moment too late and hit Lae'zel instead.",
+    killer: "gale",
+    instigator: "nyx",
+    cause: "Friendly fire, then the real thing. Nyx went to shoot the lock, fired a moment too late and hit Lae'zel instead. Lae'zel took it badly and turned on the party, and Gale landed the killing blow. The save file credits Gale.",
     act: "Act 1",
-    epitaph: "She survived a crashing nautiloid, a parasite and a cage. She did not survive Nyx's aim.",
+    epitaph: "She survived a crashing nautiloid, a parasite and a cage. She did not survive Nyx's aim, or Gale's follow-up.",
     estate: "Hagra now wears her Githyanki Half Plate. Azurae took her boots and camp clothes. Nobody asked.",
     notes: [
       { who: "nyx", text: "In my defence, the lock was very small." }
@@ -5462,7 +5587,7 @@ var FALLEN = [
   }
 ];
 (function () {
-  var NAMES = { nyx: 'Nyx', azurae: 'Azurae', hagra: 'Hagra', party: 'The whole party' };
+  var NAMES = { nyx: 'Nyx', azurae: 'Azurae', hagra: 'Hagra', gale: 'Gale', shadowheart: 'Shadowheart', astarion: 'Astarion', party: 'The whole party' };
   var wrap = document.getElementById('graves');
   var tally = document.getElementById('tally');
   function el(tag, cls, text) {
@@ -5471,9 +5596,9 @@ var FALLEN = [
     if (text != null) e.textContent = text;
     return e;
   }
-  var counts = { nyx: 0, azurae: 0, hagra: 0 };
+  var counts = { nyx: 0, azurae: 0, hagra: 0, gale: 0 };
   FALLEN.forEach(function (f) { if (counts[f.killer] != null) counts[f.killer]++; });
-  [['Body count', FALLEN.length, 'total'], ['Nyx', counts.nyx], ['Azurae', counts.azurae], ['Hagra', counts.hagra]].forEach(function (t) {
+  [['Body count', FALLEN.length, 'total'], ['Nyx', counts.nyx], ['Azurae', counts.azurae], ['Hagra', counts.hagra], ['Gale', counts.gale]].forEach(function (t) {
     var d = el('div', t[2] || null); d.appendChild(el('b', null, String(t[1]))); d.appendChild(el('span', null, t[0])); tally.appendChild(d);
   });
   FALLEN.forEach(function (f) {
@@ -5487,7 +5612,7 @@ var FALLEN = [
     body.appendChild(el('h2', null, f.name));
     if (f.what) body.appendChild(el('div', 'what', f.what));
     var dl = el('dl', 'facts');
-    [['Killed by', NAMES[f.killer] || f.killer], ['Cause of death', f.cause], ['When', [f.act, f.place].filter(Boolean).join(' · ')], ['Her belongings', f.estate]].forEach(function (r) {
+    [['Killed by', NAMES[f.killer] || f.killer], ['Started by', f.instigator ? (NAMES[f.instigator] || f.instigator) : ''], ['Cause of death', f.cause], ['When', [f.act, f.place].filter(Boolean).join(' · ')], ['Her belongings', f.estate]].forEach(function (r) {
       if (!r[1]) return;
       var row = el('div'); row.appendChild(el('dt', null, r[0])); row.appendChild(el('dd', null, r[1])); dl.appendChild(row);
     });
@@ -5762,5 +5887,19 @@ b.addEventListener('click',function(){var n=L[(L.indexOf(cur())+1)%L.length];r.c
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !tip.hidden) { unpin(); tip.hidden = true; } });
   window.addEventListener('scroll', function () { if (!tip.hidden && !pinned) tip.hidden = true; else if (pinned) place(pinned); }, { passive: true });
   window.addEventListener('hashchange', function () { unpin(); tip.hidden = true; });
+})();
+</script><script>
+/* Section links: no separator diamond in front of a link that starts a wrapped line */
+(function () {
+  function mark() {
+    document.querySelectorAll('nav.toc .wrap').forEach(function (w) {
+      var prev = null; Array.prototype.forEach.call(w.querySelectorAll('a'), function (a) {
+        a.classList.toggle('line-start', !prev || a.offsetTop > prev.offsetTop + 2); prev = a; });
+    });
+  }
+  var t; function later() { clearTimeout(t); t = setTimeout(mark, 60); }
+  window.addEventListener('resize', later); window.addEventListener('hashchange', later); window.addEventListener('load', later);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+  new MutationObserver(later).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] }); mark();
 })();
 </script>
