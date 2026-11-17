@@ -332,6 +332,11 @@ footer .wrap { padding-block: 22px 40px; font-size: 14px; color: var(--ink-dim);
 .eslot .ic { font-size: 22px; line-height: 1; color: var(--gold-lo); }
 .eslot .sn { font-family: var(--display); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
 .eslot .sv { font-size: 14px; color: var(--ink-dim); font-style: italic; }
+.eslot.on { border-color: var(--gold); }
+.eslot.on .ic { color: var(--gold-hi); }
+.eslot.on .sv { color: var(--ink); font-style: normal; font-weight: 500; }
+.hpline { font-family: var(--display); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); margin-top: 10px; }
+.hpline b { color: var(--blood-hi); font-size: 16px; letter-spacing: .04em; }
 
 /* Journal */
 .who .glyphbox {
@@ -456,11 +461,12 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
         <div class="stat"><b>8</b><span>STR</span></div>
         <div class="stat key"><b>16</b><span>DEX</span></div>
         <div class="stat"><b>14</b><span>CON</span></div>
-        <div class="stat"><b>8</b><span>INT</span></div>
-        <div class="stat"><b>12</b><span>WIS</span></div>
+        <div class="stat"><b>10</b><span>INT</span></div>
+        <div class="stat"><b>10</b><span>WIS</span></div>
         <div class="stat key"><b>16</b><span>CHA</span></div>
       </div>
-      <div class="stats-note">Target spread for the Swords build below. Gold boxes are the two that matter.</div>
+      <div class="stats-note">From the latest save. The gold boxes are the two that matter for a Swords bard.</div>
+      <div class="hpline">HP <b>13 / 17</b> · XP 606 · Proficiency +2</div>
     </div>
   </div>
 </header>
@@ -469,6 +475,7 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
   <div class="wrap">
     <a href="#story">Backstory</a>
     <a href="#persona">How to play her</a>
+    <a href="#gear">Equipment</a>
     <a href="#kit">Current kit</a>
     <a href="#subclass">Subclass</a>
     <a href="#path">Level path</a>
@@ -545,18 +552,39 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
       </div>
     </section>
 
+    <!-- GEAR -->
+    <section id="gear">
+      <div class="section-head"><span class="glyph">◆</span><h2>Equipment</h2></div>
+      <div class="await"><span class="hourglass">✓</span><span>From the latest save (AutoSave 6, at the ruined chapel, level 2). Gold is pooled, so amounts aren't shown.</span></div>
+      <div class="equip">
+        <div class="eslot"><span class="ic">♛</span><span class="sn">Head</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">◈</span><span class="sn">Amulet</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">❖</span><span class="sn">Cloak</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⛨</span><span class="sn">Armour</span><span class="sv">Simple Jerkin</span></div>
+        <div class="eslot"><span class="ic">✋</span><span class="sn">Gloves</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⬢</span><span class="sn">Boots</span><span class="sv">Leather Boots</span></div>
+        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⚔</span><span class="sn">Main hand</span><span class="sv">Shortsword</span></div>
+        <div class="eslot on"><span class="ic">◐</span><span class="sn">Off hand</span><span class="sv">Dagger</span></div>
+        <div class="eslot on"><span class="ic">➶</span><span class="sn">Ranged</span><span class="sv">Hand Crossbow</span></div>
+        <div class="eslot on"><span class="ic">♪</span><span class="sn">Instrument</span><span class="sv">Violin</span></div>
+      </div>
+      <div class="frame" style="margin-top:16px"><h4>In the backpack</h4><div class="pills"><span class="pill feat2">Light Crossbow</span><span class="pill feat2">2× Healing Potion</span><span class="pill feat2">2× Scroll of Revivify</span><span class="pill feat2">Potion of Speed</span><span class="pill feat2">Scroll of Sleep</span><span class="pill feat2">Scroll of Crown of Madness</span><span class="pill feat2">Scroll of Ray of Sickness</span><span class="pill feat2">Scroll of Ray of Frost</span><span class="pill feat2">Scroll of Protection from Evil and Good</span><span class="pill feat2">Goblin Scimitar</span><span class="pill feat2">Goblin Shortbow</span><span class="pill feat2">Handaxe</span><span class="pill feat2">Spare Dagger</span><span class="pill feat2">Silver Ring</span><span class="pill feat2">Silver Necklace</span><span class="pill feat2">2× Onyx</span><span class="pill feat2">2× Mind Flayer grenades</span><span class="pill feat2">Shovel</span></div></div>
+    </section>
+
     <!-- KIT -->
     <section id="kit">
       <div class="section-head"><span class="glyph">◆</span><h2>Current kit</h2></div>
-      <p class="lede">What you have now and how to use it. One surprise: Fire Bolt comes from being a High Elf, and that cantrip runs off Intelligence, not Charisma, so it'll miss a lot for her.</p>
+      <p class="lede">What the save says Nyx is carrying and casting, and how to use it. One surprise: Fire Bolt comes from being a High Elf, and that cantrip runs off Intelligence, not Charisma, so it'll miss a lot for her.</p>
       <div class="grid-2">
         <div class="frame">
           <h4>Weapons</h4>
           <div class="kit">
             <div class="kit-row"><div class="slot">⚔</div><div><div class="name">Shortsword · main hand</div><div class="why">Finesse, so it uses Dex. Keep it in the main hand.</div></div><span class="verdict v-core">Core</span></div>
             <div class="kit-row"><div class="slot">†</div><div><div class="name">Dagger · off hand</div><div class="why">Lets you make a bonus-action off-hand attack. Pairs with Two-Weapon Fighting at level 3.</div></div><span class="verdict v-core">Core</span></div>
-            <div class="kit-row"><div class="slot">➶</div><div><div class="name">Light Crossbow · ranged</div><div class="why">1d8 versus the hand crossbow's 1d6. Use it in the ranged slot for now.</div></div><span class="verdict v-keep">Keep</span></div>
-            <div class="kit-row"><div class="slot">➴</div><div><div class="name">Hand Crossbow</div><div class="why">Swap back to it once you find a magical one. Otherwise sell it or give it to Astarion.</div></div><span class="verdict v-situ">Spare</span></div>
+            <div class="kit-row"><div class="slot">➶</div><div><div class="name">Light Crossbow · ranged</div><div class="why">It's in your backpack. It deals 1d8 versus the hand crossbow's 1d6, so swap it into the ranged slot.</div></div><span class="verdict v-keep">Swap in</span></div>
+            <div class="kit-row"><div class="slot">➴</div><div><div class="name">Hand Crossbow · equipped</div><div class="why">This is what Nyx has in her ranged slot right now. Keep it for when you find a magical one.</div></div><span class="verdict v-situ">Spare</span></div>
           </div>
         </div>
         <div class="frame">
@@ -565,7 +593,9 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
             <div class="kit-row"><div class="slot">✶</div><div><div class="name">Vicious Mockery</div><div class="why">Your go-to cantrip. Uses Charisma, deals damage and gives the target disadvantage on its next attack. Very Nyx.</div></div><span class="verdict v-core">Core</span></div>
             <div class="kit-row"><div class="slot">✧</div><div><div class="name">Faerie Fire</div><div class="why">Gives your whole party advantage on attacks against the targets. Astarion will love you for it.</div></div><span class="verdict v-core">Core</span></div>
             <div class="kit-row"><div class="slot">♥</div><div><div class="name">Healing Word</div><div class="why">Bonus action, at range. Mainly for getting a downed ally back up.</div></div><span class="verdict v-core">Core</span></div>
-            <div class="kit-row"><div class="slot">☍</div><div><div class="name">Bane</div><div class="why">Solid against groups. Worth swapping for Dissonant Whispers later if you want more damage.</div></div><span class="verdict v-keep">Keep</span></div>
+            <div class="kit-row"><div class="slot">☍</div><div><div class="name">Dissonant Whispers</div><div class="why">Damage plus fear, which makes the target flee and can provoke free hits. What you remembered as Bane is probably this one.</div></div><span class="verdict v-keep">Keep</span></div>
+            <div class="kit-row"><div class="slot">➹</div><div><div class="name">Longstrider</div><div class="why">More movement for an ally. Handy, but swap it out at level 3 for something stronger.</div></div><span class="verdict v-situ">Swap later</span></div>
+            <div class="kit-row"><div class="slot">♫</div><div><div class="name">Song of Rest</div><div class="why">A free extra short rest for the party each day. Use it before every long rest, because Hagra's spell slots come back on a short rest.</div></div><span class="verdict v-core">Core</span></div>
             <div class="kit-row"><div class="slot">⛨</div><div><div class="name">Blade Ward</div><div class="why">Resistance to weapon damage for a turn. Useful when you're surrounded, otherwise skip.</div></div><span class="verdict v-situ">Situational</span></div>
             <div class="kit-row"><div class="slot">☄</div><div><div class="name">Fire Bolt</div><div class="why">Runs off Intelligence. Use Vicious Mockery instead unless the target is weak to fire.</div></div><span class="verdict v-drop">Rarely</span></div>
           </div>
@@ -873,7 +903,7 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
           <div class="role">You · Swords Bard</div>
           <h3>Nyx Sorrowind</h3>
           <p>High Elf. Skirmisher, buffer and the party face. Takes every Persuasion and Deception check.</p>
-          <p class="nyx">Talks first, stabs second.</p>
+          <p class="nyx">Talks first, stabs second. HP 13 / 17.</p>
         </div>
         <div class="frame member">
           <div class="role">Tom · Druid</div>
@@ -888,10 +918,10 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
           <p class="nyx">Nyx and Hagra both run on Charisma, so expect arguments over every Charisma item.</p>
         </div>
         <div class="frame member">
-          <div class="role">Fourth slot · Companion</div>
-          <h3>Astarion or Shadowheart</h3>
-          <p><strong>Astarion</strong> for damage, lockpicking and traps. <strong>Shadowheart</strong> if fights keep going badly and you want a proper healer.</p>
-          <p class="nyx">Gale waits at camp. Nyx teases him anyway.</p>
+          <div class="role">Fourth slot · Bladesinger</div>
+          <h3>Gale</h3>
+          <p>Your current fourth member, made into a Bladesinging wizard: Bladesong, Shield, Magic Missile, Burning Hands and Sleep. Level 2, HP 14.</p>
+          <p class="nyx">Approval so far: he likes Nyx a little (+1). Shadowheart is at camp and already likes Azurae (+10).</p>
         </div>
       </div>
       <div class="frame combo">
@@ -926,19 +956,20 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
       <p class="tagline">Blue dragonborn druid. Breathes lightning, talks to squirrels, and has opinions about how the rest of you treat the forest.</p>
       <div class="chips">
         <span class="chip">Dragonborn · Blue</span>
-        <span class="chip lvl">Druid · Level ?</span>
-        <span class="chip">Circle: ?</span>
+        <span class="chip lvl">Druid · Level 2</span>
+        <span class="chip">Circle of the Stars</span>
         <span class="chip" style="border-color:var(--blood-hi);color:var(--blood-hi)">Honour Mode</span>
       </div>
-      <div class="stats" aria-label="Ability scores, waiting on save">
-        <div class="stat"><b>?</b><span>STR</span></div>
-        <div class="stat"><b>?</b><span>DEX</span></div>
-        <div class="stat"><b>?</b><span>CON</span></div>
-        <div class="stat"><b>?</b><span>INT</span></div>
-        <div class="stat key"><b>?</b><span>WIS</span></div>
-        <div class="stat"><b>?</b><span>CHA</span></div>
+      <div class="stats" aria-label="Ability scores">
+        <div class="stat"><b>8</b><span>STR</span></div>
+        <div class="stat"><b>14</b><span>DEX</span></div>
+        <div class="stat"><b>16</b><span>CON</span></div>
+        <div class="stat"><b>8</b><span>INT</span></div>
+        <div class="stat key"><b>16</b><span>WIS</span></div>
+        <div class="stat"><b>12</b><span>CHA</span></div>
       </div>
-      <div class="stats-note">Wisdom powers her spells. Real numbers come from the save file.</div>
+      <div class="stats-note">From the latest save. Wisdom powers her spells.</div>
+      <div class="hpline">HP <b>17 / 19</b> · XP 606 · Proficiency +2</div>
     </div>
   </div>
 </header>
@@ -954,20 +985,21 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
   <div class="wrap">
     <section id="az-gear">
       <div class="section-head"><span class="glyph">◆</span><h2>Equipment</h2></div>
-      <div class="await"><span class="hourglass">⧗</span><span>Waiting on the save file. Once the host uploads one, these slots fill in with what Azurae is actually carrying.</span></div>
+      <div class="await"><span class="hourglass">✓</span><span>From the latest save (AutoSave 6, at the ruined chapel, level 2). Gold is pooled, so amounts aren't shown.</span></div>
       <div class="equip">
-        <div class="eslot"><span class="ic">♛</span><span class="sn">Head</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">◈</span><span class="sn">Amulet</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">❖</span><span class="sn">Cloak</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">⛨</span><span class="sn">Armour</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">✋</span><span class="sn">Gloves</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">⬢</span><span class="sn">Boots</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">⚚</span><span class="sn">Main hand</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">◐</span><span class="sn">Off hand</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">➶</span><span class="sn">Ranged</span><span class="sv">Unknown</span></div>
+        <div class="eslot"><span class="ic">♛</span><span class="sn">Head</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">◈</span><span class="sn">Amulet</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">❖</span><span class="sn">Cloak</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⛨</span><span class="sn">Armour</span><span class="sv">Druid Leather Armour</span></div>
+        <div class="eslot"><span class="ic">✋</span><span class="sn">Gloves</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⬢</span><span class="sn">Boots</span><span class="sv">Druid Leather Boots</span></div>
+        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⚔</span><span class="sn">Main hand</span><span class="sv">Druid Quarterstaff</span></div>
+        <div class="eslot"><span class="ic">◐</span><span class="sn">Off hand</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">➶</span><span class="sn">Ranged</span><span class="sv">Empty</span></div>
       </div>
+      <div class="frame" style="margin-top:16px"><h4>In the backpack</h4><div class="pills"><span class="pill feat2">Tasteful Boots</span><span class="pill feat2">Lae'zel's Githyanki Boots</span><span class="pill feat2">Lae'zel's camp clothes</span><span class="pill feat2">Longsword</span><span class="pill feat2">Rapier</span><span class="pill feat2">Shortsword</span><span class="pill feat2">3× Scimitar</span><span class="pill feat2">2× Light Crossbow</span><span class="pill feat2">Shortbow</span><span class="pill feat2">Quarterstaff</span><span class="pill feat2">2× Dagger</span><span class="pill feat2">Robe</span><span class="pill feat2">3× Healing Potion</span><span class="pill feat2">Scroll of Revivify</span><span class="pill feat2">Bronze Necklace</span><span class="pill feat2">Onyx</span><span class="pill feat2">Mind Flayer grenade</span><span class="pill feat2">A love letter</span></div></div>
     </section>
 
     <section id="az-traits">
@@ -984,15 +1016,16 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
           <h3>Druid</h3>
           <ul class="trait-list">
             <li><span class="k">Wild Shape</span><span>Turns into animals. The beast form has its own health bar, so it works like a spare life.</span></li>
-            <li><span class="k">Circle</span><span>Chosen at level 2, so Tom may have already picked one. The options are Moon, Land, Spores and Stars.</span></li>
+            <li><span class="k">Circle</span><span>Tom chose the Circle of the Stars at level 2. That gives her Starry Form (Archer, Chalice or Dragon) and a free Guiding Bolt from her Star Map.</span></li>
             <li><span class="k">Spells</span><span>Area control and healing. Druids can swap their prepared spells after any long rest.</span></li>
           </ul>
         </div>
       </div>
       <div class="frame" style="margin-top:16px">
-        <h3>Starting spells (from the save, level 1)</h3>
-        <div class="pills"><span class="pill">Shillelagh</span><span class="pill">Thorn Whip</span><span class="pill">Entangle</span><span class="pill">Thunderwave</span><span class="pill">Goodberry</span><span class="pill">Longstrider</span><span class="pill">Create Water</span><span class="pill">Lightning Breath</span></div>
-        <p class="note" style="margin:10px 0 0">Taken from the earliest save (the nautiloid, level 1). Druids re-prepare spells after each long rest, so her current list may differ.</p>
+        <h3>Spells and forms (from the latest save)</h3>
+        <div class="pills"><span class="pill">Shillelagh</span><span class="pill">Thorn Whip</span><span class="pill">Guidance</span><span class="pill">Faerie Fire</span><span class="pill">Entangle</span><span class="pill">Healing Word</span><span class="pill">Cure Wounds</span><span class="pill">Thunderwave</span><span class="pill">Ice Knife</span><span class="pill">Fog Cloud</span><span class="pill">Goodberry</span><span class="pill">Charm Person</span><span class="pill feat">Guiding Bolt (Star Map)</span><span class="pill feat">Lightning Breath</span></div>
+        <div class="pills" style="margin-top:8px"><span class="pill feat2">Starry Form: Archer</span><span class="pill feat2">Starry Form: Chalice</span><span class="pill feat2">Starry Form: Dragon</span><span class="pill feat2">Wild Shape: Badger, Cat, Spider, Dire Wolf</span></div>
+        <p class="note" style="margin:10px 0 0">Druids prepare from their whole list, so this is everything available to her, not necessarily what's prepared today.</p>
       </div>
     </section>
 
@@ -1004,7 +1037,7 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
           <ul class="trait-list">
             <li><span class="k">Moon</span><span>Tougher animal forms and quicker shapeshifting. A second front-liner alongside Hagra.</span></li>
             <li><span class="k">Land</span><span>Extra spells and recovers spell slots. The strongest caster option.</span></li>
-            <li><span class="k">Stars</span><span>Added in Patch 8. Starry Form boosts healing, ranged attacks or concentration. Flexible.</span></li>
+            <li><span class="k">Stars ✓</span><span>Tom's pick. Archer form for ranged damage, Chalice to boost healing, and Dragon to hold concentration on Moonbeam or Spike Growth.</span></li>
             <li><span class="k">Spores</span><span>Necrotic melee aura and temporary HP. The goth druid, Nyx would approve.</span></li>
           </ul>
         </div>
@@ -1079,19 +1112,20 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
       <p class="tagline">Half-orc Hexblade. Made a deal with something that lives in the dark, and now hits things very hard with it.</p>
       <div class="chips">
         <span class="chip">Half-Orc</span>
-        <span class="chip lvl">Hexblade Warlock · Level ?</span>
-        <span class="chip">Pact: ?</span>
+        <span class="chip lvl">Hexblade Warlock · Level 2</span>
+        <span class="chip">Pact: picks at level 3</span>
         <span class="chip" style="border-color:var(--blood-hi);color:var(--blood-hi)">Honour Mode</span>
       </div>
-      <div class="stats" aria-label="Ability scores, waiting on save">
-        <div class="stat"><b>?</b><span>STR</span></div>
-        <div class="stat"><b>?</b><span>DEX</span></div>
-        <div class="stat key"><b>?</b><span>CON</span></div>
-        <div class="stat"><b>?</b><span>INT</span></div>
-        <div class="stat"><b>?</b><span>WIS</span></div>
-        <div class="stat key"><b>?</b><span>CHA</span></div>
+      <div class="stats" aria-label="Ability scores">
+        <div class="stat"><b>8</b><span>STR</span></div>
+        <div class="stat"><b>13</b><span>DEX</span></div>
+        <div class="stat key"><b>14</b><span>CON</span></div>
+        <div class="stat"><b>13</b><span>INT</span></div>
+        <div class="stat"><b>10</b><span>WIS</span></div>
+        <div class="stat key"><b>17</b><span>CHA</span></div>
       </div>
-      <div class="stats-note">Hexblades swing and cast with Charisma. Real numbers come from the save file.</div>
+      <div class="stats-note">From the latest save. Hexblades swing and cast with Charisma, so Strength 8 is fine.</div>
+      <div class="hpline">HP <b>17 / 17</b> · XP 606 · Proficiency +2</div>
     </div>
   </div>
 </header>
@@ -1107,20 +1141,22 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
   <div class="wrap">
     <section id="hg-gear">
       <div class="section-head"><span class="glyph">◆</span><h2>Equipment</h2></div>
-      <div class="await"><span class="hourglass">⧗</span><span>Waiting on the save file. Once the host uploads one, these slots fill in with what Hagra is actually carrying.</span></div>
+      <div class="await"><span class="hourglass">✓</span><span>From the latest save (AutoSave 6, at the ruined chapel, level 2). Gold is pooled, so amounts aren't shown.</span></div>
       <div class="equip">
-        <div class="eslot"><span class="ic">♛</span><span class="sn">Head</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">◈</span><span class="sn">Amulet</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">❖</span><span class="sn">Cloak</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">⛨</span><span class="sn">Armour</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">✋</span><span class="sn">Gloves</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">⬢</span><span class="sn">Boots</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">⚔</span><span class="sn">Main hand</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">◐</span><span class="sn">Off hand</span><span class="sv">Unknown</span></div>
-        <div class="eslot"><span class="ic">➶</span><span class="sn">Ranged</span><span class="sv">Unknown</span></div>
+        <div class="eslot on"><span class="ic">♛</span><span class="sn">Head</span><span class="sv">Rufflesome Blaggart Hat</span></div>
+        <div class="eslot"><span class="ic">◈</span><span class="sn">Amulet</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">❖</span><span class="sn">Cloak</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⛨</span><span class="sn">Armour</span><span class="sv">Githyanki Half Plate (Lae'zel's)</span></div>
+        <div class="eslot"><span class="ic">✋</span><span class="sn">Gloves</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⬢</span><span class="sn">Boots</span><span class="sv">Shoes</span></div>
+        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
+        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">⚔</span><span class="sn">Main hand</span><span class="sv">Everburn Blade</span></div>
+        <div class="eslot"><span class="ic">◐</span><span class="sn">Off hand</span><span class="sv">Empty</span></div>
+        <div class="eslot on"><span class="ic">➶</span><span class="sn">Ranged</span><span class="sv">Shortbow</span></div>
       </div>
+      <div class="frame" style="margin-top:16px"><h4>In the backpack</h4><div class="pills"><span class="pill feat2">Soul Coin</span><span class="pill feat2">Pike</span><span class="pill feat2">Quarterstaff</span><span class="pill feat2">2× Dagger</span><span class="pill feat2">Padded Armour</span><span class="pill feat2">Potion of Healing</span><span class="pill feat2">Potion of Fire Resistance</span><span class="pill feat2">Scroll of Revivify</span><span class="pill feat2">Scroll of Ray of Enfeeblement</span><span class="pill feat2">Scroll of Protection from Evil and Good</span><span class="pill feat2">Thieves' Tools</span><span class="pill feat2">Trap Disarm Toolkit</span><span class="pill feat2">Basic Toxin</span><span class="pill feat2">Bronze Necklace</span><span class="pill feat2">Pearl</span><span class="pill feat2">A dead commoner's locket</span></div></div>
+      <div class="frame" style="margin-top:16px"><h4>Gear notes</h4><ul class="compass"><li><strong>Everburn Blade</strong> is a two-handed greatsword with extra fire damage. Hexblades attack with Charisma once the weapon is bound, but two hands means no shield for now.</li><li><strong>Githyanki Half Plate</strong> is medium armour, which Hexblades can wear. It came off Lae'zel.</li></ul></div>
     </section>
 
     <section id="hg-traits">
@@ -1145,9 +1181,8 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
         </div>
       </div>
       <div class="frame" style="margin-top:16px">
-        <h3>Starting spells (from the save, level 1)</h3>
-        <div class="pills"><span class="pill">Eldritch Blast</span><span class="pill">Witch Bolt</span><span class="pill">Wrathful Smite</span><span class="pill feat">Hexblade&#39;s Curse</span><span class="pill feat">Bind Hexed Weapon</span></div>
-        <p class="note" style="margin:10px 0 0">Taken from the earliest save (the nautiloid, level 1).</p>
+        <h3>Spells (from the latest save)</h3>
+        <div class="pills"><span class="pill">Eldritch Blast</span><span class="pill">Blade Ward</span><span class="pill">Hellish Rebuke</span><span class="pill">Witch Bolt</span><span class="pill">Wrathful Smite</span><span class="pill feat">Hexblade&#39;s Curse</span><span class="pill feat">Bind Hexed Weapon</span><span class="pill feat2">Cleave (Everburn Blade)</span></div>
       </div>
     </section>
 
@@ -1168,7 +1203,7 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
           <ul class="compass">
             <li><strong>Short rests matter.</strong> Warlocks get their spell slots back on a short rest, and Nyx's Song of Rest gives the party an extra one.</li>
             <li><strong>Hold Person, then Curse:</strong> guaranteed crits on the paralysed enemy, plus extra damage from Savage Attacks.</li>
-            <li><strong>Hagra holds the line</strong> with her shield while Nyx flourishes around her.</li>
+            <li><strong>Hagra holds the line</strong> with the Everburn Blade while Nyx flourishes around her.</li>
             <li><strong>Charisma gear:</strong> they'll both want the same items, so agree who gets what.</li>
           </ul>
         </div>
@@ -1295,6 +1330,7 @@ var FALLEN = [
     cause: "Friendly fire. Nyx went to shoot the lock, fired a moment too late and hit Lae'zel instead.",
     act: "Act 1",
     epitaph: "She survived a crashing nautiloid, a parasite and a cage. She did not survive Nyx's aim.",
+    estate: "Hagra now wears her Githyanki Half Plate. Azurae took her boots and camp clothes. Nobody asked.",
     notes: [
       { who: "nyx", text: "In my defence, the lock was very small." }
     ]
@@ -1326,7 +1362,7 @@ var FALLEN = [
     body.appendChild(el('h2', null, f.name));
     if (f.what) body.appendChild(el('div', 'what', f.what));
     var dl = el('dl', 'facts');
-    [['Killed by', NAMES[f.killer] || f.killer], ['Cause of death', f.cause], ['When', [f.act, f.place].filter(Boolean).join(' · ')]].forEach(function (r) {
+    [['Killed by', NAMES[f.killer] || f.killer], ['Cause of death', f.cause], ['When', [f.act, f.place].filter(Boolean).join(' · ')], ['Her belongings', f.estate]].forEach(function (r) {
       if (!r[1]) return;
       var row = el('div'); row.appendChild(el('dt', null, r[0])); row.appendChild(el('dd', null, r[1])); dl.appendChild(row);
     });
