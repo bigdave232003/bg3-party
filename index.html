@@ -387,6 +387,35 @@ dialog.lightbox button {
 dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi); }
 @media (max-width: 600px) { .empty { grid-template-columns: minmax(0, 1fr); padding: 20px; } .empty .polaroid { max-width: 220px; } }
 
+/* The Fallen */
+.fallen-hero { border-bottom: 1px solid var(--gold-lo); background: radial-gradient(ellipse at 50% 120%, #2a1018 0%, var(--void) 70%); }
+.fallen-hero .wrap { padding-block: 44px 30px; }
+.fallen-hero h1 { font-size: clamp(36px, 6vw, 60px); }
+.tally { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.tally div { padding: 10px 16px; border: 1px solid var(--gold-lo); background: rgba(23,19,26,.85); min-width: 110px; }
+.tally b { display: block; font-family: var(--display); font-size: 28px; line-height: 1.1; color: var(--gold-hi); font-variant-numeric: tabular-nums; }
+.tally span { font-family: var(--display); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
+.tally .total { border-color: var(--blood-hi); }
+.tally .total b { color: var(--blood-hi); }
+.graves { display: grid; gap: 24px; }
+.grave { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 28px; padding: 20px; align-items: start; }
+.grave figure { margin: 0; border: 1px solid var(--gold-lo); padding: 6px; background: #0a080b; }
+.grave figure img { display: block; width: 100%; height: auto; aspect-ratio: 864 / 1184; object-fit: cover; filter: saturate(.85); }
+.grave figcaption { font-size: 12px; color: var(--ink-dim); text-align: center; padding-top: 5px; font-style: italic; }
+.grave .rip { font-family: var(--display); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--blood-hi); }
+.grave h2 { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4vw, 40px); color: var(--gold-hi); margin: 4px 0 2px; letter-spacing: .03em; }
+.grave .what { font-style: italic; color: var(--ink-dim); margin-bottom: 16px; }
+.facts { display: grid; gap: 0; margin: 0 0 16px; }
+.facts div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 14px; padding: 9px 0; border-bottom: 1px solid rgba(110,90,51,.4); }
+.facts dt { font-family: var(--display); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); padding-top: 4px; }
+.facts dd { margin: 0; }
+.epitaph { font-size: 21px; font-style: italic; line-height: 1.4; margin: 0 0 14px; padding: 14px 18px; border-left: 2px solid var(--blood); background: rgba(155,47,66,.07); }
+@media (max-width: 760px) {
+  .grave { grid-template-columns: minmax(0, 1fr); }
+  .grave figure { max-width: 240px; }
+  .facts div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .portrait { animation: rise .8s ease-out both; }
   @keyframes rise { from { transform: translateY(8px); } to { transform: none; } }
@@ -400,6 +429,7 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
     <a class="who" href="#azula" data-sheet="azula"><img src="data:image/jpeg;base64,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" alt=""><span>Azula<small>Tom · Druid</small></span></a>
     <a class="who" href="#hagra" data-sheet="hagra"><img src="data:image/jpeg;base64,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" alt=""><span>Hagra<small>Dave · Warlock</small></span></a>
     <a class="who" href="#journal" data-sheet="journal"><span class="glyphbox" aria-hidden="true">✒</span><span>Journal<small>Our adventure</small></span></a>
+    <a class="who" href="#fallen" data-sheet="fallen"><span class="glyphbox" aria-hidden="true">☠</span><span>The Fallen<small>Our victims</small></span></a>
   </div>
 </div>
 
@@ -872,7 +902,7 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
           <li><strong>Hypnotic Pattern before Azula's area spells:</strong> keep allies out of the pattern, then hit the stunned group.</li>
           <li><strong>Gear sharing:</strong> Gloves of Belligerent Skies and Boots of Stormy Clamour suit Azula's lightning. Charisma headwear goes to whoever is struggling more, Nyx or Hagra.</li>
         </ul>
-        <p class="fallen">Fallen: <s>Lae'zel</s>. Nyx said a few words over her. She didn't sing.</p>
+        <p class="fallen">Fallen: <s>Lae'zel</s>, shot by Nyx while aiming for a lock. Nyx said a few words over her. She didn't sing. <a href="#fallen">See The Fallen</a></p>
         <p class="fallen">Back at camp: <strong>Withers</strong> respecs for 100 gold and revives fallen companions. Nyx adores him.</p>
       </div>
     </section>
@@ -1205,10 +1235,29 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
     </section>
   </div>
 </main>
-<dialog class="lightbox" id="lightbox" aria-label="Screenshot">
+<dialog class="lightbox" id="lightbox" aria-label="Screenshot" data-placeholder="journal">
   <img id="lb-img" alt="">
   <div class="lb-bar"><span class="lb-title" id="lb-title"></span><button type="button" id="lb-close">Close</button></div>
 </dialog>
+</div>
+
+<!-- ================= THE FALLEN ================= -->
+<div class="sheet" id="sheet-fallen" hidden>
+<header class="fallen-hero">
+  <div class="wrap">
+    <div class="eyebrow">In Memoriam</div>
+    <h1>The Fallen</h1>
+    <p class="tagline">Everyone we've killed along the way, on purpose or otherwise. Nyx says a few words over each of them. She still hasn't sung for any.</p>
+    <div class="tally" id="tally"></div>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <section id="graves-list">
+      <div class="graves" id="graves"></div>
+    </section>
+  </div>
+</main>
 </div>
 
 <footer>
@@ -1221,6 +1270,69 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
      notes: [ { who: "nyx" | "azula" | "hagra", text } ] } */
 var JOURNAL = [
 ];
+/* THE FALLEN: newest first. Portraits live in fallen/ next to index.html.
+   { name, what, img, killer: "nyx" | "azula" | "hagra" | "party", cause, act, place,
+     epitaph, notes: [ { who, text } ] } */
+var FALLEN = [
+  {
+    name: "Lae'zel",
+    what: "Githyanki warrior. Survivor of the nautiloid. Briefly.",
+    img: "fallen/laezel.jpg",
+    killer: "nyx",
+    cause: "Friendly fire. Nyx went to shoot the lock, fired a moment too late and hit Lae'zel instead.",
+    act: "Act 1",
+    epitaph: "She survived a crashing nautiloid, a parasite and a cage. She did not survive Nyx's aim.",
+    notes: [
+      { who: "nyx", text: "In my defence, the lock was very small." }
+    ]
+  }
+];
+(function () {
+  var NAMES = { nyx: 'Nyx', azula: 'Azula', hagra: 'Hagra', party: 'The whole party' };
+  var wrap = document.getElementById('graves');
+  var tally = document.getElementById('tally');
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  var counts = { nyx: 0, azula: 0, hagra: 0 };
+  FALLEN.forEach(function (f) { if (counts[f.killer] != null) counts[f.killer]++; });
+  [['Body count', FALLEN.length, 'total'], ['Nyx', counts.nyx], ['Azula', counts.azula], ['Hagra', counts.hagra]].forEach(function (t) {
+    var d = el('div', t[2] || null); d.appendChild(el('b', null, String(t[1]))); d.appendChild(el('span', null, t[0])); tally.appendChild(d);
+  });
+  FALLEN.forEach(function (f) {
+    var card = el('article', 'frame grave');
+    var fig = el('figure');
+    var img = el('img'); img.src = f.img; img.alt = 'Memorial portrait of ' + f.name; img.loading = 'lazy';
+    fig.appendChild(img); fig.appendChild(el('figcaption', null, 'Painted from memory'));
+    card.appendChild(fig);
+    var body = el('div');
+    body.appendChild(el('div', 'rip', 'Here lies'));
+    body.appendChild(el('h2', null, f.name));
+    if (f.what) body.appendChild(el('div', 'what', f.what));
+    var dl = el('dl', 'facts');
+    [['Killed by', NAMES[f.killer] || f.killer], ['Cause of death', f.cause], ['When', [f.act, f.place].filter(Boolean).join(' · ')]].forEach(function (r) {
+      if (!r[1]) return;
+      var row = el('div'); row.appendChild(el('dt', null, r[0])); row.appendChild(el('dd', null, r[1])); dl.appendChild(row);
+    });
+    body.appendChild(dl);
+    if (f.epitaph) body.appendChild(el('blockquote', 'epitaph', f.epitaph));
+    if (f.notes && f.notes.length) {
+      var notes = el('div', 'notes');
+      f.notes.forEach(function (n) {
+        var line = el('div', 'note-line ' + n.who);
+        line.appendChild(el('b', null, NAMES[n.who] || n.who));
+        line.appendChild(document.createTextNode('"' + n.text + '"'));
+        notes.appendChild(line);
+      });
+      body.appendChild(notes);
+    }
+    card.appendChild(body);
+    wrap.appendChild(card);
+  });
+})();
 (function () {
   var NAMES = { nyx: 'Nyx', azula: 'Azula', hagra: 'Hagra' };
   var list = document.getElementById('entries');
@@ -1272,7 +1384,7 @@ var JOURNAL = [
   lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
 })();
 (function () {
-  var names = ['nyx', 'azula', 'hagra', 'journal'];
+  var names = ['nyx', 'azula', 'hagra', 'journal', 'fallen'];
   var current = null;
   function show(name) {
     if (current === name) return false;
