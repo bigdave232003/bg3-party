@@ -335,6 +335,45 @@ footer .wrap { padding-block: 22px 40px; font-size: 14px; color: var(--ink-dim);
 .eslot.on { border-color: var(--gold); }
 .eslot.on .ic { color: var(--gold-hi); }
 .eslot.on .sv { color: var(--ink); font-style: normal; font-weight: 500; }
+/* Interactive equipment */
+.equip .eslot { font: inherit; color: inherit; cursor: default; position: relative; }
+.equip .eslot.on { cursor: pointer; }
+.equip .eslot svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.equip .eslot .ic { color: var(--gold-lo); line-height: 0; }
+.equip .eslot.on .ic { color: var(--gold-hi); }
+.equip .eslot.r-unc-b { border-color: #5fae4f; box-shadow: inset 0 0 18px rgba(95,174,79,.18); }
+.equip .eslot.r-unc-b .ic { color: #9ed68d; }
+.equip .eslot.on:hover, .equip .eslot.on:focus-visible { border-color: var(--gold-hi); background: radial-gradient(circle at 50% 35%, #3a2f2a, #15110f); }
+.equip .eslot[aria-pressed="true"] { border-color: var(--gold-hi); box-shadow: 0 0 0 1px var(--gold-hi), 0 0 16px rgba(233,207,143,.25); }
+.equip-hint { margin: 8px 0 0; }
+.tip {
+  position: fixed; z-index: 30; width: min(320px, calc(100vw - 32px)); pointer-events: none;
+  background: linear-gradient(180deg, #1d1813, #100d0b); color: var(--ink);
+  border: 1px solid var(--gold); box-shadow: 0 0 0 3px #0a0807, 0 0 0 4px var(--gold-lo), 0 18px 40px rgba(0,0,0,.6);
+  padding: 14px 16px 12px; font-size: 15px; line-height: 1.45;
+}
+.tip.pinned { pointer-events: auto; }
+.tip .t-name { font-family: var(--display); font-weight: 600; font-size: 18px; letter-spacing: .03em; line-height: 1.2; }
+.tip .t-name.common { color: #efe6d2; }
+.tip .t-name.uncommon { color: #7fd36a; }
+.tip .t-name.rare { color: #6ea6e0; }
+.tip .t-type { font-family: var(--display); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); margin-top: 3px; }
+.tip .t-big { margin-top: 10px; font-family: var(--display); font-size: 15px; color: var(--ink-dim); }
+.tip .t-big b { font-size: 26px; color: var(--gold-hi); margin-right: 6px; font-variant-numeric: tabular-nums; }
+.tip .t-big .fire { color: #f08a4b; }
+.tip .t-for { font-size: 14px; color: var(--ink-dim); font-style: italic; }
+.tip hr { border: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-lo), transparent); margin: 10px 0; }
+.tip .t-props { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 6px; }
+.tip .t-props li { font-size: 13px; padding: 1px 7px; border: 1px solid rgba(201,164,92,.35); color: var(--ink); }
+.tip .t-props li.bad { border-color: rgba(194,71,93,.5); color: #e7a3ae; }
+.tip .t-props li.good { border-color: rgba(127,211,106,.45); color: #b9e5ad; }
+.tip .t-head { font-family: var(--display); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 10px 0 4px; }
+.tip .t-flav { font-style: italic; color: #cbbf9f; margin: 10px 0 0; }
+.tip .t-tip { margin: 10px 0 0; padding-left: 10px; border-left: 2px solid var(--blood-hi); }
+.tip .t-foot { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; padding-top: 8px; border-top: 1px solid rgba(110,90,51,.45); font-size: 13px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+@media (max-width: 600px) {
+  .tip { left: 16px !important; right: 16px; top: auto !important; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: 60vh; overflow: auto; }
+}
 .hpline { font-family: var(--display); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); margin-top: 10px; }
 .hpline b { color: var(--blood-hi); font-size: 16px; letter-spacing: .04em; }
 
@@ -437,6 +476,28 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
     <a class="who" href="#fallen" data-sheet="fallen"><span class="glyphbox" aria-hidden="true">☠</span><span>The Fallen<small>Our victims</small></span></a>
   </div>
 </div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-sword" viewBox="0 0 24 24"><path d="M20 4l-1 4.2L9.6 17.4 6.6 14.4 15.8 5.2Z"/><path d="M5.5 12.5l6 6"/><path d="M7.8 16.2L4 20"/></symbol>
+  <symbol id="i-dagger" viewBox="0 0 24 24"><path d="M18 6l-.6 3L11 15.4 8.6 13 15 6.6Z"/><path d="M7.2 11.6l5.2 5.2"/><path d="M9.4 14.6 5 19"/></symbol>
+  <symbol id="i-greatsword" viewBox="0 0 24 24"><path d="M21 3l-.8 3.6L8.4 18.4 5.6 15.6 17.4 3.8Z"/><path d="M4.4 13.6l6 6"/><path d="M6.8 17.2 3 21"/><path class="flame" d="M16 4.5c.5 1.6 2 2 2.6 3.4M12.5 8c.6 1.5 2 2 2.5 3.3"/></symbol>
+  <symbol id="i-xbow" viewBox="0 0 24 24"><path d="M4 9c4-4.5 12-4.5 16 0"/><path d="M4 9l8 4 8-4"/><path d="M12 5.5V21"/><path d="M9.5 18.5h5"/></symbol>
+  <symbol id="i-bow" viewBox="0 0 24 24"><path d="M8 3c9 4 9 14 0 18"/><path d="M8 3v18"/><path d="M4 12h13"/><path d="M15 10l2 2-2 2"/></symbol>
+  <symbol id="i-staff" viewBox="0 0 24 24"><path d="M5 21 16.5 6.5"/><circle cx="18.2" cy="4.6" r="2.1"/><path d="M13.5 10.5c1.6-.2 2.8.6 3 2.2"/><path d="M10.5 14.2c-1.4-.4-2.5.2-3 1.4"/></symbol>
+  <symbol id="i-boots" viewBox="0 0 24 24"><path d="M8 3h5v10l6 3v4H6V13Z"/><path d="M6 17h13"/><path d="M8 7h5"/></symbol>
+  <symbol id="i-shoe" viewBox="0 0 24 24"><path d="M3.5 15.5c3 0 5.5-2.8 6.5-5l3 2c2 1.2 5 1.2 7.5 2.2V18H3.5Z"/><path d="M3.5 18h17"/></symbol>
+  <symbol id="i-jerkin" viewBox="0 0 24 24"><path d="M8 3l4 2.2L16 3l4 3-2 4-2-1v12H8V9l-2 1-2-4Z"/><path d="M12 5.2V21"/><path d="M10.5 9h3M10.5 13h3"/></symbol>
+  <symbol id="i-plate" viewBox="0 0 24 24"><path d="M7 4h10l3 4-2 3v9H6v-9L4 8Z"/><path d="M12 4v16"/><path d="M6 11.5h12"/><path d="M9 4c0 2 1.3 3 3 3s3-1 3-3"/></symbol>
+  <symbol id="i-hat" viewBox="0 0 24 24"><path d="M2.5 16.5c4.5-2.2 14.5-2.2 19 0"/><path d="M6.5 15.5c0-5.2 2.4-8 5.5-8s5.5 2.8 5.5 8"/><path d="M15.5 9.5c1.5-3.6 4.6-5.6 6-5.5-.6 2.3-2.4 5.3-5.2 7.2"/></symbol>
+  <symbol id="i-violin" viewBox="0 0 24 24"><path d="M10.5 11c-3 0-4 2.2-3 4-1 2 0 5 3 5h2c3 0 4-3 3-5 1-1.8 0-4-3-4Z"/><path d="M11.5 11V3.5h1.6"/><path d="M10.2 15.5h2.6"/><path d="M3.5 20.5 19 5"/></symbol>
+  <symbol id="i-e-head" viewBox="0 0 24 24"><path d="M5 16a7 7 0 0 1 14 0v3H5Z"/><path d="M12 9v10"/></symbol>
+  <symbol id="i-e-amulet" viewBox="0 0 24 24"><path d="M6 4c0 6 3 9 6 9s6-3 6-9"/><path d="M12 13l2.5 3.2L12 20l-2.5-3.8Z"/></symbol>
+  <symbol id="i-e-cloak" viewBox="0 0 24 24"><path d="M9 4h6l4.5 16h-15Z"/><path d="M9 4c0 3 1.4 4.2 3 4.2S15 7 15 4"/></symbol>
+  <symbol id="i-e-gloves" viewBox="0 0 24 24"><path d="M8 21v-7l-2.5-3.5L7 9l1.8 2.2V4.5h1.8V10M10.6 10V3.5h1.8V10M12.4 10V4.2h1.8V11l1.8-1.6 1.6 1.2-3.4 4.6V21"/></symbol>
+  <symbol id="i-e-ring" viewBox="0 0 24 24"><circle cx="12" cy="14.5" r="5.5"/><path d="M10 6.5 12 3.5l2 3-2 2Z"/></symbol>
+  <symbol id="i-e-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6Z"/></symbol>
+</svg>
+<div class="tip" id="tip" role="tooltip" hidden></div>
 
 <div class="sheet" id="sheet-nyx">
 <header class="hero">
@@ -556,20 +617,8 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
     <section id="gear">
       <div class="section-head"><span class="glyph">◆</span><h2>Equipment</h2></div>
       <div class="await"><span class="hourglass">✓</span><span>From the latest save (AutoSave 6, at the ruined chapel, level 2). Gold is pooled, so amounts aren't shown.</span></div>
-      <div class="equip">
-        <div class="eslot"><span class="ic">♛</span><span class="sn">Head</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">◈</span><span class="sn">Amulet</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">❖</span><span class="sn">Cloak</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⛨</span><span class="sn">Armour</span><span class="sv">Simple Jerkin</span></div>
-        <div class="eslot"><span class="ic">✋</span><span class="sn">Gloves</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⬢</span><span class="sn">Boots</span><span class="sv">Leather Boots</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⚔</span><span class="sn">Main hand</span><span class="sv">Shortsword</span></div>
-        <div class="eslot on"><span class="ic">◐</span><span class="sn">Off hand</span><span class="sv">Dagger</span></div>
-        <div class="eslot on"><span class="ic">➶</span><span class="sn">Ranged</span><span class="sv">Hand Crossbow</span></div>
-        <div class="eslot on"><span class="ic">♪</span><span class="sn">Instrument</span><span class="sv">Violin</span></div>
-      </div>
+      <div class="equip" data-char="nyx"></div>
+      <p class="note equip-hint">Hover over a slot to inspect it. Click or tap to keep the tooltip open.</p>
       <div class="frame" style="margin-top:16px"><h4>In the backpack</h4><div class="pills"><span class="pill feat2">Light Crossbow</span><span class="pill feat2">2× Healing Potion</span><span class="pill feat2">2× Scroll of Revivify</span><span class="pill feat2">Potion of Speed</span><span class="pill feat2">Scroll of Sleep</span><span class="pill feat2">Scroll of Crown of Madness</span><span class="pill feat2">Scroll of Ray of Sickness</span><span class="pill feat2">Scroll of Ray of Frost</span><span class="pill feat2">Scroll of Protection from Evil and Good</span><span class="pill feat2">Goblin Scimitar</span><span class="pill feat2">Goblin Shortbow</span><span class="pill feat2">Handaxe</span><span class="pill feat2">Spare Dagger</span><span class="pill feat2">Silver Ring</span><span class="pill feat2">Silver Necklace</span><span class="pill feat2">2× Onyx</span><span class="pill feat2">2× Mind Flayer grenades</span><span class="pill feat2">Shovel</span></div></div>
     </section>
 
@@ -986,19 +1035,8 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
     <section id="az-gear">
       <div class="section-head"><span class="glyph">◆</span><h2>Equipment</h2></div>
       <div class="await"><span class="hourglass">✓</span><span>From the latest save (AutoSave 6, at the ruined chapel, level 2). Gold is pooled, so amounts aren't shown.</span></div>
-      <div class="equip">
-        <div class="eslot"><span class="ic">♛</span><span class="sn">Head</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">◈</span><span class="sn">Amulet</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">❖</span><span class="sn">Cloak</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⛨</span><span class="sn">Armour</span><span class="sv">Druid Leather Armour</span></div>
-        <div class="eslot"><span class="ic">✋</span><span class="sn">Gloves</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⬢</span><span class="sn">Boots</span><span class="sv">Druid Leather Boots</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⚔</span><span class="sn">Main hand</span><span class="sv">Druid Quarterstaff</span></div>
-        <div class="eslot"><span class="ic">◐</span><span class="sn">Off hand</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">➶</span><span class="sn">Ranged</span><span class="sv">Empty</span></div>
-      </div>
+      <div class="equip" data-char="azurae"></div>
+      <p class="note equip-hint">Hover over a slot to inspect it. Click or tap to keep the tooltip open.</p>
       <div class="frame" style="margin-top:16px"><h4>In the backpack</h4><div class="pills"><span class="pill feat2">Tasteful Boots</span><span class="pill feat2">Lae'zel's Githyanki Boots</span><span class="pill feat2">Lae'zel's camp clothes</span><span class="pill feat2">Longsword</span><span class="pill feat2">Rapier</span><span class="pill feat2">Shortsword</span><span class="pill feat2">3× Scimitar</span><span class="pill feat2">2× Light Crossbow</span><span class="pill feat2">Shortbow</span><span class="pill feat2">Quarterstaff</span><span class="pill feat2">2× Dagger</span><span class="pill feat2">Robe</span><span class="pill feat2">3× Healing Potion</span><span class="pill feat2">Scroll of Revivify</span><span class="pill feat2">Bronze Necklace</span><span class="pill feat2">Onyx</span><span class="pill feat2">Mind Flayer grenade</span><span class="pill feat2">A love letter</span></div></div>
     </section>
 
@@ -1142,19 +1180,8 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
     <section id="hg-gear">
       <div class="section-head"><span class="glyph">◆</span><h2>Equipment</h2></div>
       <div class="await"><span class="hourglass">✓</span><span>From the latest save (AutoSave 6, at the ruined chapel, level 2). Gold is pooled, so amounts aren't shown.</span></div>
-      <div class="equip">
-        <div class="eslot on"><span class="ic">♛</span><span class="sn">Head</span><span class="sv">Rufflesome Blaggart Hat</span></div>
-        <div class="eslot"><span class="ic">◈</span><span class="sn">Amulet</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">❖</span><span class="sn">Cloak</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⛨</span><span class="sn">Armour</span><span class="sv">Githyanki Half Plate (Lae'zel's)</span></div>
-        <div class="eslot"><span class="ic">✋</span><span class="sn">Gloves</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⬢</span><span class="sn">Boots</span><span class="sv">Shoes</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
-        <div class="eslot"><span class="ic">○</span><span class="sn">Ring</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">⚔</span><span class="sn">Main hand</span><span class="sv">Everburn Blade</span></div>
-        <div class="eslot"><span class="ic">◐</span><span class="sn">Off hand</span><span class="sv">Empty</span></div>
-        <div class="eslot on"><span class="ic">➶</span><span class="sn">Ranged</span><span class="sv">Shortbow</span></div>
-      </div>
+      <div class="equip" data-char="hagra"></div>
+      <p class="note equip-hint">Hover over a slot to inspect it. Click or tap to keep the tooltip open.</p>
       <div class="frame" style="margin-top:16px"><h4>In the backpack</h4><div class="pills"><span class="pill feat2">Soul Coin</span><span class="pill feat2">Pike</span><span class="pill feat2">Quarterstaff</span><span class="pill feat2">2× Dagger</span><span class="pill feat2">Padded Armour</span><span class="pill feat2">Potion of Healing</span><span class="pill feat2">Potion of Fire Resistance</span><span class="pill feat2">Scroll of Revivify</span><span class="pill feat2">Scroll of Ray of Enfeeblement</span><span class="pill feat2">Scroll of Protection from Evil and Good</span><span class="pill feat2">Thieves' Tools</span><span class="pill feat2">Trap Disarm Toolkit</span><span class="pill feat2">Basic Toxin</span><span class="pill feat2">Bronze Necklace</span><span class="pill feat2">Pearl</span><span class="pill feat2">A dead commoner's locket</span></div></div>
       <div class="frame" style="margin-top:16px"><h4>Gear notes</h4><ul class="compass"><li><strong>Everburn Blade</strong> is a two-handed greatsword with extra fire damage. Hexblades attack with Charisma once the weapon is bound, but two hands means no shield for now.</li><li><strong>Githyanki Half Plate</strong> is medium armour, which Hexblades can wear. It came off Lae'zel.</li></ul></div>
     </section>
@@ -1313,6 +1340,345 @@ dialog.lightbox button:hover { border-color: var(--gold); color: var(--gold-hi);
 </footer>
 
 <script>
+
+/* EQUIPMENT: item data from the save plus the game's stats files. */
+var ITEMS = {
+ "jerkin": {
+  "name": "Simple Jerkin",
+  "rarity": "common",
+  "icon": "jerkin",
+  "type": "Light armour · Body",
+  "big": [
+   "11",
+   "Armour Class + Dex"
+  ],
+  "props": [
+   "Light armour proficiency"
+  ],
+  "weight": "4.5 kg",
+  "tip": "Nyx: AC 14 with her Dex. An easy upgrade. Any better light armour, or medium armour once she joins the College of Swords."
+ },
+ "leatherboots": {
+  "name": "Leather Boots",
+  "rarity": "common",
+  "icon": "boots",
+  "type": "Boots",
+  "props": [
+   "No armour class",
+   "No special effects"
+  ],
+  "weight": "0.55 kg",
+  "tip": "Placeholder boots. Upgrade with Boots of Speed or the Disintegrating Night Walkers."
+ },
+ "shortsword": {
+  "name": "Shortsword",
+  "rarity": "common",
+  "icon": "sword",
+  "type": "Martial · One-handed melee",
+  "big": [
+   "1d6",
+   "Piercing"
+  ],
+  "for": "Nyx: 1d6 + 3 (Dexterity)",
+  "props": [
+   "Finesse",
+   "Light",
+   "Dippable",
+   "Range 1.5 m"
+  ],
+  "actions": [
+   "Flourish",
+   "Piercing Strike"
+  ],
+  "weight": "0.9 kg",
+  "tip": "Upgrade: Knife of the Undermountain King, a +2 shortsword sold at Crèche Y'llek."
+ },
+ "dagger": {
+  "name": "Dagger",
+  "rarity": "common",
+  "icon": "dagger",
+  "type": "Simple · One-handed melee · Off hand",
+  "big": [
+   "1d4",
+   "Piercing"
+  ],
+  "for": "Off-hand hits add no Dex to damage until she takes Two-Weapon Fighting (College of Swords).",
+  "props": [
+   "Finesse",
+   "Light",
+   "Thrown",
+   "Dippable"
+  ],
+  "actions": [
+   "Piercing Strike"
+  ],
+  "weight": "0.45 kg"
+ },
+ "handxbow": {
+  "name": "Hand Crossbow",
+  "rarity": "common",
+  "icon": "xbow",
+  "type": "Martial · Ranged",
+  "big": [
+   "1d6",
+   "Piercing"
+  ],
+  "for": "Nyx: 1d6 + 3 (Dexterity)",
+  "props": [
+   "Range 18 m",
+   "Light",
+   "Loading",
+   "Ammunition",
+   "Dippable"
+  ],
+  "actions": [
+   "Piercing Shot",
+   "Mobile Shot"
+  ],
+  "weight": "0.9 kg",
+  "tip": "The Light Crossbow in her backpack hits harder (1d8). Swap it in until you find a magical hand crossbow."
+ },
+ "violin": {
+  "name": "Violin",
+  "rarity": "common",
+  "icon": "violin",
+  "type": "Musical instrument",
+  "props": [
+   "Unlocks Perform"
+  ],
+  "weight": "0.55 kg",
+  "flav": "Lark's violin. The only thing Nyx took when she ran."
+ },
+ "druidarmour": {
+  "name": "Druid Leather Armour",
+  "rarity": "common",
+  "icon": "jerkin",
+  "type": "Light armour · Body",
+  "big": [
+   "11",
+   "Armour Class + Dex"
+  ],
+  "props": [
+   "Light armour proficiency"
+  ],
+  "weight": "4.5 kg",
+  "tip": "Azurae: AC 13 with her Dex. Druids can wear medium armour, so Yuan-Ti Scale Mail is a big Act 2 upgrade."
+ },
+ "druidboots": {
+  "name": "Druid Leather Boots",
+  "rarity": "common",
+  "icon": "boots",
+  "type": "Boots",
+  "props": [
+   "No armour class",
+   "No special effects"
+  ],
+  "weight": "0.55 kg",
+  "tip": "Starting druid boots, the same as plain Leather Boots apart from the look. An easy slot to upgrade."
+ },
+ "druidstaff": {
+  "name": "Druid Quarterstaff",
+  "rarity": "common",
+  "icon": "staff",
+  "type": "Simple · Melee · Versatile",
+  "big": [
+   "1d6",
+   "Bludgeoning"
+  ],
+  "for": "Two-handed: 1d8. With Shillelagh it hits with Wisdom (+3) and deals 1d8.",
+  "props": [
+   "Versatile",
+   "Dippable",
+   "Range 1.5 m"
+  ],
+  "actions": [
+   "Topple"
+  ],
+  "weight": "1.8 kg"
+ },
+ "hat": {
+  "name": "Rufflesome Blaggart Hat",
+  "rarity": "common",
+  "icon": "hat",
+  "type": "Headwear",
+  "props": [
+   "No armour class",
+   "Purely cosmetic"
+  ],
+  "weight": "0.5 kg",
+  "price": "5 gp",
+  "flav": "\"For the discerning raconteur, spinner of stories, and peacockish personality.\"",
+  "tip": "Zero stats, maximum style. Arguably Nyx should be wearing this."
+ },
+ "githplate": {
+  "name": "Githyanki Half Plate",
+  "rarity": "common",
+  "icon": "plate",
+  "type": "Medium armour · Body",
+  "big": [
+   "15",
+   "Armour Class + Dex (max 2)"
+  ],
+  "for": "Hagra: AC 16 with her Dex.",
+  "props": [
+   "Medium armour proficiency",
+   {
+    "t": "Disadvantage on Stealth",
+    "c": "bad"
+   }
+  ],
+  "weight": "12 kg",
+  "flav": "Taken from Lae'zel. She won't be needing it."
+ },
+ "everburn": {
+  "name": "Everburn Blade",
+  "rarity": "uncommon",
+  "icon": "greatsword",
+  "type": "Martial · Two-handed melee · Greatsword",
+  "big": [
+   "2d6",
+   "Slashing <span class=\"fire\">+ 1d4 Fire</span>"
+  ],
+  "for": "Hagra: 2d6 + 3 with Bind Hexed Weapon (Charisma), plus fire.",
+  "props": [
+   "Two-handed",
+   "Heavy",
+   "Magical",
+   {
+    "t": "Always burning",
+    "c": "good"
+   },
+   "Not dippable"
+  ],
+  "actions": [
+   "Cleave",
+   "Lacerate",
+   "Pommel Strike"
+  ],
+  "weight": "2.7 kg",
+  "price": "130 gp",
+  "flav": "\"Silent flames surge the length of the blade as soon as it clears the scabbard.\"",
+  "tip": "Commander Zhalk's sword from the nautiloid. Two hands means no shield."
+ },
+ "shortbow": {
+  "name": "Shortbow",
+  "rarity": "common",
+  "icon": "bow",
+  "type": "Simple · Two-handed ranged",
+  "big": [
+   "1d6",
+   "Piercing"
+  ],
+  "props": [
+   "Range 18 m",
+   "Ammunition",
+   "Dippable"
+  ],
+  "actions": [
+   "Hamstring Shot"
+  ],
+  "weight": "0.9 kg",
+  "tip": "Hagra's Eldritch Blast usually beats this at range."
+ },
+ "shoes": {
+  "name": "Shoes",
+  "rarity": "common",
+  "icon": "shoe",
+  "type": "Boots · Clothing",
+  "props": [
+   "No armour class",
+   "No special effects"
+  ],
+  "weight": "0.55 kg",
+  "tip": "Ordinary shoes. Any boots are an upgrade."
+ }
+};
+var EQUIP = {
+ "nyx": {
+  "Armour": "jerkin",
+  "Boots": "leatherboots",
+  "Main hand": "shortsword",
+  "Off hand": "dagger",
+  "Ranged": "handxbow",
+  "Instrument": "violin"
+ },
+ "azurae": {
+  "Armour": "druidarmour",
+  "Boots": "druidboots",
+  "Main hand": "druidstaff"
+ },
+ "hagra": {
+  "Head": "hat",
+  "Armour": "githplate",
+  "Boots": "shoes",
+  "Main hand": "everburn",
+  "Ranged": "shortbow"
+ }
+};
+(function () {
+  var SLOTS = [['Head','e-head'],['Amulet','e-amulet'],['Cloak','e-cloak'],['Armour','jerkin'],['Gloves','e-gloves'],['Boots','boots'],['Ring','e-ring'],['Ring 2','e-ring'],['Main hand','sword'],['Off hand','e-shield'],['Ranged','bow'],['Instrument','violin']];
+  var tip = document.getElementById('tip');
+  var pinned = null, current = null;
+  function svg(id) { return '<svg aria-hidden="true"><use href="#i-' + id + '"></use></svg>'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function tipHTML(it) {
+    var x = '<div class="t-name ' + it.rarity + '">' + esc(it.name) + '</div>';
+    x += '<div class="t-type">' + esc(it.type) + ' · ' + it.rarity.charAt(0).toUpperCase() + it.rarity.slice(1) + '</div>';
+    if (it.big) x += '<div class="t-big"><b>' + esc(it.big[0]) + '</b>' + it.big[1] + '</div>';
+    if (it.for) x += '<div class="t-for">' + esc(it.for) + '</div>';
+    if (it.props && it.props.length) x += '<hr><ul class="t-props">' + it.props.map(function (p) { return typeof p === 'string' ? '<li>' + esc(p) + '</li>' : '<li class="' + p.c + '">' + esc(p.t) + '</li>'; }).join('') + '</ul>';
+    if (it.actions && it.actions.length) x += '<div class="t-head">Weapon actions</div><ul class="t-props">' + it.actions.map(function (a) { return '<li class="good">' + esc(a) + '</li>'; }).join('') + '</ul>';
+    if (it.flav) x += '<p class="t-flav">' + esc(it.flav) + '</p>';
+    if (it.tip) x += '<p class="t-tip">' + esc(it.tip) + '</p>';
+    x += '<div class="t-foot"><span>Weight ' + esc(it.weight || '–') + '</span><span>' + esc(it.price || '') + '</span></div>';
+    return x;
+  }
+  function place(btn) {
+    var r = btn.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    var left, top = r.top;
+    if (r.right + 10 + tw <= vw - 16) left = r.right + 10;
+    else if (r.left - 10 - tw >= 16) left = r.left - tw - 10;
+    else { left = Math.max(16, Math.min(vw - tw - 16, r.left)); top = r.bottom + 8; }
+    if (top + th > vh - 16) top = Math.max(16, vh - th - 16);
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+  function show(btn) {
+    var it = ITEMS[btn.getAttribute('data-item')]; if (!it) return;
+    current = btn; tip.innerHTML = tipHTML(it); tip.hidden = false; place(btn);
+  }
+  function hide() { if (pinned) return; tip.hidden = true; current = null; }
+  function unpin() { if (pinned) pinned.setAttribute('aria-pressed', 'false'); pinned = null; tip.classList.remove('pinned'); }
+  Array.prototype.forEach.call(document.querySelectorAll('.equip[data-char]'), function (box) {
+    var eq = EQUIP[box.getAttribute('data-char')] || {};
+    SLOTS.forEach(function (s) {
+      var id = eq[s[0]]; if (s[0] === 'Instrument' && !id) return;
+      var it = id && ITEMS[id];
+      var el = document.createElement(it ? 'button' : 'div');
+      el.className = 'eslot' + (it ? ' on' : '') + (it && it.rarity === 'uncommon' ? ' r-unc-b' : '');
+      el.innerHTML = '<span class="ic">' + svg(it ? it.icon : s[1]) + '</span><span class="sn">' + esc(s[0].replace(' 2', '')) + '</span><span class="sv">' + esc(it ? it.name : 'Empty') + '</span>';
+      if (it) {
+        el.type = 'button'; el.setAttribute('data-item', id); el.setAttribute('aria-pressed', 'false');
+        el.setAttribute('aria-label', s[0] + ': ' + it.name + '. Show details');
+        el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && !pinned) show(el); });
+        el.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hide(); });
+        el.addEventListener('focus', function () { if (!pinned) show(el); });
+        el.addEventListener('blur', function () { hide(); });
+        el.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (pinned === el) { unpin(); hide(); return; }
+          unpin(); pinned = el; el.setAttribute('aria-pressed', 'true'); tip.classList.add('pinned'); show(el);
+        });
+      }
+      box.appendChild(el);
+    });
+  });
+  document.addEventListener('click', function (e) { if (pinned && !tip.contains(e.target)) { unpin(); hide(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { unpin(); hide(); } });
+  window.addEventListener('scroll', function () { if (current && !tip.hidden) place(current); }, { passive: true });
+  window.addEventListener('resize', function () { if (current && !tip.hidden) place(current); });
+  window.addEventListener('hashchange', function () { unpin(); hide(); });
+})();
+
 /* JOURNAL ENTRIES: newest first. Images live in journal/ next to index.html.
    { title, date: "YYYY-MM-DD", act, place, img: "journal/file.jpg", caption,
      notes: [ { who: "nyx" | "azurae" | "hagra", text } ] } */
