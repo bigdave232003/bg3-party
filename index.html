@@ -377,6 +377,8 @@ section.collapsed .section-head h2 { color: var(--ink-dim); }
 .hpline .hp-max { color: var(--ink); font-size: calc(16px * var(--fs, 1)); letter-spacing: .04em; }
 .hpline .xp { display: inline-flex; align-items: center; gap: 8px; }
 .hpline .xp b { color: var(--ink); font-weight: 600; }
+.hpline .xp b, .hpline .xp small { white-space: nowrap; }
+.hpline .xp { flex-wrap: wrap; }
 .xpbar { position: relative; width: 120px; height: 7px; background: #241d22; border: 1px solid var(--gold-lo); }
 .xpbar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #8a6a2f, var(--gold-hi)); }
 .hpline .xp small { font-family: var(--body); font-size: calc(13px * var(--fs, 1)); letter-spacing: 0; text-transform: none; color: var(--ink-dim); }
@@ -597,7 +599,24 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 /* Equipment slots: every box the same height (icon + label + up to three lines of name) */
 :is(.equip, .camp) .eslot { grid-template-rows: calc(46px * var(--fs, 1)) auto calc(3 * 1.25 * 14px * var(--fs, 1)); align-content: start; }
 :is(.equip, .camp) .eslot .ic { display: flex; align-items: center; justify-content: center; height: calc(46px * var(--fs, 1)); }
-:is(.equip, .camp) .eslot .sv { line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+:is(.equip, .camp) .eslot .sv { line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; align-self: center; }
+/* Narrow screens: party chips become portraits only; on phones the save info and buttons drop to a second row */
+@media (max-width: 1100px) {
+  .switcher .who > span:not(.glyphbox) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .switcher .who { padding: 3px; }
+}
+@media (max-width: 640px) {
+  .switcher .wrap, html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-x: visible; row-gap: 6px; justify-content: space-between; }
+  .switcher .divider { display: none; }
+  .switcher .meta { margin-left: 0; margin-right: auto; padding-left: 0; flex-direction: row; align-items: center; gap: 6px; }
+  .switcher .meta .row:first-child { display: none; }
+  .switcher .wrap .brk { display: block; flex-basis: 100%; height: 0; }
+  .switcher .wrap { gap: 4px 6px; padding-left: 10px; padding-right: 10px; justify-content: flex-start; }
+  .switcher .who { padding: 2px; }
+  .switcher .who img, .switcher .who .glyphbox { width: 32px; height: 32px; }
+}
+.switcher .brk { display: none; }
+@media (max-width: 420px) { .switcher .wrap { gap: 4px 2px; justify-content: space-between; } .switcher .who img, .switcher .who .glyphbox { width: 28px; height: 28px; } }
 </style>
 
 <div class="switcher" role="navigation" aria-label="Party members">
@@ -613,6 +632,7 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
     <span class="divider" aria-hidden="true"></span>
     <a class="who" href="#journal" data-sheet="journal"><span class="glyphbox" aria-hidden="true">✒</span><span>Journal<small>Our adventure</small></span></a>
     <a class="who" href="#fallen" data-sheet="fallen"><span class="glyphbox" aria-hidden="true">☠</span><span>The Fallen<small>Our victims</small></span></a>
+    <span class="brk" aria-hidden="true"></span>
     <div class="meta"><span class="row">Last uploaded save</span><span class="row"><b id="savestamp">16 Nov, 23:09</b> · <span class="gold-amt" title="Party gold"><svg class="coins" aria-hidden="true"><use href="#i-coins"></use></svg><b id="partygold">135</b></span></span></div>
     <button type="button" class="dv" id="dv-btn" aria-pressed="false" title="Dave Vision: make the text bigger"><span class="dv-word">Dave Vision</span><span class="dv-short" aria-hidden="true">Aa</span><b id="dv-lvl">1×</b></button>
     <button type="button" class="refresh" id="refresh-btn" title="Refresh data" aria-label="Refresh data" aria-haspopup="dialog" aria-controls="refresh-pop"><span aria-hidden="true">⟳</span><span class="rf-word"> Refresh</span></button>
