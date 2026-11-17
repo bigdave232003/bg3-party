@@ -713,20 +713,22 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 @media (max-width: 1400px) { .switcher .meta.quest { padding-right: 10px; margin-right: 6px; } .switcher .meta.quest + .meta { padding-right: 10px; } }
 @media (max-width: 640px) { .switcher .meta.quest { margin-right: 0; padding-right: 8px; } .switcher .meta.quest + .meta { padding-right: 0; } }
 /* Fun stats */
-.fun { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(190px * var(--fs, 1))), 1fr)); gap: 10px; }
-@media (max-width: 640px) { .fun { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .funt { padding: 10px; } .funt .fl { letter-spacing: .08em; } }
+/* one framed table; two columns of rows on wide screens */
+.fun { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 36px; padding: 10px 22px; }
+@media (max-width: 900px) { .fun { grid-template-columns: minmax(0, 1fr); padding: 6px 14px; } }
+html.dv15 .fun, html.dv2 .fun { grid-template-columns: minmax(0, 1fr); }
 nav.toc a.line-start::before { display: none; }
-.funt { padding: 12px 14px; background: linear-gradient(180deg, var(--panel-2), var(--panel)); border: 1px solid var(--gold-lo); min-width: 0; overflow-wrap: normal; word-break: normal; }
-.funt .fi { display: inline-block; width: 1.4em; font-size: calc(15px * var(--fs, 1)); color: var(--gold); line-height: 1; vertical-align: -1px; }
-.funt .fl { display: inline; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
-.funt .fl sup { color: var(--gold-lo); margin-left: 2px; }
-.funt b { display: block; margin-top: 6px; font-family: var(--display); font-weight: 600; font-size: calc(19px * var(--fs, 1)); color: var(--gold-hi); line-height: 1.25; }
-.funt small { display: block; font-size: calc(13px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; margin-top: 2px; }
-.funt details.more { margin-top: 2px; }
-.funt details.more summary { cursor: pointer; list-style: none; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
-.funt details.more summary::-webkit-details-marker { display: none; }
-.funt details.more[open] summary { color: var(--gold-hi); }
-.fun-note { margin-top: 10px; font-size: calc(13px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; }
+.funr { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 9.5em) minmax(0, 1fr); gap: 4px 14px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid rgba(110,90,51,.35); overflow-wrap: normal; word-break: normal; min-width: 0; }
+.funr .fl { font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); }
+.funr .fi { display: inline-block; width: 1.5em; color: var(--gold); font-size: calc(14px * var(--fs, 1)); letter-spacing: 0; }
+.funr b { font-family: var(--display); font-weight: 600; font-size: calc(17px * var(--fs, 1)); color: var(--gold-hi); line-height: 1.25; }
+.funr .fd small { font-size: calc(14px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; }
+@media (max-width: 520px) { .funr { grid-template-columns: minmax(0, 1fr) auto; } .funr .fd { grid-column: 1 / -1; } .funr b { text-align: right; } }
+.funr details.more { display: inline; }
+.funr details.more summary { display: inline; cursor: pointer; list-style: none; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-left: 6px; }
+.funr details.more summary::-webkit-details-marker { display: none; }
+.funr details.more[open] summary { color: var(--gold-hi); }
+.funr details.more[open] small { display: block; }
 /* Long words never push the page wider than the screen */
 body { overflow-wrap: break-word; }
 h2, h3, h4, .pill, .tag, .chip { overflow-wrap: break-word; min-width: 0; }
@@ -1919,7 +1921,9 @@ var PARTY = {
    "crimes": [],
    "tadpole": 0,
    "places": 0,
-   "waypoints": 0
+   "waypoints": 0,
+   "spotted": [],
+   "lore": 0
   },
   "nyx": {
    "id": "nyx",
@@ -2154,7 +2158,11 @@ var PARTY = {
    ],
    "tadpole": 0,
    "places": 45,
-   "waypoints": 2
+   "waypoints": 2,
+   "spotted": [
+    "Secret door button"
+   ],
+   "lore": 1
   },
   "hagra": {
    "id": "hagra",
@@ -2351,7 +2359,9 @@ var PARTY = {
    "crimes": [],
    "tadpole": 0,
    "places": 40,
-   "waypoints": 2
+   "waypoints": 2,
+   "spotted": [],
+   "lore": 1
   },
   "laezel": {
    "id": "laezel",
@@ -2404,7 +2414,9 @@ var PARTY = {
    "crimes": [],
    "tadpole": 0,
    "places": 7,
-   "waypoints": 0
+   "waypoints": 0,
+   "spotted": [],
+   "lore": 0
   },
   "shadowheart": {
    "id": "shadowheart",
@@ -2512,7 +2524,9 @@ var PARTY = {
    "crimes": [],
    "tadpole": 0,
    "places": 15,
-   "waypoints": 0
+   "waypoints": 0,
+   "spotted": [],
+   "lore": 0
   },
   "gale": {
    "id": "gale",
@@ -2628,7 +2642,9 @@ var PARTY = {
    ],
    "tadpole": 0,
    "places": 31,
-   "waypoints": 2
+   "waypoints": 2,
+   "spotted": [],
+   "lore": 1
   },
   "azurae": {
    "id": "azurae",
@@ -2914,7 +2930,9 @@ var PARTY = {
    ],
    "tadpole": 1,
    "places": 61,
-   "waypoints": 2
+   "waypoints": 2,
+   "spotted": [],
+   "lore": 1
   }
  },
  "items": {
@@ -5558,6 +5576,9 @@ var SAVE = { time: PARTY.saveTime };
       ['✺', 'Tadpole powers used', c.tadpole || 0, sm(c.tadpole ? 'The parasite approves.' : 'Resisting the urge')],
       ['⌖', 'Places explored', c.places || 0, sm('Areas walked into')],
       ['⚑', 'Waypoints found', c.waypoints || 0, ''],
+      ['◉', 'Hidden things spotted', (c.spotted || []).length, listHtml(c.spotted, 'Nothing hidden found yet')],
+      ['✎', 'Lore checks passed', c.lore || 0, sm(c.lore ? 'History, Religion, Arcana and friends' : '')],
+      ['⛀', 'Gold in pocket', (c.gold || 0) + ' gold', ''],
       ['♥', 'Furthest base', BASES[rom.stage] || BASES[0], sm(rom.with.length ? 'With ' + rom.with.join(', ') : BASE_SUB[rom.stage] || '')],
       ['❦', 'Romance partners', rom.with.length, sm(rom.with.length ? rom.with.join(', ') : 'None yet')],
       ['♛', PLAYERS.indexOf(id) >= 0 ? 'Biggest fan' : 'Favourite', fan ? fan.who : 'Nobody, yet', sm(fan ? 'Approval +' + fan.v : '')],
@@ -5565,10 +5586,9 @@ var SAVE = { time: PARTY.saveTime };
     ];
     var sec = document.createElement('section'); sec.id = id + '-fun';
     sec.innerHTML = '<div class="section-head"><span class="glyph">◆</span><h2>Fun stats</h2></div>' +
-      '<div class="fun">' + tiles.map(function (x) {
-        return '<div class="funt"><span class="fi" aria-hidden="true">' + x[0] + '︎</span><span class="fl">' + esc(x[1]) + '</span><b>' + esc(x[2]) + '</b>' + (x[3] || '') + '</div>';
-      }).join('') + '</div>' +
-      '<p class="fun-note">All from the latest save. The game keeps no record of downs, deaths, knock-outs, bribes or jail time, so those can’t be counted.</p>';
+      '<div class="fun frame">' + tiles.map(function (x) {
+        return '<div class="funr"><span class="fl"><span class="fi" aria-hidden="true">' + x[0] + '︎</span>' + esc(x[1]) + '</span><b>' + esc(x[2]) + '</b><span class="fd">' + (x[3] || '') + '</span></div>';
+      }).join('') + '</div>';
     var eq = sheet.querySelector('main .wrap > section .equip');
     var gear = (eq && eq.closest('section')) || sheet.querySelector('main .wrap > section');
     if (gear && gear.nextSibling) gear.parentNode.insertBefore(sec, gear.nextSibling); else if (gear) gear.parentNode.appendChild(sec);
