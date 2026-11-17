@@ -654,7 +654,7 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .journal-hero.has-img { background-image: linear-gradient(180deg, rgba(13,11,15,.3) 0%, rgba(13,11,15,.72) 62%, var(--void) 100%), var(--place); }
 .journal-hero .wrap { padding-block: clamp(48px, 12vw, 140px) 30px; }
 .journal-hero .tagline, .journal-hero h1, .journal-hero .eyebrow { text-shadow: 0 2px 8px #000, 0 0 2px #000; }
-.jstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(160px * var(--fs, 1))), 1fr)); gap: 10px; margin-top: 18px; }
+.jstats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
 .jstat { background: rgba(13,11,15,.78); border: 1px solid var(--gold-lo); padding: 10px 14px; min-width: 0; }
 .jstat span { display: block; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
 .jstat b { display: block; font-family: var(--display); font-weight: 600; font-size: calc(18px * var(--fs, 1)); color: var(--gold-hi); line-height: 1.3; overflow-wrap: break-word; }
@@ -688,6 +688,15 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .jcamp a { color: var(--gold-hi); }
 #sheet-journal main .wrap { gap: 40px; }
 @media (max-width: 760px) { .jquests { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 900px) { .jstats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 1000px) { html.dv15 .jstats, html.dv2 .jstats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* top bar: breathing room between the save info and the buttons */
+.switcher .meta.quest + .meta { padding-right: 14px; }
+.switcher .dv { margin-left: 4px; }
+.switcher .refresh { margin-left: 4px; }
+.switcher .meta.quest { padding-right: 14px; margin-right: 10px; }
+@media (max-width: 1400px) { .switcher .meta.quest { padding-right: 10px; margin-right: 6px; } .switcher .meta.quest + .meta { padding-right: 10px; } }
+@media (max-width: 640px) { .switcher .meta.quest { margin-right: 0; padding-right: 8px; } .switcher .meta.quest + .meta { padding-right: 0; } }
 /* Long words never push the page wider than the screen */
 body { overflow-wrap: break-word; }
 h2, h3, h4, .pill, .tag, .chip { overflow-wrap: break-word; min-width: 0; }
@@ -1712,8 +1721,8 @@ h1 { overflow-wrap: normal; min-width: 0; }
 <div class="sheet" id="sheet-journal">
 <header class="journal-hero" id="jhero">
   <div class="wrap">
-    <div class="eyebrow">Adventure Journal</div>
-    <h1>The Sorrowind Chronicle</h1>
+    <div class="eyebrow">Adventure Journal · Azurae, Nyx &amp; Hagra</div>
+    <h1>Storm, Song &amp; Steel</h1>
     <p class="tagline" id="j-where">Where the party is, what we're chasing, and who's still standing.</p>
     <div class="jstats" id="jstats"></div>
   </div>
@@ -5645,8 +5654,7 @@ b.addEventListener('click',function(){var n=L[(L.indexOf(cur())+1)%L.length];r.c
   if (where && loc.name) where.textContent = 'Last seen at ' + loc.name + (loc.area ? ', ' + loc.area : '') + (act ? ' · ' + act : '') + '.';
 
   var tiles = [
-    ['Where we are', loc.name || '–', loc.area || ''],
-    ['Act', act || '–', ''],
+    ['Where we are', loc.name || '–', [act, loc.area].filter(Boolean).join(' · ')],
     ['Difficulty', diff || '–', honour ? 'Still on. No party wipes yet.' : '', honour ? 'honour' : ''],
     ['Last uploaded save', saved ? saved.toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '–', played],
     ['Party gold', '<svg class="coins" aria-hidden="true"><use href="#i-coins"></use></svg>' + (PARTY.partyGold || 0), '', '', true]
