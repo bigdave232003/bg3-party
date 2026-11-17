@@ -257,6 +257,24 @@ ul.plain li { margin-bottom: 6px; }
 }
 .lv.major .num { border-color: var(--gold); background: #2a1e14; }
 .lv.now .num { border-color: var(--blood-hi); color: var(--ink); background: #3a1620; }
+.lv.done { opacity: .5; }
+.act-label .here { color: var(--ink); letter-spacing: .1em; }
+.item.owned { opacity: .62; }
+.item .got { margin: -2px 0 6px; font-family: var(--display); font-size: calc(12px * var(--fs, 1)); letter-spacing: .12em; text-transform: uppercase; color: #8fc27a; }
+/* Portrait gallery */
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(170px * var(--fs, 1)), 1fr)); gap: 18px; }
+@media (max-width: 640px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+.gpic { all: unset; box-sizing: border-box; cursor: zoom-in; display: flex; flex-direction: column; gap: 4px; padding: 8px; border: 1px solid rgba(110,90,51,.55); background: rgba(0,0,0,.25); min-width: 0; }
+.gpic:hover, .gpic:focus-visible { border-color: var(--gold); }
+.gpic img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; display: block; margin-bottom: 4px; }
+.gpic .gl { font-family: var(--display); font-size: calc(14px * var(--fs, 1)); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.gpic.latest .gl::after { content: " · now"; color: var(--ink); }
+.gpic .gs { font-size: calc(13px * var(--fs, 1)); color: var(--ink-dim); }
+.lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(5,4,8,.9); display: flex; align-items: center; justify-content: center; padding: 16px; cursor: zoom-out; }
+.lightbox[hidden] { display: none; }
+.lightbox figure { margin: 0; max-width: 100%; max-height: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.lightbox img { max-width: 100%; max-height: calc(100vh - 80px); object-fit: contain; border: 1px solid var(--gold); }
+.lightbox figcaption { font-family: var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); font-size: calc(14px * var(--fs, 1)); text-align: center; }
 .lv .what { font-size: calc(17px * var(--fs, 1)); }
 .lv .what strong { color: var(--gold-hi); font-weight: 600; }
 .lv .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
@@ -787,7 +805,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
 <div class="tip" id="tip" role="tooltip" hidden></div>
 <div class="refresh-pop" id="refresh-pop" role="dialog" aria-labelledby="refresh-title" hidden>
   <h3 id="refresh-title">Refresh data</h3>
-  <p>Refreshing runs in Claude Code on Dave W.'s laptop. Claude downloads the newest save from the shared Drive folder, decodes it, updates every sheet and repaints portraits whose gear changed.</p>
+  <p>Refreshing runs in Claude Code on Dave W.'s laptop. Claude downloads the newest save from the shared Drive folder, decodes it, updates every sheet and repaints portraits whose gear changed. Every new portrait joins the Portraits gallery on that character's sheet.</p>
   <dl><dt>Showing</dt><dd id="rp-save"></dd><dt>Location</dt><dd id="rp-where"></dd><dt>Difficulty</dt><dd id="rp-diff"></dd></dl>
   <p>To refresh, run this in Claude Code:</p>
   <div class="cmd"><code id="rp-cmd">/bg3-refresh</code><button type="button" id="rp-copy">Copy</button></div>
@@ -812,7 +830,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
         <span class="chip">Next: Subclass at Level 3</span>
       </div>
       <div class="stats" data-stats="nyx" aria-label="Ability scores"></div>
-      <div class="stats-note">From the latest save. The gold boxes are the two that matter for a Swords bard.</div>
+      <div class="stats-note">The gold boxes are the two that matter for a Swords bard.</div>
       <div class="hpline" data-hp="nyx"></div>
       <div class="look" data-look="nyx" aria-label="Appearance from the save"></div>
     </div>
@@ -912,7 +930,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
     <!-- KIT -->
     <section id="kit">
       <div class="section-head"><span class="glyph">◆</span><h2>Current kit</h2></div>
-      <p class="lede">What the save says Nyx is carrying and casting, and how to use it. One surprise: Fire Bolt comes from being a High Elf, and that cantrip runs off Intelligence, not Charisma, so it'll miss a lot for her.</p>
+      <p class="lede">What Nyx is carrying and casting, and how to use it. One surprise: Fire Bolt comes from being a High Elf, and that cantrip runs off Intelligence, not Charisma, so it'll miss a lot for her.</p>
       <div class="grid-2">
         <div class="frame">
           <h4>Weapons</h4>
@@ -1077,7 +1095,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
     <!-- ITEMS -->
     <section id="items">
       <div class="section-head"><span class="glyph">◆</span><h2>Items to hunt</h2></div>
-      <div class="act-label">Act 1 · you're here</div>
+      <div class="act-label">Act 1 · The Wilds</div>
       <div class="items">
         <article class="frame item">
           <span class="rar r-rare">Rare · Longsword</span>
@@ -1269,7 +1287,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
           <li><strong>Hypnotic Pattern before Azurae's area spells:</strong> keep allies out of the pattern, then hit the stunned group.</li>
           <li><strong>Gear sharing:</strong> Gloves of Belligerent Skies and Boots of Stormy Clamour suit Azurae's lightning. Charisma headwear goes to whoever is struggling more, Nyx or Hagra.</li>
         </ul>
-        <p class="fallen">Fallen: <s>Lae'zel</s>, shot by Nyx while aiming for a lock. Nyx said a few words over her. She didn't sing. <a href="#fallen">See The Fallen</a></p>
+        <p class="fallen">Fallen: <s>Lae'zel</s>. Nyx's stray arrow made her angry and Gale finished her off. Nyx said a few words over her. She didn't sing. <a href="#fallen">See The Fallen</a></p>
         <p class="fallen">Back at camp: <strong>Withers</strong> respecs for 100 gold and revives fallen companions. Nyx adores him.</p>
       </div>
     </section>
@@ -1296,7 +1314,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
         <span class="chip">Circle of the Stars</span>
       </div>
       <div class="stats" data-stats="azurae" aria-label="Ability scores"></div>
-      <div class="stats-note">From the latest save. Wisdom powers her spells.</div>
+      <div class="stats-note">Wisdom powers her spells.</div>
       <div class="hpline" data-hp="azurae"></div>
       <div class="look" data-look="azurae" aria-label="Appearance from the save"></div>
     </div>
@@ -1341,7 +1359,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
         </div>
       </div>
       <div class="frame" style="margin-top:16px">
-        <h3>Spells and forms (from the latest save)</h3>
+        <h3>Spells and forms</h3>
         <div class="pills" data-spells="azurae"></div>
         <p class="note" style="margin:10px 0 0">Druids prepare from their whole list, so this is everything available to her, not necessarily what's prepared today.</p>
       </div>
@@ -1415,6 +1433,36 @@ h1 { overflow-wrap: normal; min-width: 0; }
           <p class="fx">+1 AC and +1 to all saves. Talli sells one, so there may not be enough for everyone.</p>
           <p class="where"><b>WHERE</b>Last Light Inn, Quartermaster Talli (200 gp).</p>
         </article>
+        <article class="frame item">
+          <span class="rar r-vrare">Act 3 · Legendary · Quarterstaff</span>
+          <h3>Markoheshkir</h3>
+          <p class="fx">+2 staff with +1 to spell attacks and save DC, and one free spell per long rest. Once per short rest, Kereska's Favour lets her pick an element. Choose Bolts of Doom to boost her lightning damage and gain free Lightning Bolt and Chain Lightning casts. Made for a blue dragon.</p>
+          <p class="where"><b>WHERE</b>Ramazith's Tower, inside a Globe of Invulnerability. Someone has to cast See Invisibility to find the lever, then pass an Arcana check (DC 20).</p>
+        </article>
+        <article class="frame item">
+          <span class="rar r-vrare">Act 3 · Clothing</span>
+          <h3>Robe of the Weave</h3>
+          <p class="fx">+1 spell save DC and spell attacks, +2 AC, and it heals her when she succeeds on a save against a spell. Druids can't wear metal armour anyway.</p>
+          <p class="where"><b>WHERE</b>Ramazith's Tower, in the same globe as Markoheshkir.</p>
+        </article>
+        <article class="frame item">
+          <span class="rar r-vrare">Act 3 · Amulet</span>
+          <h3>Amulet of Greater Health</h3>
+          <p class="fx">Sets Constitution to 23 and gives advantage on Constitution saves. More HP, and Call Lightning or Moonbeam almost never loses concentration.</p>
+          <p class="where"><b>WHERE</b>House of Hope, on the left-most pedestal in the Archive.</p>
+        </article>
+        <article class="frame item">
+          <span class="rar r-vrare">Act 3 · Cloak</span>
+          <h3>Cloak of the Weave</h3>
+          <p class="fx">+1 spell save DC and spell attacks. Stacks with the Robe of the Weave.</p>
+          <p class="where"><b>WHERE</b>Devil's Fee in the Lower City, sold by Helsik once her special stock is unlocked.</p>
+        </article>
+        <article class="frame item">
+          <span class="rar r-vrare">Act 3 · Quarterstaff</span>
+          <h3>Staff of Spellpower</h3>
+          <p class="fx">+2 staff with +1 to spell attacks and save DC, and one free spell per long rest. The backup if Gale claims Markoheshkir.</p>
+          <p class="where"><b>WHERE</b>House of Hope, Raphael's Vault. It takes a Wisdom check (DC 10) and then an Arcana check (DC 20) to open the door.</p>
+        </article>
       </div>
     </section>
   </div>
@@ -1439,7 +1487,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
         <span class="chip">Pact: picks at level 3</span>
       </div>
       <div class="stats" data-stats="hagra" aria-label="Ability scores"></div>
-      <div class="stats-note">From the latest save. Hexblades swing and cast with Charisma, so Strength 8 is fine.</div>
+      <div class="stats-note">Hexblades swing and cast with Charisma, so Strength 8 is fine.</div>
       <div class="hpline" data-hp="hagra"></div>
       <div class="look" data-look="hagra" aria-label="Appearance from the save"></div>
     </div>
@@ -1487,7 +1535,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
         </div>
       </div>
       <div class="frame" style="margin-top:16px">
-        <h3>Spells (from the latest save)</h3>
+        <h3>Spells</h3>
         <div class="pills" data-spells="hagra"></div>
       </div>
     </section>
@@ -1580,7 +1628,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
       <p class="tagline">Wizard of Waterdeep. Talks a great deal, apologises nearly as often, and on this run he also stabs things.</p>
       <div class="chips"><span class="chip">Human</span><span class="chip lvl">Bladesinging Wizard · Level <span data-level="gale"></span></span><span class="chip status-chip">In party</span></div>
       <div class="stats" data-stats="gale" aria-label="Ability scores"></div>
-      <div class="stats-note">From the latest save. Intelligence 17 powers his spells.</div>
+      <div class="stats-note">Intelligence 17 powers his spells.</div>
       <div class="hpline" data-hp="gale"></div>
     </div>
   </div>
@@ -1641,7 +1689,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
       <p class="tagline">Cleric of a goddess she would rather not discuss. Guarded and sharp-tongued, and already oddly fond of Azurae.</p>
       <div class="chips"><span class="chip">Half-Elf</span><span class="chip lvl">Trickery Cleric · Level <span data-level="shadowheart"></span></span><span class="chip status-chip camp">At camp</span></div>
       <div class="stats" data-stats="shadowheart" aria-label="Ability scores"></div>
-      <div class="stats-note">From the latest save. Wisdom 17 powers her spells.</div>
+      <div class="stats-note">Wisdom 17 powers her spells.</div>
       <div class="hpline" data-hp="shadowheart"></div>
     </div>
   </div>
@@ -1702,7 +1750,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
       <p class="tagline">Charming, vain and suspiciously pale. Nyx finds him delightful competition.</p>
       <div class="chips"><span class="chip">High Elf</span><span class="chip lvl">Rogue · Level <span data-level="astarion"></span></span><span class="chip status-chip camp">At camp</span></div>
       <div class="stats" data-stats="astarion" aria-label="Ability scores"></div>
-      <div class="stats-note">From the latest save. Dexterity 17 drives his attacks.</div>
+      <div class="stats-note">Dexterity 17 drives his attacks.</div>
       <div class="hpline" data-hp="astarion"></div>
     </div>
   </div>
@@ -1743,7 +1791,7 @@ h1 { overflow-wrap: normal; min-width: 0; }
     </section>
     <section id="as-tips">
       <div class="section-head"><span class="glyph">◆</span><h2>Tips</h2></div>
-      <div class="frame"><ul class="compass"><li><strong>Still level 1 in the save.</strong> Bring him along for a fight or two to catch him up.</li><li><strong>Faerie Fire, then Astarion:</strong> advantage turns on Sneak Attack every turn.</li><li><strong>Best lockpicker in the party.</strong> Let him open chests and disarm traps.</li><li>He likes cleverness and cruelty to people who deserve it. He does not like heroics.</li></ul></div>
+      <div class="frame"><ul class="compass"><li data-behind="astarion" hidden></li><li><strong>Faerie Fire, then Astarion:</strong> advantage turns on Sneak Attack every turn.</li><li><strong>Best lockpicker in the party.</strong> Let him open chests and disarm traps.</li><li>He likes cleverness and cruelty to people who deserve it. He does not like heroics.</li></ul></div>
     </section>
   </div>
 </main>
@@ -5599,6 +5647,93 @@ var SAVE = { time: PARTY.saveTime };
   var jc = document.getElementById('jcamp');
   if (jc) { var total = 0, sm = 0; Object.keys(CH).forEach(function (k) { total += (CH[k].kills || []).length; sm += (CH[k].smashed || []).length; });
     var p = document.createElement('p'); p.className = 'jcamp'; p.textContent = 'Fights: ' + (PARTY.fights || 0) + '. Party body count: ' + total + '. Things smashed: ' + sm + '.'; jc.parentNode.insertBefore(p, jc.nextSibling); }
+})();
+/* KEPT CURRENT FROM PARTY on every refresh (no hand edits): the portrait gallery, the "you're here" act in Items to hunt,
+   the level-path marker, items someone already owns, and companions who are behind on levels. */
+var GALLERY = {
+  "nyx": [
+    { "file": "portraits/nyx-00.jpg", "label": "Concept", "sub": "Before the adventure" },
+    { "file": "portraits/nyx-01.jpg", "label": "Level 2", "sub": "Overgrown Ruins · 16 Nov 2026" }
+  ],
+  "azurae": [
+    { "file": "portraits/azurae-00.jpg", "label": "Concept", "sub": "Before the adventure" },
+    { "file": "portraits/azurae-01.jpg", "label": "Level 2", "sub": "Overgrown Ruins · 16 Nov 2026" }
+  ],
+  "hagra": [
+    { "file": "portraits/hagra-00.jpg", "label": "Concept", "sub": "Before the adventure" },
+    { "file": "portraits/hagra-01.jpg", "label": "Level 2", "sub": "Overgrown Ruins · 16 Nov 2026" }
+  ]
+}
+;
+(function () {
+  if (typeof PARTY === 'undefined') return;
+  var CH = PARTY.chars, PLAYERS = ['nyx', 'azurae', 'hagra'];
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var first = function (id) { return CH[id] ? CH[id].name.split(' ')[0] : id; };
+  var lvl = PARTY.level || '', act = /^(INT|BGO|CTY|END)/.test(lvl) ? 3 : /^SCL/.test(lvl) ? 2 : 1;
+  // "you're here" on the current act (and keep that act open)
+  Array.prototype.forEach.call(document.querySelectorAll('.act-label'), function (lab) {
+    var m = lab.textContent.match(/^\s*▾?\s*Act (\d)/); if (!m || +m[1] !== act) return;
+    var tgt = lab.querySelector('button > span:last-child') || lab; tgt.insertAdjacentHTML('beforeend', '<span class="here"> · you’re here</span>');
+  });
+  // level path: mark the character's current level, dim the ones already passed
+  Object.keys(CH).forEach(function (id) {
+    var sheet = document.getElementById('sheet-' + id), L = CH[id].level; if (!sheet || !L) return;
+    Array.prototype.forEach.call(sheet.querySelectorAll('.path'), function (path) {
+      var rows = Array.prototype.slice.call(path.querySelectorAll('.lv')); if (!rows.length) return;
+      var hit = null;
+      rows.forEach(function (r) {
+        r.classList.remove('now', 'done');
+        Array.prototype.forEach.call(r.querySelectorAll('.what > strong'), function (s) { if (/^You are here\.?$/.test(s.textContent.trim())) s.remove(); });
+        var n = +((r.querySelector('.num') || {}).textContent || 0);
+        if (n < L) r.classList.add('done'); else if (n === L) hit = r;
+      });
+      if (!hit && L > +rows[rows.length - 1].querySelector('.num').textContent) hit = rows[rows.length - 1];
+      if (hit) { hit.classList.remove('done'); hit.classList.add('now'); var w = hit.querySelector('.what'); if (w) w.insertAdjacentHTML('afterbegin', '<strong>You are here.</strong> '); }
+    });
+  });
+  // items to hunt: tick the ones someone in the party already has (worn or in a backpack)
+  var norm = function (s) { return String(s || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); };
+  var owner = {};
+  Object.keys(CH).forEach(function (id) {
+    var c = CH[id], tpls = Object.keys(c.equip || {}).map(function (k) { return c.equip[k]; }).concat((c.bag || []).map(function (b) { return b.tpl; }));
+    tpls.forEach(function (t) { var it = PARTY.items && PARTY.items[t]; if (it && it.name) { var k = norm(it.name); (owner[k] = owner[k] || []).indexOf(id) < 0 && owner[k].push(id); } });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.sheet .item h3'), function (h) {
+    var who = owner[norm(h.textContent)]; if (!who) return;
+    var sheetId = (h.closest('.sheet') || { id: '' }).id.replace('sheet-', '');
+    var card = h.closest('.item'); card.classList.add('owned');
+    h.insertAdjacentHTML('afterend', '<p class="got">✓ ' + (who.indexOf(sheetId) >= 0 ? 'Got it' : esc(who.map(first).join(' and ')) + ' has it') + '</p>');
+  });
+  // companions behind the party
+  var top = Math.max.apply(null, PLAYERS.map(function (p) { return (CH[p] || {}).level || 0; }));
+  Array.prototype.forEach.call(document.querySelectorAll('[data-behind]'), function (li) {
+    var c = CH[li.getAttribute('data-behind')]; if (!c || !c.level || c.level >= top) return;
+    li.innerHTML = '<strong>Level ' + c.level + ', behind the party (level ' + top + ').</strong> Bring ' + (c.id === 'shadowheart' || c.id === 'laezel' ? 'her' : 'him') + ' along for a fight or two to catch up.'; li.hidden = false;
+  });
+  // portrait gallery: every portrait painted so far, oldest first
+  if (typeof GALLERY === 'undefined') return;
+  var box = document.createElement('div'); box.className = 'lightbox'; box.hidden = true; box.innerHTML = '<figure><img alt=""><figcaption></figcaption></figure>';
+  document.body.appendChild(box);
+  box.addEventListener('click', function () { box.hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') box.hidden = true; });
+  Object.keys(GALLERY).forEach(function (id) {
+    var list = GALLERY[id] || [], sheet = document.getElementById('sheet-' + id); if (!list.length || !sheet) return;
+    var wrap = sheet.querySelector('main .wrap'); if (!wrap) return;
+    var sec = document.createElement('section'); sec.id = id + '-portraits';
+    sec.innerHTML = '<div class="section-head"><span class="glyph">◆</span><h2>Portraits</h2></div>' +
+      '<div class="gallery">' + list.map(function (p, i) {
+        return '<button type="button" class="gpic' + (i === list.length - 1 ? ' latest' : '') + '" data-i="' + i + '"><img src="' + esc(p.file) + '" alt="' + esc(first(id) + ', ' + p.label) + '" loading="lazy"><span class="gl">' + esc(p.label) + '</span><span class="gs">' + esc(p.sub || '') + '</span></button>';
+      }).join('') + '</div>';
+    wrap.appendChild(sec);
+    sec.addEventListener('click', function (e) {
+      var b = e.target.closest('.gpic'); if (!b) return; var p = list[+b.getAttribute('data-i')];
+      box.querySelector('img').src = b.querySelector('img').src; box.querySelector('img').alt = b.querySelector('img').alt;
+      box.querySelector('figcaption').textContent = first(id) + ' · ' + p.label + (p.sub ? ' · ' + p.sub : ''); box.hidden = false;
+    });
+    var toc = sheet.querySelector('nav.toc .wrap');
+    if (toc) { var a = document.createElement('a'); a.href = '#' + sec.id; a.textContent = 'Portraits'; toc.appendChild(a); }
+  });
 })();
 /* Collapsible sections: every section with a heading can be folded; remembered per viewer. */
 (function () {
