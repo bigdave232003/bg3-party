@@ -100,6 +100,15 @@ h1 {
 .stat b { display: block; font-family: var(--display); font-size: calc(22px * var(--fs, 1)); color: var(--gold-hi); font-variant-numeric: tabular-nums; }
 .stat span { font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; color: var(--ink-dim); }
 .stat.key { border-color: var(--gold); }
+button.stat { font: inherit; color: inherit; cursor: pointer; width: 100%; min-width: 0; }
+button.stat:hover, button.stat[aria-pressed="true"] { border-color: var(--gold-hi); background: rgba(40,32,30,.9); }
+.stat .mod { display: block; font-style: normal; font-family: var(--display); font-size: calc(12px * var(--fs, 1)); color: var(--ink); margin: -2px 0 2px; }
+.stattip { border-color: var(--gold); }
+.stattip .s-name { color: var(--gold-hi); }
+.stattip .big { font-family: var(--display); font-weight: 700; font-size: calc(30px * var(--fs, 1)); color: var(--gold-hi); line-height: 1; }
+.stattip .big small { font-size: calc(12px * var(--fs, 1)); font-weight: 400; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); margin-left: 6px; }
+.stattip p { margin: 8px 0 0; }
+.stattip .how { font-size: calc(12px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; margin-top: 8px; }
 .stats-note { font-size: calc(14px * var(--fs, 1)); color: var(--ink-dim); margin-top: 8px; font-style: italic; }
 
 /* ---------- NAV ---------- */
@@ -5264,7 +5273,7 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
   function each(sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   each('[data-stats]', function (el) { var c = CH[el.getAttribute('data-stats')]; if (!c || !c.stats) return; var k = KEY[el.getAttribute('data-stats')] || [];
-    el.innerHTML = c.stats.map(function (v, i) { return '<div class="stat' + (k.indexOf(L[i]) >= 0 ? ' key' : '') + '"><b>' + v + '</b><span>' + L[i] + '</span></div>'; }).join(''); });
+    el.innerHTML = c.stats.map(function (v, i) { var m = Math.floor((v - 10) / 2); return '<button type="button" class="stat' + (k.indexOf(L[i]) >= 0 ? ' key' : '') + '" data-ab="' + i + '" data-char="' + el.getAttribute('data-stats') + '" aria-pressed="false"><b>' + v + '</b><em class="mod">' + (m >= 0 ? '+' : '−') + Math.abs(m) + '</em><span>' + L[i] + '</span></button>'; }).join(''); });
   each('[data-hp]', function (el) { var id = el.getAttribute('data-hp'), c = CH[id]; if (!c) return;
     var XPT = [0, 0, 300, 900, 2700, 6500, 13000, 21000, 30000, 42000, 56000, 76000, 100000];
     var x = '<span>HP <b class="hp-cur">' + c.hp + '</b> <span class="hp-max">/ ' + c.maxHp + '</span></span>';
@@ -5694,5 +5703,62 @@ b.addEventListener('click',function(){var n=L[(L.indexOf(cur())+1)%L.length];r.c
   });
   var jp = document.getElementById('jparty'); if (jp) jp.innerHTML = cards.join('');
   var jc = document.getElementById('jcamp'); if (jc) jc.innerHTML = camp.length ? 'At camp: ' + camp.join(', ') + '.' : '';
+})();
+</script>
+<script>
+/* Ability score tooltips: modifier, what it's for, saving throw and skills (hover, focus, or tap to pin). */
+(function () {
+  if (typeof PARTY === 'undefined') return;
+  var NAMES = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma'];
+  var WHAT = [
+    'Melee attacks with non-finesse weapons, how far you jump, shoving, and how much you can carry.',
+    'Ranged and finesse weapon attacks, Armour Class in light or medium armour, and how early you act in combat (initiative).',
+    'Hit points gained every level, and keeping concentration on a spell when you get hit.',
+    'Wizard spellcasting, and knowledge checks in conversation.',
+    'Cleric and druid spellcasting, and noticing hidden things, traps and lies.',
+    'Bard, warlock, sorcerer and paladin spellcasting, and talking your way through conversations.'
+  ];
+  var SKILLS = [['Athletics'], ['Acrobatics', 'Sleight of Hand', 'Stealth'], [], ['Arcana', 'History', 'Investigation', 'Nature', 'Religion'], ['Animal Handling', 'Insight', 'Medicine', 'Perception', 'Survival'], ['Deception', 'Intimidation', 'Performance', 'Persuasion']];
+  var SAVES = { Bard: [1, 5], Druid: [3, 4], Warlock: [4, 5], Wizard: [3, 4], Cleric: [4, 5], Rogue: [1, 3], Fighter: [0, 2], Ranger: [0, 1], Paladin: [4, 5], Barbarian: [0, 2], Monk: [0, 1], Sorcerer: [2, 5] };
+  var CLASS_BY_ID = { shadowheart: 'Cleric', astarion: 'Rogue', laezel: 'Fighter', gale: 'Wizard', karlach: 'Barbarian', wyll: 'Warlock' };
+  var sgn = function (n) { return (n >= 0 ? '+' : '−') + Math.abs(n); };
+  var tip = document.createElement('div'); tip.className = 'spelltip stattip'; tip.hidden = true; tip.setAttribute('role', 'tooltip'); tip.id = 'stattip'; document.body.appendChild(tip);
+  var pinned = null;
+  function fill(btn) {
+    var c = PARTY.chars[btn.getAttribute('data-char')]; if (!c) return false;
+    var i = +btn.getAttribute('data-ab'), v = c.stats[i], m = Math.floor((v - 10) / 2), prof = c.prof || 2;
+    var cls = c.cls || CLASS_BY_ID[c.id] || '', saves = SAVES[cls] || [], profSave = saves.indexOf(i) >= 0;
+    var name = c.name.split(' ')[0];
+    tip.innerHTML = '<div class="s-head noimg"><div><div class="s-name">' + NAMES[i] + '</div><div class="s-kind">' + name + '\u2019s score: ' + v + '</div></div></div>' +
+      '<div class="big">' + sgn(m) + '<small>modifier</small></div>' +
+      '<p>' + WHAT[i] + '</p>' +
+      '<dl class="s-rows"><dt>Saving throw</dt><dd>' + sgn(m + (profSave ? prof : 0)) + (profSave ? ' (proficient: ' + sgn(m) + ' + ' + prof + ')' : '') + '</dd>' +
+      (SKILLS[i].length ? '<dt>Skills</dt><dd>' + SKILLS[i].join(', ') + '</dd>' : '') + '</dl>' +
+      '<div class="how">Modifier = (score \u2212 10) \u00f7 2, rounded down. It\u2019s added to dice rolls that use ' + NAMES[i] + '.</div>';
+    return true;
+  }
+  function place(btn) {
+    tip.hidden = false; if (window.matchMedia('(max-width: 600px)').matches) return;
+    var r = btn.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+    var top = r.bottom + 8; if (top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 8);
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+  function show(btn) { if (fill(btn)) place(btn); }
+  function hide() { if (!pinned) tip.hidden = true; }
+  function unpin() { if (pinned) pinned.setAttribute('aria-pressed', 'false'); pinned = null; }
+  document.addEventListener('pointerover', function (e) { var b = e.target.closest && e.target.closest('button.stat'); if (b && e.pointerType === 'mouse' && !pinned) show(b); });
+  document.addEventListener('pointerout', function (e) { var b = e.target.closest && e.target.closest('button.stat'); if (b && e.pointerType === 'mouse' && !b.contains(e.relatedTarget)) hide(); });
+  document.addEventListener('focusin', function (e) { var b = e.target.closest && e.target.closest('button.stat'); if (b && !pinned) show(b); });
+  document.addEventListener('focusout', function (e) { if (e.target.closest && e.target.closest('button.stat')) hide(); });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('button.stat');
+    if (!b) { if (pinned) { unpin(); tip.hidden = true; } return; }
+    if (pinned === b) { unpin(); tip.hidden = true; return; }
+    unpin(); pinned = b; b.setAttribute('aria-pressed', 'true'); show(b);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !tip.hidden) { unpin(); tip.hidden = true; } });
+  window.addEventListener('scroll', function () { if (!tip.hidden && !pinned) tip.hidden = true; else if (pinned) place(pinned); }, { passive: true });
+  window.addEventListener('hashchange', function () { unpin(); tip.hidden = true; });
 })();
 </script>
