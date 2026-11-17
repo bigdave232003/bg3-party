@@ -115,6 +115,9 @@ nav.toc a {
   color: var(--ink-dim); text-decoration: none; padding: 4px 0;
 }
 nav.toc a:hover { color: var(--gold-hi); }
+nav.toc .wrap { gap: 4px 28px; }
+nav.toc a { position: relative; }
+nav.toc a + a::before { content: "◆"; position: absolute; left: -18px; top: 50%; transform: translateY(-50%); font-size: calc(7px * var(--fs, 1)); letter-spacing: 0; color: var(--gold-lo); pointer-events: none; }
 
 /* ---------- SECTIONS ---------- */
 main .wrap { padding-block: 24px 64px; display: grid; gap: 48px; }
