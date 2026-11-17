@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--/doc-->
 <title>Nyx Sorrowind</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,7 +80,7 @@ a { color: var(--gold-hi); }
   font-family: var(--display); font-size: calc(13px * var(--fs, 1)); letter-spacing: .22em; text-transform: uppercase; color: var(--gold);
 }
 h1 {
-  font-family: var(--display); font-weight: 700; font-size: calc(clamp(40px, 7vw, 76px) * var(--fs, 1));
+  font-family: var(--display); font-weight: 700; font-size: min(calc(clamp(40px, 7vw, 76px) * var(--fs, 1)), 12.5vw);
   line-height: 1; margin: 8px 0 12px; letter-spacing: .03em; color: var(--gold-hi);
   text-shadow: 0 2px 0 #000, 0 0 30px rgba(201,164,92,.25);
   text-wrap: balance;
@@ -116,8 +121,9 @@ section { scroll-margin-top: 64px; }
 .section-head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
 .section-head h2 {
   font-family: var(--display); font-weight: 600; font-size: calc(clamp(24px, 3.4vw, 32px) * var(--fs, 1)); color: var(--gold-hi);
-  margin: 0; letter-spacing: .04em; white-space: nowrap;
+  margin: 0; letter-spacing: .04em; min-width: 0; overflow-wrap: break-word;
 }
+.section-head::after { min-width: 24px; }
 .section-head::after {
   content: ""; flex: 1; height: 1px;
   background: linear-gradient(90deg, var(--gold) 0%, var(--gold-lo) 40%, transparent 100%);
@@ -239,7 +245,7 @@ ul.plain li { margin-bottom: 6px; }
 .lv .what { font-size: calc(17px * var(--fs, 1)); }
 .lv .what strong { color: var(--gold-hi); font-weight: 600; }
 .lv .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.pill { white-space: nowrap; font-size: calc(14px * var(--fs, 1)); padding: 2px 9px; border: 1px solid rgba(154,131,201,.45); color: #cbbde8; background: rgba(154,131,201,.08); }
+.pill { white-space: normal; max-width: 100%; font-size: calc(14px * var(--fs, 1)); padding: 2px 9px; border: 1px solid rgba(154,131,201,.45); color: #cbbde8; background: rgba(154,131,201,.08); }
 .pill.feat { border-color: rgba(201,164,92,.5); color: var(--gold-hi); background: rgba(201,164,92,.08); }
 .pill.feat2 { border-color: rgba(143,176,122,.5); color: #b7d3a4; background: rgba(143,176,122,.08); }
 
@@ -617,6 +623,9 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 }
 .switcher .brk { display: none; }
 @media (max-width: 420px) { .switcher .wrap { gap: 4px 2px; justify-content: space-between; } .switcher .who img, .switcher .who .glyphbox { width: 28px; height: 28px; } }
+/* Long words never push the page wider than the screen */
+body { overflow-wrap: break-word; }
+h1, h2, h3, h4, .pill, .tag, .chip { overflow-wrap: break-word; min-width: 0; }
 </style>
 
 <div class="switcher" role="navigation" aria-label="Party members">
