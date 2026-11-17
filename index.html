@@ -722,9 +722,11 @@ nav.toc a.line-start::before { display: none; }
 .funt .fl sup { color: var(--gold-lo); margin-left: 2px; }
 .funt b { display: block; margin-top: 6px; font-family: var(--display); font-weight: 600; font-size: calc(19px * var(--fs, 1)); color: var(--gold-hi); line-height: 1.25; }
 .funt small { display: block; font-size: calc(13px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; margin-top: 2px; }
-.funt.hand { border-style: dashed; }
+.funt details.more { margin-top: 2px; }
+.funt details.more summary { cursor: pointer; list-style: none; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.funt details.more summary::-webkit-details-marker { display: none; }
+.funt details.more[open] summary { color: var(--gold-hi); }
 .fun-note { margin-top: 10px; font-size: calc(13px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; }
-.fun-note span { color: var(--gold-lo); font-style: normal; }
 /* Long words never push the page wider than the screen */
 body { overflow-wrap: break-word; }
 h2, h3, h4, .pill, .tag, .chip { overflow-wrap: break-word; min-width: 0; }
@@ -1913,7 +1915,11 @@ var PARTY = {
    "romance": {
     "stage": 0,
     "with": []
-   }
+   },
+   "crimes": [],
+   "tadpole": 0,
+   "places": 0,
+   "waypoints": 0
   },
   "nyx": {
    "id": "nyx",
@@ -2142,7 +2148,13 @@ var PARTY = {
    "romance": {
     "stage": 0,
     "with": []
-   }
+   },
+   "crimes": [
+    "Assault (no damage) on Lae'zel"
+   ],
+   "tadpole": 0,
+   "places": 45,
+   "waypoints": 2
   },
   "hagra": {
    "id": "hagra",
@@ -2335,7 +2347,11 @@ var PARTY = {
    "romance": {
     "stage": 0,
     "with": []
-   }
+   },
+   "crimes": [],
+   "tadpole": 0,
+   "places": 40,
+   "waypoints": 2
   },
   "laezel": {
    "id": "laezel",
@@ -2384,7 +2400,11 @@ var PARTY = {
    "romance": {
     "stage": 0,
     "with": []
-   }
+   },
+   "crimes": [],
+   "tadpole": 0,
+   "places": 7,
+   "waypoints": 0
   },
   "shadowheart": {
    "id": "shadowheart",
@@ -2488,7 +2508,11 @@ var PARTY = {
    "romance": {
     "stage": 0,
     "with": []
-   }
+   },
+   "crimes": [],
+   "tadpole": 0,
+   "places": 15,
+   "waypoints": 0
   },
   "gale": {
    "id": "gale",
@@ -2598,7 +2622,13 @@ var PARTY = {
    "romance": {
     "stage": 0,
     "with": []
-   }
+   },
+   "crimes": [
+    "Murder on Lae'zel"
+   ],
+   "tadpole": 0,
+   "places": 31,
+   "waypoints": 2
   },
   "azurae": {
    "id": "azurae",
@@ -2878,7 +2908,13 @@ var PARTY = {
    "romance": {
     "stage": 0,
     "with": []
-   }
+   },
+   "crimes": [
+    "Vandalism"
+   ],
+   "tadpole": 1,
+   "places": 61,
+   "waypoints": 2
   }
  },
  "items": {
@@ -4982,6 +5018,7 @@ var PARTY = {
    "stats": "WPN_Longsword"
   }
  },
+ "fights": 5,
  "quests": {
   "active": [
    {
@@ -5487,48 +5524,51 @@ var SAVE = { time: PARTY.saveTime };
   var el = document.getElementById('savestamp'); if (!el) return;
   try { el.textContent = new Date(SAVE.time * 1000).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }); } catch (e) {}
 })();
-/* FUN STATS. Kills, smashed things, romance and fans come from the save (PARTY).
-   The game doesn't record the rest, so they're kept here by hand: tell Claude and it updates TALLY.
-   { ko: knocked out (non-lethal), downed, died, bribes: gold paid in bribes + fines, jailed } */
-var TALLY = {
-  nyx: {}, azurae: {}, hagra: {}, gale: {}, shadowheart: {}, astarion: {}
-};
+/* FUN STATS: all from the save (PARTY, built by extract.js + fun.js). Kills/smashed from death records; crimes, tadpole uses,
+   places, waypoints and romance from the story database. The game keeps no history of downs, deaths, knock-outs, bribes or jail. */
 (function () {
   if (typeof PARTY === 'undefined') return;
   var CH = PARTY.chars, PLAYERS = ['nyx', 'azurae', 'hagra'];
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var first = function (id) { return CH[id] ? CH[id].name.split(' ')[0] : id; };
-  function group(list) { var n = {}, order = []; (list || []).forEach(function (x) { if (!n[x]) { n[x] = 0; order.push(x); } n[x]++; }); return order.map(function (x) { return x + (n[x] > 1 ? ' ×' + n[x] : ''); }).join(', '); }
+  // ["Skeleton","Mind Flayer","Skeleton"] -> ["Skeleton ×2", "Mind Flayer"], most common first
+  function groups(list) { var n = {}, order = []; (list || []).forEach(function (x) { if (!n[x]) { n[x] = 0; order.push(x); } n[x]++; }); order.sort(function (a, b) { return n[b] - n[a]; }); return order.map(function (x) { return x + (n[x] > 1 ? ' ×' + n[x] : ''); }); }
+  function group(list) { return groups(list).join(', '); }
+  // short summary plus a fold-out for the rest, so long lists stay tidy
+  function listHtml(list, empty) {
+    var g = groups(list); if (!g.length) return '<small>' + esc(empty) + '</small>';
+    if (g.length <= 3) return '<small>' + esc(g.join(', ')) + '</small>';
+    return '<small>' + esc(g.slice(0, 3).join(', ')) + '</small><details class="more"><summary>+' + (g.length - 3) + ' more</summary><small>' + esc(g.slice(3).join(', ')) + '</small></details>';
+  }
   var BASES = ['Not even a wink', 'Kissed', 'Dating', 'Partnered'];
   var BASE_SUB = ['Still waiting for the tiefling party.', 'First base reached.', 'It’s official(ish).', 'It’s serious.'];
   Object.keys(CH).forEach(function (id) {
     var c = CH[id], sheet = document.getElementById('sheet-' + id); if (!sheet) return;
-    var t = TALLY[id] || {}, kills = c.kills || [], smashed = c.smashed || [], rom = c.romance || { stage: 0, with: [] };
+    var kills = c.kills || [], smashed = c.smashed || [], crimes = c.crimes || [], rom = c.romance || { stage: 0, with: [] };
     // biggest fan: for a player, the companion who likes them most; for a companion, the player they like most
     var fan = null;
     if (PLAYERS.indexOf(id) >= 0) Object.keys(CH).forEach(function (k) { var a = CH[k].approval; if (a && a[id] != null && (!fan || a[id] > fan.v) && a[id] > 0) fan = { who: first(k), v: a[id] }; });
     else if (c.approval) Object.keys(c.approval).forEach(function (p) { var v = c.approval[p]; if (v > 0 && (!fan || v > fan.v)) fan = { who: first(p), v: v }; });
     var bagN = (c.bag || []).length;
-    var hand = function (v) { return v == null ? 0 : v; };
+    var sm = function (s) { return s ? '<small>' + esc(s) + '</small>' : ''; };
     var tiles = [
-      ['☠', 'Kills', kills.length, kills.length ? group(kills) : 'Clean hands. For now.'],
-      ['✊', 'Knocked out', hand(t.ko), 'Non-lethal. Mostly.', true],
-      ['↓', 'Times downed', hand(t.downed), '', true],
-      ['⚰', 'Times died', hand(t.died), '', true],
-      ['⚖', 'Bribes & fines', hand(t.bribes) + ' gold', '', true],
-      ['⛓', 'Times jailed', hand(t.jailed), '', true],
-      ['♥', 'Furthest base', BASES[rom.stage] || BASES[0], rom.with.length ? 'With ' + rom.with.join(', ') : BASE_SUB[rom.stage] || ''],
-      ['❦', 'Romance partners', rom.with.length, rom.with.length ? rom.with.join(', ') : 'None yet'],
-      ['⚒', 'Things smashed', smashed.length, smashed.length ? group(smashed) : 'Nothing yet'],
-      ['♛', PLAYERS.indexOf(id) >= 0 ? 'Biggest fan' : 'Favourite', fan ? fan.who : 'Nobody, yet', fan ? 'Approval +' + fan.v : ''],
-      ['⛁', 'Pack mule', bagN + ' items', 'In the backpack']
+      ['☠', 'Kills', kills.length, listHtml(kills, 'Clean hands. For now.')],
+      ['⚖', 'Crimes committed', crimes.length, listHtml(crimes, 'Spotless record. Suspicious.')],
+      ['⚒', 'Things smashed', smashed.length, listHtml(smashed, 'Nothing yet')],
+      ['✺', 'Tadpole powers used', c.tadpole || 0, sm(c.tadpole ? 'The parasite approves.' : 'Resisting the urge')],
+      ['⌖', 'Places explored', c.places || 0, sm('Areas walked into')],
+      ['⚑', 'Waypoints found', c.waypoints || 0, ''],
+      ['♥', 'Furthest base', BASES[rom.stage] || BASES[0], sm(rom.with.length ? 'With ' + rom.with.join(', ') : BASE_SUB[rom.stage] || '')],
+      ['❦', 'Romance partners', rom.with.length, sm(rom.with.length ? rom.with.join(', ') : 'None yet')],
+      ['♛', PLAYERS.indexOf(id) >= 0 ? 'Biggest fan' : 'Favourite', fan ? fan.who : 'Nobody, yet', sm(fan ? 'Approval +' + fan.v : '')],
+      ['⛁', 'Pack mule', bagN + ' items', sm('In the backpack')]
     ];
     var sec = document.createElement('section'); sec.id = id + '-fun';
     sec.innerHTML = '<div class="section-head"><span class="glyph">◆</span><h2>Fun stats</h2></div>' +
       '<div class="fun">' + tiles.map(function (x) {
-        return '<div class="funt' + (x[4] ? ' hand' : '') + '"><span class="fi" aria-hidden="true">' + x[0] + '︎</span><span class="fl">' + esc(x[1]) + (x[4] ? '<sup title="Logged by hand">†</sup>' : '') + '</span><b>' + esc(x[2]) + '</b>' + (x[3] ? '<small>' + esc(x[3]) + '</small>' : '') + '</div>';
+        return '<div class="funt"><span class="fi" aria-hidden="true">' + x[0] + '︎</span><span class="fl">' + esc(x[1]) + '</span><b>' + esc(x[2]) + '</b>' + (x[3] || '') + '</div>';
       }).join('') + '</div>' +
-      '<p class="fun-note">From the save: kills, things smashed, romance, fans and backpack. <span>†</span> The game doesn’t count these, so tell Claude when they happen.</p>';
+      '<p class="fun-note">All from the latest save. The game keeps no record of downs, deaths, knock-outs, bribes or jail time, so those can’t be counted.</p>';
     var eq = sheet.querySelector('main .wrap > section .equip');
     var gear = (eq && eq.closest('section')) || sheet.querySelector('main .wrap > section');
     if (gear && gear.nextSibling) gear.parentNode.insertBefore(sec, gear.nextSibling); else if (gear) gear.parentNode.appendChild(sec);
@@ -5538,7 +5578,7 @@ var TALLY = {
   // party totals on the Journal
   var jc = document.getElementById('jcamp');
   if (jc) { var total = 0, sm = 0; Object.keys(CH).forEach(function (k) { total += (CH[k].kills || []).length; sm += (CH[k].smashed || []).length; });
-    var p = document.createElement('p'); p.className = 'jcamp'; p.textContent = 'Party body count: ' + total + '. Things smashed: ' + sm + '.'; jc.parentNode.insertBefore(p, jc.nextSibling); }
+    var p = document.createElement('p'); p.className = 'jcamp'; p.textContent = 'Fights: ' + (PARTY.fights || 0) + '. Party body count: ' + total + '. Things smashed: ' + sm + '.'; jc.parentNode.insertBefore(p, jc.nextSibling); }
 })();
 /* Collapsible sections: every section with a heading can be folded; remembered per viewer. */
 (function () {
