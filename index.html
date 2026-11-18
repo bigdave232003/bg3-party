@@ -712,17 +712,18 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .qlist.done .q { grid-template-columns: calc(56px * var(--fs, 1)) minmax(0, 1fr); align-items: center; }
 .qlist.done .q .qt::before { content: "✓ "; color: var(--gold); }
 .qlist.done .qd { display: none; }
-.jparty { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(230px * var(--fs, 1))), 1fr)); gap: 12px; }
+.jparty { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(280px * var(--fs, 1))), 1fr)); gap: 14px; }
 .pm { display: grid; grid-template-columns: calc(88px * var(--fs, 1)) minmax(0, 1fr); gap: 14px; align-items: stretch; padding: 10px; border: 1px solid var(--gold-lo); background: linear-gradient(180deg, var(--panel-2), var(--panel)); text-decoration: none; color: inherit; }
 .pm:hover { border-color: var(--gold); }
 .pm img { width: 100%; height: 100%; min-height: calc(110px * var(--fs, 1)); object-fit: cover; object-position: top; border: 1px solid var(--gold); display: block; box-sizing: border-box; }
 .pm > div { align-self: center; }
 .pm .pn { font-family: var(--display); font-weight: 600; font-size: calc(17px * var(--fs, 1)); color: var(--gold-hi); }
 .pm .pc { font-size: calc(14px * var(--fs, 1)); color: var(--ink-dim); }
-.pm .bar2 { position: relative; height: 8px; background: #0b090c; border: 1px solid #3a2a2e; margin-top: 6px; }
+.pm .bar2 { position: relative; height: 8px; background: #0b090c; border: 1px solid #3a2a2e; margin-top: 3px; }
+.pm .pst { margin-top: 10px; }
 .pm .bar2 i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #7a1f2e, var(--blood-hi)); }
 .pm .bar2.xp i { background: linear-gradient(90deg, #7a6233, var(--gold)); }
-.pm .bl { display: flex; justify-content: space-between; gap: 8px; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .08em; color: var(--ink-dim); margin-top: 4px; }
+.pm .bl { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-family: var(--display); font-size: calc(12px * var(--fs, 1)); letter-spacing: .08em; color: var(--ink-dim); white-space: nowrap; }
 .pm .bl b { color: var(--ink); font-weight: 600; } .pm .bl b.hp { color: var(--blood-hi); }
 /* full health: no red, only damage is red */
 .pm .bl b.hp.full, .hpline b.hp-cur.full { color: #8fc27a; }
@@ -6099,9 +6100,11 @@ b.addEventListener('click',function(){var n=L[(L.indexOf(cur())+1)%L.length];r.c
     var lo = XPT[c.level] || 0, hi = XPT[c.level + 1], xpPct = hi ? Math.max(0, Math.min(100, (c.xp - lo) / (hi - lo) * 100)) : 100;
     cards.push('<a class="pm" href="#' + id + '">' + (img ? '<img src="' + img.getAttribute('src') + '" alt="">' : '<span></span>') +
       '<div><div class="pn">' + esc(name) + '</div><div class="pc">Level ' + c.level + (cls ? ' ' + esc(cls) : '') + '</div>' +
-      '<div class="bar2' + (c.hp >= c.maxHp ? ' full' : '') + '" role="img" aria-label="HP ' + c.hp + ' of ' + c.maxHp + '"><i style="width:' + hpPct.toFixed(1) + '%"></i></div>' +
-      '<div class="bl"><span>HP <b class="hp' + (c.hp >= c.maxHp ? ' full' : '') + '">' + c.hp + '</b> / ' + c.maxHp + '</span>' + (hi ? '<span>XP <b>' + c.xp + '</b> / ' + hi + '</span>' : '') + '</div>' +
-      (hi ? '<div class="bar2 xp" role="img" aria-label="XP ' + c.xp + ' of ' + hi + '"><i style="width:' + xpPct.toFixed(1) + '%"></i></div>' : '') + '</div></a>');
+      // each number sits directly above its own bar: HP, then XP
+      '<div class="pst"><div class="bl"><span>HP</span><span><b class="hp' + (c.hp >= c.maxHp ? ' full' : '') + '">' + c.hp + '</b> / ' + c.maxHp + '</span></div>' +
+      '<div class="bar2' + (c.hp >= c.maxHp ? ' full' : '') + '" role="img" aria-label="HP ' + c.hp + ' of ' + c.maxHp + '"><i style="width:' + hpPct.toFixed(1) + '%"></i></div></div>' +
+      (hi ? '<div class="pst"><div class="bl"><span>XP</span><span><b>' + c.xp + '</b> / ' + hi + '</span></div>' +
+      '<div class="bar2 xp" role="img" aria-label="XP ' + c.xp + ' of ' + hi + '"><i style="width:' + xpPct.toFixed(1) + '%"></i></div></div>' : '') + '</div></a>');
   });
   var jp = document.getElementById('jparty'); if (jp) jp.innerHTML = cards.join('');
   var jc = document.getElementById('jcamp'); if (jc) jc.innerHTML = camp.length ? 'At camp: ' + camp.join(', ') + '.' : '';
