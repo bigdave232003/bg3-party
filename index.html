@@ -725,8 +725,8 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .pm .bl b { color: var(--ink); font-weight: 600; } .pm .bl b.hp { color: var(--blood-hi); }
 .jcamp { margin-top: 12px; color: var(--ink-dim); font-size: calc(15px * var(--fs, 1)); }
 .jcamp a { color: var(--gold-hi); }
-.withers { margin-top: 22px; display: grid; grid-template-columns: calc(150px * var(--fs, 1)) minmax(0, 1fr); gap: 22px; align-items: start; padding: 16px 22px; max-width: 900px; }
-.withers > img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: top; border: 1px solid var(--gold-lo); display: block; }
+.withers { margin-top: 22px; display: grid; grid-template-columns: calc(170px * var(--fs, 1)) minmax(0, 1fr); gap: 26px; align-items: start; padding: 16px 22px; }
+.withers > img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; border: 1px solid var(--gold-lo); display: block; }
 .withers .fun { grid-template-columns: minmax(0, 1fr); padding: 0; }
 .withers .funr:last-child { border-bottom: 0; }
 @media (max-width: 520px) { .withers { grid-template-columns: 90px minmax(0, 1fr); gap: 14px; padding: 12px 14px; } }
@@ -5709,17 +5709,17 @@ var SAVE = { time: PARTY.saveTime };
     if (W) {
       // who he can bring back: his own list once he's at camp, otherwise any companion lying dead (0 HP)
       var dead = (W.revivable && W.revivable.length) ? W.revivable : Object.keys(CH).filter(function (k) { return PLAYERS.indexOf(k) < 0 && CH[k].maxHp && CH[k].hp === 0; }).map(first);
-      var gold = PARTY.partyGold || 0, rev = W.resPrice != null ? Math.max(0, W.resPrice - (W.discount || 0)) : null;
+      var C = '<svg class="coins" aria-hidden="true"><use href="#i-coins"></use></svg>', gold = PARTY.partyGold || 0, rev = W.resPrice != null ? Math.max(0, W.resPrice - (W.discount || 0)) : null;
       var rows = [
         ['⛺', 'Available', W.atCamp ? 'At camp' : W.met ? 'Not yet' : 'Not met yet', ws(W.atCamp ? '' : W.canRaise ? 'Out of his tomb, but not in camp yet.' : '')],
-        ['☥', 'Next revive', rev != null ? rev + ' gold' : '–', ws(rev != null ? 'We have ' + gold + '.' : '')],
-        ['↺', 'Respec', W.respecPrice != null ? W.respecPrice + ' gold' : '–', ws(W.respecPrice != null ? 'Per character.' : '')],
+        ['☥', 'Next revive', rev != null ? { html: C + rev } : '–', rev != null ? '<small>We have ' + C + gold + '</small>' : ''],
+        ['↺', 'Respec', W.respecPrice != null ? { html: C + W.respecPrice } : '–', ws(W.respecPrice != null ? 'Per character.' : '')],
         ['☠', 'Can revive', dead.length ? dead.join(', ') : 'Nobody', ws(dead.length ? '' : 'Everyone is still breathing.')]
       ];
       var wd = document.createElement('div'); wd.className = 'withers frame';
-      wd.innerHTML = '<img src="story/withers.jpg" alt="Withers">' +
+      wd.innerHTML = '<img src="story/withers.jpg" alt="Painted portrait of Withers in a candlelit crypt">' +
         '<div><h3>Withers <small>The camp undertaker</small></h3><div class="fun">' + rows.map(function (x) {
-          return '<div class="funr"><span class="fl"><span class="fi" aria-hidden="true">' + x[0] + '︎</span>' + esc(x[1]) + '</span><b>' + esc(x[2]) + '</b><span class="fd">' + (x[3] || '') + '</span></div>';
+          return '<div class="funr"><span class="fl"><span class="fi" aria-hidden="true">' + x[0] + '︎</span>' + esc(x[1]) + '</span><b>' + (x[2] && x[2].html ? '<span class="gold-amt">' + x[2].html + '</span>' : esc(x[2])) + '</b><span class="fd">' + (x[3] || '') + '</span></div>';
         }).join('') + '</div></div>';
       p.parentNode.insertBefore(wd, p.nextSibling);
     } }
