@@ -2265,6 +2265,22 @@ var PARTY = {
        "name": "Makeup_Black",
        "hex": "#000000"
       }
+     },
+     {
+      "kind": "Hair highlights",
+      "colour": {
+       "name": "Hair_Highlight 26",
+       "hex": "#510101"
+      },
+      "amount": 84
+     },
+     {
+      "kind": "Lipstick",
+      "colour": {
+       "name": "LipMakeUp_Color_68",
+       "hex": "#351413"
+      },
+      "amount": 98
      }
     ]
    },
@@ -2464,6 +2480,22 @@ var PARTY = {
        "name": "Makeup_Leaves",
        "hex": "#145700"
       }
+     },
+     {
+      "kind": "Hair highlights",
+      "colour": {
+       "name": "Hair_Highlight 14",
+       "hex": "#A65937"
+      },
+      "amount": 36
+     },
+     {
+      "kind": "Greying",
+      "colour": {
+       "name": "Grey Teal 3",
+       "hex": "#7C9899"
+      },
+      "amount": 94
      },
      {
       "kind": "Scar",
@@ -5572,7 +5604,16 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
     sw(/dragonborn/.test(el.getAttribute('data-look') === 'azurae' ? 'dragonborn' : '') ? 'Scales' : 'Skin', a.skin, a.skin ? nice(a.skin.name) : '–');
     sw('Eyes', a.eyes, a.eyes ? nice(a.eyes.name) : '–');
     sw('Hair', a.hair, a.hair ? nice(a.hair.name) : 'None');
-    (a.extras || []).forEach(function (e) { sw(e.kind, e.colour, e.colour ? nice(e.colour.name) : 'Yes'); });
+    // numbered colours ("Hair_Highlight 26", "LipMakeUp_Color_68") mean nothing to a reader: describe them from the hex instead
+    function shade(hex) {
+      var n = parseInt(String(hex || '').slice(1), 16); if (isNaN(n)) return '';
+      var r = (n >> 16 & 255) / 255, g = (n >> 8 & 255) / 255, bl = (n & 255) / 255, mx = Math.max(r, g, bl), mn = Math.min(r, g, bl), l = (mx + mn) / 2, d = mx - mn;
+      if (d < 0.08) return l < 0.2 ? 'Black' : l > 0.8 ? 'White' : 'Grey';
+      var h = mx === r ? ((g - bl) / d + 6) % 6 : mx === g ? (bl - r) / d + 2 : (r - g) / d + 4; h *= 60;
+      var w = h < 15 || h >= 345 ? 'red' : h < 40 ? 'orange' : h < 65 ? 'gold' : h < 160 ? 'green' : h < 200 ? 'teal' : h < 255 ? 'blue' : h < 290 ? 'purple' : 'pink';
+      var pre = l < 0.25 ? 'Deep ' : l > 0.7 ? 'Pale ' : ''; return pre ? pre + w : w.charAt(0).toUpperCase() + w.slice(1);
+    }
+    (a.extras || []).forEach(function (e) { var named = e.colour && /\d\s*$|Color_\d/.test(e.colour.name || '') ? shade(e.colour.hex) : (e.colour ? nice(e.colour.name) : 'Yes'); sw(e.kind, e.colour, named + (e.amount && e.amount < 95 ? ' (' + e.amount + '%)' : '')); });
     el.innerHTML = out.join(''); });
   each('[data-spells]', function (el) { var c = CH[el.getAttribute('data-spells')]; if (!c) return;
     el.innerHTML = (c.spells || []).map(function (s) { return '<span class="pill">' + esc(s) + '</span>'; }).join('') + (c.features || []).map(function (s) { return '<span class="pill feat">' + esc(s) + '</span>'; }).join(''); });
