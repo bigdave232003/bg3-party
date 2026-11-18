@@ -725,9 +725,11 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .pm .bar2.xp i { background: linear-gradient(90deg, #7a6233, var(--gold)); }
 .pm .bl { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-family: var(--display); font-size: calc(12px * var(--fs, 1)); letter-spacing: .08em; color: var(--ink-dim); white-space: nowrap; }
 .pm .bl b { color: var(--ink); font-weight: 600; } .pm .bl b.hp { color: var(--blood-hi); }
-/* full health: no red, only damage is red */
-.pm .bl b.hp.full, .hpline b.hp-cur.full { color: #8fc27a; }
-.pm .bar2.full i { background: linear-gradient(90deg, #3f6b34, #8fc27a); }
+/* HP colour: red only when damaged, plain at full, green only above max (temporary hit points) */
+.pm .bl b.hp.full, .hpline b.hp-cur.full { color: var(--ink); }
+.pm .bl b.hp.over, .hpline b.hp-cur.over { color: #8fc27a; }
+.pm .bar2.full i { background: linear-gradient(90deg, #8a7a5c, #d8c9a8); }
+.pm .bar2.over i { background: linear-gradient(90deg, #3f6b34, #8fc27a); }
 .jcamp { margin-top: 12px; color: var(--ink-dim); font-size: calc(15px * var(--fs, 1)); }
 .jcamp a { color: var(--gold-hi); }
 .withers { margin-top: 22px; display: grid; grid-template-columns: calc(170px * var(--fs, 1)) minmax(0, 1fr); gap: 26px; align-items: start; padding: 16px 22px; }
@@ -5496,7 +5498,7 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
     el.innerHTML = c.stats.map(function (v, i) { var m = Math.floor((v - 10) / 2); return '<button type="button" class="stat' + (k.indexOf(L[i]) >= 0 ? ' key' : '') + '" data-ab="' + i + '" data-char="' + el.getAttribute('data-stats') + '" aria-pressed="false"><b>' + v + '</b><em class="mod">' + (m >= 0 ? '+' : '−') + Math.abs(m) + '</em><span>' + L[i] + '</span></button>'; }).join(''); });
   each('[data-hp]', function (el) { var id = el.getAttribute('data-hp'), c = CH[id]; if (!c) return;
     var XPT = [0, 0, 300, 900, 2700, 6500, 13000, 21000, 30000, 42000, 56000, 76000, 100000];
-    var x = '<span>HP <b class="hp-cur' + (c.hp >= c.maxHp ? ' full' : '') + '">' + c.hp + '</b> <span class="hp-max">/ ' + c.maxHp + '</span></span>';
+    var x = '<span>HP <b class="hp-cur' + ((c.tempHp > 0 || c.hp > c.maxHp) ? ' over' : c.hp >= c.maxHp ? ' full' : '') + '"' + (c.tempHp > 0 ? ' title="' + c.tempHp + ' temporary HP"' : '') + '>' + (c.hp + (c.tempHp || 0)) + '</b> <span class="hp-max">/ ' + c.maxHp + '</span></span>';
     if (c.xp != null && c.level) {
       var lo = XPT[c.level] || 0, hi = XPT[c.level + 1];
       if (hi) { var pct = Math.max(0, Math.min(100, (c.xp - lo) / (hi - lo) * 100));
@@ -6101,8 +6103,8 @@ b.addEventListener('click',function(){var n=L[(L.indexOf(cur())+1)%L.length];r.c
     cards.push('<a class="pm" href="#' + id + '">' + (img ? '<img src="' + img.getAttribute('src') + '" alt="">' : '<span></span>') +
       '<div><div class="pn">' + esc(name) + '</div><div class="pc">Level ' + c.level + (cls ? ' ' + esc(cls) : '') + '</div>' +
       // each number sits directly above its own bar: HP, then XP
-      '<div class="pst"><div class="bl"><span>HP</span><span><b class="hp' + (c.hp >= c.maxHp ? ' full' : '') + '">' + c.hp + '</b> / ' + c.maxHp + '</span></div>' +
-      '<div class="bar2' + (c.hp >= c.maxHp ? ' full' : '') + '" role="img" aria-label="HP ' + c.hp + ' of ' + c.maxHp + '"><i style="width:' + hpPct.toFixed(1) + '%"></i></div></div>' +
+      '<div class="pst"><div class="bl"><span>HP</span><span><b class="hp' + ((c.tempHp > 0 || c.hp > c.maxHp) ? ' over' : c.hp >= c.maxHp ? ' full' : '') + '"' + (c.tempHp > 0 ? ' title="' + c.tempHp + ' temporary HP"' : '') + '>' + (c.hp + (c.tempHp || 0)) + '</b> / ' + c.maxHp + '</span></div>' +
+      '<div class="bar2' + ((c.tempHp > 0 || c.hp > c.maxHp) ? ' over' : c.hp >= c.maxHp ? ' full' : '') + '" role="img" aria-label="HP ' + c.hp + ' of ' + c.maxHp + '"><i style="width:' + hpPct.toFixed(1) + '%"></i></div></div>' +
       (hi ? '<div class="pst"><div class="bl"><span>XP</span><span><b>' + c.xp + '</b> / ' + hi + '</span></div>' +
       '<div class="bar2 xp" role="img" aria-label="XP ' + c.xp + ' of ' + hi + '"><i style="width:' + xpPct.toFixed(1) + '%"></i></div></div>' : '') + '</div></a>');
   });
