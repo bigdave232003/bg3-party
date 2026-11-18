@@ -197,6 +197,12 @@ h4 { font-family: var(--display); font-weight: 600; font-size: calc(14px * var(-
   padding: 12px 0; border-bottom: 1px solid rgba(110,90,51,.4);
 }
 .kit-row:last-child { border-bottom: 0; }
+.kit-row .has-info { cursor: pointer; }
+.kit-row .slot { transition: border-color .15s, box-shadow .15s; }
+.kit-row:has(.has-info:hover) .slot, .kit-row:has(.has-info:focus-visible) .slot { border-color: var(--gold); }
+.kit-row:has([aria-pressed="true"]) { background: linear-gradient(90deg, rgba(201,162,90,.12), transparent 75%); }
+.kit-row:has([aria-pressed="true"]) .slot { border-color: var(--gold-hi); box-shadow: 0 0 0 1px var(--gold), 0 0 14px rgba(201,162,90,.45); }
+.kit-row:has([aria-pressed="true"]) .name { color: var(--gold-hi); }
 .slot {
   width: 44px; height: 44px; display: grid; place-items: center;
   background: radial-gradient(circle at 50% 40%, #2c2430, #120f14); border: 1px solid var(--gold-lo);
@@ -719,6 +725,9 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .pm .bl b { color: var(--ink); font-weight: 600; } .pm .bl b.hp { color: var(--blood-hi); }
 .jcamp { margin-top: 12px; color: var(--ink-dim); font-size: calc(15px * var(--fs, 1)); }
 .jcamp a { color: var(--gold-hi); }
+.withers { margin-top: 22px; }
+.withers h3 { margin: 0 0 10px; }
+.withers h3 small { font-family: var(--body); font-size: calc(14px * var(--fs, 1)); color: var(--ink-dim); letter-spacing: 0; text-transform: none; margin-left: 8px; }
 #sheet-journal main .wrap { gap: 40px; }
 @media (max-width: 760px) { .jquests { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 900px) { .jstats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -5085,6 +5094,28 @@ var PARTY = {
   }
  },
  "fights": 5,
+ "withers": {
+  "met": true,
+  "metAt": "Overgrown Ruins crypt",
+  "openedTomb": true,
+  "religionCheck": true,
+  "atCamp": false,
+  "canRaise": true,
+  "discount": 0,
+  "hirelings": 0,
+  "flags": [
+   "CHA_Chapel_Event_OpenedJergalsTomb",
+   "CHA_Crypt_Event_JergalAppears",
+   "CHA_Crypt_Event_JergalReligionCheckSuccess",
+   "CHA_Crypt_State_SpokeToJergal",
+   "CHA_Jergal_Event_InteractedWithTomb",
+   "CHA_Jergal_HasMet",
+   "CHA_Jergal_HasMet_AtChapel",
+   "GLO_Jergal_HasMet",
+   "GLO_Jergal_State_CanResurrect",
+   "GLO_Jergal_State_OutOfTomb"
+  ]
+ },
  "quests": {
   "active": [
    {
@@ -5402,6 +5433,7 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
       unpin(); pinned = el; el.setAttribute('aria-pressed', 'true'); tip.classList.add('pinned'); show(el);
     });
   }
+  window.__itemWire = wire;   // the Current kit rows reuse the item tooltip for weapons
   function slotEl(cid, slot, label, glyph, tpl) {
     var it = tpl && IT[tpl] && IT[tpl].name !== 'Unknown item' ? IT[tpl] : null;
     var el = document.createElement(it ? 'button' : 'div');
@@ -5508,6 +5540,9 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
     return '<div class="s-head' + (s.local ? '' : ' noimg') + '">' + (s.local ? '<img src="' + s.local + '" alt="">' : '') + '<div><div class="s-name">' + esc(s.title && !/^Feats$/.test(s.title) ? s.title : name) + '</div><div class="s-kind">' + esc(kind(s)) + '</div></div></div><div>' + esc(s.desc) + '</div>' + (rows.length ? '<dl class="s-rows">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('') + '</dl>' : '');
   }
   var pinned = null;
+  // a kit row's icon and name act as one target: either opens the tooltip, and the pinned one is marked selected
+  function grp(el) { return el.closest('.kit-row') || el; }
+  function pin(el) { if (pinned) pinned.setAttribute('aria-pressed', 'false'); pinned = el; if (el) el.setAttribute('aria-pressed', 'true'); }
   function show(el) {
     var f = find(el.getAttribute('data-info')); if (!f) return;
     tip.innerHTML = html(f.key, f.s); tip.hidden = false;
@@ -5517,12 +5552,25 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
   }
   function hide() { if (!pinned) tip.hidden = true; }
   function wire(el, text) {
-    el.setAttribute('data-info', text); el.classList.add('has-info'); el.tabIndex = 0;
+    el.setAttribute('data-info', text); el.classList.add('has-info'); el.tabIndex = 0; el.setAttribute('role', 'button'); el.setAttribute('aria-pressed', 'false');
     el.addEventListener('mouseenter', function () { if (!pinned) show(el); });
     el.addEventListener('mouseleave', hide);
     el.addEventListener('focus', function () { if (!pinned) show(el); });
     el.addEventListener('blur', hide);
-    el.addEventListener('click', function (e) { e.stopPropagation(); if (pinned === el) { pinned = null; tip.hidden = true; return; } pinned = el; show(el); });
+    el.addEventListener('click', function (e) { e.stopPropagation(); if (pinned && grp(pinned) === grp(el)) { pin(null); tip.hidden = true; return; } pin(el); show(el); });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } });
+  }
+  // weapons in the kit: hand the row to the item tooltip (same one as the Equipment slots)
+  function itemWire(el, tpl, cid, slot) {
+    if (!window.__itemWire) return false;
+    el.setAttribute('data-tpl', tpl); el.setAttribute('data-char', cid); if (slot != null) el.setAttribute('data-slot', slot);
+    el.setAttribute('aria-pressed', 'false'); el.classList.add('has-info'); el.tabIndex = 0; el.setAttribute('role', 'button');
+    window.__itemWire(el); return true;
+  }
+  function itemTpl(name, cid) {
+    var c = PARTY.chars[cid], best = null;
+    for (var k in PARTY.items) if (PARTY.items[k].name === name) { if (!best) best = k; if (c && c.equip) for (var s in c.equip) if (c.equip[s] === k) return { tpl: k, slot: +s }; }
+    return best ? { tpl: best, slot: null } : null;
   }
   function itemIcon(name) { for (var k in PARTY.items) { var it = PARTY.items[k]; if (it.name === name && it.img) return it.img; } return null; }
   Array.prototype.forEach.call(document.querySelectorAll('.pill'), function (p) {
@@ -5533,10 +5581,12 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
     var nameEl = row.querySelector('.name'), slot = row.querySelector('.slot'); if (!nameEl || !slot) return;
     var name = nameEl.textContent.replace(/ · .*$/, '').trim(); var f = find(name); var icon = itemIcon(name) || (f && f.s.local);
     if (icon) slot.innerHTML = '<img src="' + icon + '" alt="">';
-    if (f) wire(nameEl, name);
+    if (f) { wire(nameEl, name); wire(slot, name); slot.setAttribute('aria-label', name + ': show details'); return; }
+    var cid = (row.closest('.sheet') || { id: '' }).id.replace('sheet-', ''), t = itemTpl(name, cid);
+    if (t) { itemWire(nameEl, t.tpl, cid, t.slot); itemWire(slot, t.tpl, cid, t.slot); slot.setAttribute('aria-label', name + ': show details'); }
   });
-  document.addEventListener('click', function () { if (pinned) { pinned = null; tip.hidden = true; } });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { pinned = null; tip.hidden = true; } });
+  document.addEventListener('click', function () { if (pinned) { pin(null); tip.hidden = true; } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { pin(null); tip.hidden = true; } });
   window.addEventListener('scroll', function () { if (!pinned) tip.hidden = true; }, { passive: true });
 })();
 /* Foldable acts in "Items to hunt": group Act-labelled item cards and let each act collapse. Remembered per viewer. */
@@ -5646,7 +5696,25 @@ var SAVE = { time: PARTY.saveTime };
   // party totals on the Journal
   var jc = document.getElementById('jcamp');
   if (jc) { var total = 0, sm = 0; Object.keys(CH).forEach(function (k) { total += (CH[k].kills || []).length; sm += (CH[k].smashed || []).length; });
-    var p = document.createElement('p'); p.className = 'jcamp'; p.textContent = 'Fights: ' + (PARTY.fights || 0) + '. Party body count: ' + total + '. Things smashed: ' + sm + '.'; jc.parentNode.insertBefore(p, jc.nextSibling); }
+    var p = document.createElement('p'); p.className = 'jcamp'; p.textContent = 'Fights: ' + (PARTY.fights || 0) + '. Party body count: ' + total + '. Things smashed: ' + sm + '.'; jc.parentNode.insertBefore(p, jc.nextSibling);
+    // Withers: what the save knows about him (his story flags; it keeps no count of resurrections or respecs)
+    var W = PARTY.withers, ws = function (s) { return s ? '<small>' + esc(s) + '</small>' : ''; };
+    if (W && W.met) {
+      var dead = Object.keys(CH).filter(function (k) { return PLAYERS.indexOf(k) < 0 && CH[k].maxHp && CH[k].hp === 0; }).map(first);
+      var COST = 200, need = dead.length * COST, gold = PARTY.partyGold || 0;
+      var rows = [
+        ['⚰', 'Met him', W.metAt || 'Yes', W.openedTomb ? ws('We opened his tomb' + (W.religionCheck ? ' and passed his Religion check.' : '.')) : ''],
+        ['☥', 'Raising the dead', W.canRaise ? 'Open for business' : 'Not yet', ws(W.canRaise ? COST + ' gold a head, no questions asked' + (W.discount ? ' (discount: ' + W.discount + ')' : '') + '.' : '')],
+        ['☠', 'Waiting on him', dead.length ? dead.join(', ') : 'Nobody', ws(dead.length ? (gold >= need ? 'We can afford it: ' + need + ' of our ' + gold + ' gold.' : 'We have ' + gold + ' of the ' + need + ' gold. Check the couch cushions.') : 'Everyone is still breathing.')],
+        ['⛺', 'Living at camp', W.atCamp ? 'Yes' : 'Not yet', ws(W.atCamp ? 'Lurking by the tents.' : 'Still haunting the crypt.')],
+        ['⚔', 'Hirelings bought', W.hirelings || 0, ws(W.hirelings ? 'Mercenaries from his ledger.' : 'We do our own fighting.')]
+      ];
+      var wd = document.createElement('div'); wd.className = 'withers';
+      wd.innerHTML = '<h3>Withers <small>The camp undertaker</small></h3><div class="fun frame">' + rows.map(function (x) {
+        return '<div class="funr"><span class="fl"><span class="fi" aria-hidden="true">' + x[0] + '︎</span>' + esc(x[1]) + '</span><b>' + esc(x[2]) + '</b><span class="fd">' + (x[3] || '') + '</span></div>';
+      }).join('') + '</div>';
+      p.parentNode.insertBefore(wd, p.nextSibling);
+    } }
 })();
 /* KEPT CURRENT FROM PARTY on every refresh (no hand edits): the portrait gallery, the "you're here" act in Items to hunt,
    the level-path marker, items someone already owns, and companions who are behind on levels. */
