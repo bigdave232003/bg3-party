@@ -551,8 +551,18 @@ section.collapsed .section-head h2 { color: var(--ink-dim); }
 .journal-hero { border-bottom: 1px solid var(--gold-lo); background: linear-gradient(180deg, #1a1420 0%, var(--void) 100%); }
 .journal-hero .wrap { padding-block: 44px 30px; }
 .journal-hero h1 { font-size: calc(clamp(36px, 6vw, 60px) * var(--fs, 1)); }
-.entries { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 20px; }
-.entry { padding: 12px 12px 16px; display: grid; gap: 10px; align-content: start; }
+.entries { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+/* "Since last time": one entry per refresh, screenshot on the left, the story on the right */
+.entry { padding: 16px; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 22px; align-items: start; }
+.entry .ebody { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.entry .shotwrap { display: grid; gap: 6px; }
+.entry .from { font-size: calc(13px * var(--fs, 1)); color: var(--ink-dim); font-style: italic; }
+.empty[hidden] { display: none; }
+.entry .tale p { margin: 0 0 10px; padding-inline: 4px; font-size: calc(16px * var(--fs, 1)); }
+.entry .qline { padding-inline: 4px; font-size: calc(15px * var(--fs, 1)); color: var(--ink-dim); margin: 0; }
+.entry .qline b { font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-right: 8px; }
+@media (max-width: 900px) { .entry { grid-template-columns: minmax(0, 1fr); } }
+html.dv15 .entry, html.dv2 .entry { grid-template-columns: minmax(0, 1fr); }
 .entry .shot {
   display: block; width: 100%; padding: 0; border: 1px solid var(--gold-lo); background: #000; cursor: zoom-in;
   aspect-ratio: 16 / 9; overflow: hidden;
@@ -1840,13 +1850,13 @@ h1 { overflow-wrap: normal; min-width: 0; }
       <p class="jcamp" id="jcamp"></p>
     </section>
     <section id="journal-entries" aria-live="polite">
-      <div class="section-head"><span class="glyph">◆</span><h2>Screenshots</h2></div>
+      <div class="section-head"><span class="glyph">◆</span><h2>Since last time</h2></div>
       <div class="entries" id="entries"></div>
       <div class="frame empty" id="journal-empty" hidden>
         <div class="polaroid"><div><span>✒</span>No pages yet</div></div>
         <div>
           <h3>The first page is waiting</h3>
-          <p>Every screenshot you add becomes a card here, with a title, where it happened and a note from each of you.</p>
+          <p>Every refresh adds a page here: what happened since the last save, with a screenshot.</p>
           <ol>
             <li>Take screenshots in game (on Steam, press <code>F12</code>).</li>
             <li>Drop them into <code>Desktop\bg3-party-site\inbox</code>, or send Claude the file path or a Google Drive link.</li>
@@ -5839,10 +5849,33 @@ var GALLERY = {
   });
 })();
 /* JOURNAL ENTRIES: newest first. Images live in journal/ next to index.html.
-   { title, date: "YYYY-MM-DD", act, place, img: "journal/file.jpg", caption,
-     notes: [ { who: "nyx" | "azurae" | "hagra", text } ] } */
+   One "Since last time" entry per refresh, from _build/journal.json:
+   { title, date: "YYYY-MM-DD", save, since, act, place, img: "journal/<file>.jpg", imgFrom: "save" | "player", caption,
+     story: [paragraphs], done: [quest titles], next: [quest titles], notes: [ { who: "nyx" | "azurae" | "hagra", text } ] } */
 var JOURNAL = [
-];
+  {
+    "title": "From the Nautiloid to the Overgrown Ruins",
+    "date": "2026-11-16",
+    "save": "AutoSave 6",
+    "since": "AutoSave 1",
+    "act": "Act 1",
+    "place": "Overgrown Ruins",
+    "img": "journal/2026-11-16-autosave-6.jpg",
+    "imgFrom": "save",
+    "caption": "The crypt beneath the ruins, moments before Withers climbed out of his tomb.",
+    "story": [
+      "Still aboard the nautiloid, we prised Shadowheart out of her pod and took her along. Lae'zel hurried us to the helm, where we fired the transponder, fought the devils and the mind flayer, and dropped through the planes as the ship came apart.",
+      "We woke on a beach among the wreckage. Shadowheart had been left there unconscious, Astarion turned up with a story and a knife, and Gale was hauled out of a waypoint by his hand. All three ended up at camp. A dying mind flayer at the crash site didn't stay alive for long: Nyx finished it off.",
+      "At the Overgrown Ruins we found Lae'zel caged by a gang of tieflings. Our Persuasion fell flat, but the tieflings told us where their grove was and left. We freed Lae'zel. Then Nyx's stray arrow turned her against us, and Gale ended it. She's waiting for Withers now.",
+      "Bandits loot the ruins upstairs; there was some noise and a pillar came down. In the crypt below we cleared out the skeletons, prised a scroll out of an old tome by magic and by force, and opened a tomb that turned out to have someone in it. Withers climbed out and we passed his Religion check.",
+      "Along the way Azurae let the tadpole do its thing once, and Shadowheart has decided she likes her."
+    ],
+    "done": ["Escape the Nautiloid", "Rescue the Illithids' Captive", "Free Lae'zel", "Explore the Ruins"],
+    "next": ["Find a Cure", "Get Help from Healer Nettie"],
+    "notes": []
+  }
+]
+;
 /* THE FALLEN: newest first. Portraits live in fallen/ next to index.html.
    { name, what, img, killer: "nyx" | "azurae" | "hagra" | "party", cause, act, place,
      epitaph, notes: [ { who, text } ] } */
@@ -5936,12 +5969,17 @@ var FALLEN = [
       lbImg.src = j.img; lbImg.alt = img.alt; lbTitle.textContent = j.title;
       if (lb.showModal) lb.showModal(); else lb.setAttribute('open', '');
     });
-    card.appendChild(btn);
+    var sw = el('div', 'shotwrap'); sw.appendChild(btn);
+    if (j.caption) sw.appendChild(el('p', 'from', j.caption));
+    card.appendChild(sw);
+    var body = el('div', 'ebody'); card.appendChild(body);
     var meta = el('div', 'meta');
-    [j.act, j.place, j.date && fmtDate(j.date)].forEach(function (m) { if (m) meta.appendChild(el('span', null, m)); });
-    card.appendChild(meta);
-    card.appendChild(el('h3', null, j.title));
-    if (j.caption) card.appendChild(el('p', 'cap', j.caption));
+    [j.act, j.place, j.date && fmtDate(j.date), j.since && j.save ? j.since + ' → ' + j.save : j.save].forEach(function (m) { if (m) meta.appendChild(el('span', null, m)); });
+    body.appendChild(meta);
+    body.appendChild(el('h3', null, j.title));
+    if (j.story && j.story.length) { var st = el('div', 'tale'); j.story.forEach(function (t) { st.appendChild(el('p', null, t)); }); body.appendChild(st); }
+    if (j.done && j.done.length) { var qd = el('p', 'qline'); qd.appendChild(el('b', null, 'Quests done')); qd.appendChild(document.createTextNode(j.done.join(' · '))); body.appendChild(qd); }
+    if (j.next && j.next.length) { var qn = el('p', 'qline'); qn.appendChild(el('b', null, 'Up next')); qn.appendChild(document.createTextNode(j.next.join(' · '))); body.appendChild(qn); }
     if (j.notes && j.notes.length) {
       var notes = el('div', 'notes');
       j.notes.forEach(function (n) {
