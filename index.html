@@ -725,11 +725,9 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .pm .bar2.xp i { background: linear-gradient(90deg, #7a6233, var(--gold)); }
 .pm .bl { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-family: var(--display); font-size: calc(12px * var(--fs, 1)); letter-spacing: .08em; color: var(--ink-dim); white-space: nowrap; }
 .pm .bl b { color: var(--ink); font-weight: 600; } .pm .bl b.hp { color: var(--blood-hi); }
-/* HP colour: red only when damaged, plain at full, green only above max (temporary hit points) */
+/* HP number colour: red only when damaged, plain at full, green only above max (temporary hit points). The bar is always red. */
 .pm .bl b.hp.full, .hpline b.hp-cur.full { color: var(--ink); }
 .pm .bl b.hp.over, .hpline b.hp-cur.over { color: #8fc27a; }
-.pm .bar2.full i { background: linear-gradient(90deg, #8a7a5c, #d8c9a8); }
-.pm .bar2.over i { background: linear-gradient(90deg, #3f6b34, #8fc27a); }
 .jcamp { margin-top: 12px; color: var(--ink-dim); font-size: calc(15px * var(--fs, 1)); }
 .jcamp a { color: var(--gold-hi); }
 .withers { margin-top: 22px; display: grid; grid-template-columns: calc(170px * var(--fs, 1)) minmax(0, 1fr); gap: 26px; align-items: start; padding: 16px 22px; }
