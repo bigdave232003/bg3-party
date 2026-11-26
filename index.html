@@ -573,12 +573,19 @@ section.collapsed .section-head h2 { color: var(--ink-dim); }
 .jtick { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--gold-lo); background: rgba(201,164,92,.06); cursor: pointer; }
 .jtick input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--gold); flex: none; }
 .jtick span { display: grid; gap: 2px; } .jtick b { font-family: var(--display); font-weight: 500; color: var(--gold-hi); } .jtick small { color: var(--ink-dim); font-size: calc(14px * var(--fs, 1)); }
+.jentry { border: 0; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 10px; }
+.jentry legend { font-family: var(--display); font-size: calc(12px * var(--fs, 1)); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); padding: 0; margin-bottom: 8px; }
+.jentry label { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--gold-lo); cursor: pointer; }
+.jentry label:has(input:checked) { border-color: var(--gold-hi); background: rgba(201,164,92,.1); }
+.jentry input { margin: 3px 0 0; accent-color: var(--gold); flex: none; }
+.jentry span { display: grid; gap: 2px; } .jentry b { font-family: var(--display); font-weight: 500; color: var(--gold-hi); } .jentry small { color: var(--ink-dim); font-size: calc(14px * var(--fs, 1)); }
 .jsend { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 18px; }
 .jword input { padding: 10px 12px; font: inherit; color: var(--ink); background: #0d0b10; border: 1px solid var(--gold-lo); width: 12em; max-width: 100%; }
 .jbtn { font-family: var(--display); font-size: calc(15px * var(--fs, 1)); letter-spacing: .08em; padding: 12px 24px; color: #120f14; background: var(--gold-hi); border: 1px solid var(--gold-hi); cursor: pointer; min-height: 44px; }
 .jbtn:disabled { opacity: .55; cursor: default; }
 .jstatus { color: var(--ink-dim); font-size: calc(15px * var(--fs, 1)); align-self: center; }
 .jstatus.ok { color: #8fc27a; } .jstatus.bad { color: var(--blood-hi); }
+.jwaiting { margin: 0; padding-top: 10px; border-top: 1px solid rgba(110,90,51,.35); color: var(--ink-dim); font-size: calc(15px * var(--fs, 1)); font-style: italic; }
 /* party submissions inside an entry: one picture each */
 .entry .fromparty { grid-column: 1 / -1; border-top: 1px solid rgba(110,90,51,.45); padding-top: 14px; display: grid; gap: 10px; }
 .entry .fromparty > b { font-family: var(--display); font-size: calc(12px * var(--fs, 1)); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
@@ -762,6 +769,16 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 .qlist.done .q { grid-template-columns: calc(56px * var(--fs, 1)) minmax(0, 1fr); align-items: center; }
 .qlist.done .q .qt::before { content: "✓ "; color: var(--gold); }
 .qlist.done .qd { display: none; }
+/* a quest with its parts tucked underneath, indented on a gold rail */
+.qgroup { display: grid; gap: 6px; }
+.qsubs { display: grid; gap: 6px; margin-left: calc(24px * var(--fs, 1)); padding-left: 12px; border-left: 2px solid var(--gold-lo); }
+.qs { display: grid; grid-template-columns: calc(56px * var(--fs, 1)) minmax(0, 1fr); gap: 12px; align-items: center; padding: 6px 8px; background: rgba(0,0,0,.2); border: 1px solid rgba(110,90,51,.5); text-decoration: none; color: inherit; }
+.qs:hover { border-color: var(--gold); }
+.qs img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 1px solid var(--gold-lo); display: block; }
+.qs .qt { font-family: var(--display); font-weight: 600; font-size: calc(14px * var(--fs, 1)); color: var(--gold-hi); }
+.qs .qd { font-size: calc(14px * var(--fs, 1)); color: var(--ink-dim); margin-top: 2px; }
+.qs.done { opacity: .7; }
+.qs.done .qt::before { content: "✓ "; color: var(--gold); }
 .jparty { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(280px * var(--fs, 1))), 1fr)); gap: 14px; }
 .pm { display: grid; grid-template-columns: calc(88px * var(--fs, 1)) minmax(0, 1fr); gap: 14px; align-items: stretch; padding: 10px; border: 1px solid var(--gold-lo); background: linear-gradient(180deg, var(--panel-2), var(--panel)); text-decoration: none; color: inherit; }
 .pm:hover { border-color: var(--gold); }
@@ -1977,10 +1994,15 @@ h1 { overflow-wrap: normal; min-width: 0; }
           <label class="jdrop" id="jdrop"><input type="file" name="image" accept="image/*" id="jfile" aria-label="Add a picture"><img id="jprev" alt="" hidden><span class="jdrop-txt" id="jdrop-txt"><b>Drop a screenshot here, or tap to choose</b><small>No picture? One is painted from your words, with everyone looking like themselves.</small></span></label>
         </div>
         <label class="jtick"><input type="checkbox" name="drawing"><span><b>Make it a hand drawing on old paper</b><small>Your screenshot, or the painted picture, redrawn in ink on yellowed paper.</small></span></label>
+        <fieldset class="jentry"><legend>Which entry is it for?</legend>
+          <label><input type="radio" name="entry" value="next" checked><span><b>The next one</b><small>The session we're playing now, written up at the next refresh.</small></span></label>
+          <label><input type="radio" name="entry" value="latest"><span><b>The newest one already up</b><small id="jlatest">The last "Since last time" entry.</small></span></label>
+        </fieldset>
         <div class="jsend">
           <button type="submit" class="jbtn" id="jbtn">Send to the journal</button>
           <span class="jstatus" id="jstatus" role="status"></span>
         </div>
+        <p class="jwaiting" id="jwaiting" hidden></p>
       </form>
     </section>
   </div>
@@ -2158,7 +2180,8 @@ var PARTY = {
    "places": 61,
    "waypoints": 3,
    "spotted": [],
-   "lore": 2
+   "lore": 2,
+   "eluded": []
   },
   "hagra": {
    "id": "hagra",
@@ -2351,7 +2374,9 @@ var PARTY = {
     "stage": 0,
     "with": []
    },
-   "crimes": [],
+   "crimes": [
+    "Theft from Irritated Tiefling (caught, warned ×2)"
+   ],
    "tadpole": 0,
    "places": 111,
    "waypoints": 3,
@@ -2362,7 +2387,10 @@ var PARTY = {
     "Tunnel Turret",
     "Tunnel Chest"
    ],
-   "lore": 2
+   "lore": 2,
+   "eluded": [
+    "Talked their way out with Irritated Tiefling"
+   ]
   },
   "laezel": {
    "id": "laezel",
@@ -2417,7 +2445,8 @@ var PARTY = {
    "places": 7,
    "waypoints": 0,
    "spotted": [],
-   "lore": 0
+   "lore": 0,
+   "eluded": []
   },
   "wyll": {
    "id": "wyll",
@@ -2496,7 +2525,8 @@ var PARTY = {
    "places": 3,
    "waypoints": 0,
    "spotted": [],
-   "lore": 0
+   "lore": 0,
+   "eluded": []
   },
   "nyx": {
    "id": "nyx",
@@ -2820,7 +2850,8 @@ var PARTY = {
    "places": 0,
    "waypoints": 0,
    "spotted": [],
-   "lore": 0
+   "lore": 0,
+   "eluded": []
   },
   "shadowheart": {
    "id": "shadowheart",
@@ -2930,7 +2961,8 @@ var PARTY = {
    "places": 16,
    "waypoints": 0,
    "spotted": [],
-   "lore": 0
+   "lore": 0,
+   "eluded": []
   },
   "gale": {
    "id": "gale",
@@ -3039,7 +3071,8 @@ var PARTY = {
    "places": 46,
    "waypoints": 0,
    "spotted": [],
-   "lore": 1
+   "lore": 1,
+   "eluded": []
   },
   "azurae": {
    "id": "azurae",
@@ -3348,7 +3381,8 @@ var PARTY = {
     "Tunnel Turret",
     "Tunnel Turret"
    ],
-   "lore": 2
+   "lore": 2,
+   "eluded": []
   }
  },
  "items": {
@@ -6610,6 +6644,7 @@ var SAVE = { time: PARTY.saveTime };
     var tiles = [
       ['☠', 'Kills', kills.length, listHtml(kills, 'Clean hands. For now.')],
       ['⚖', 'Crimes committed', crimes.length, listHtml(crimes, 'Spotless record. Suspicious.')],
+      ['☘', 'Got away with it', (c.eluded || []).length, listHtml(c.eluded, crimes.length ? 'Not yet' : 'Nothing to get away with')],
       ['⚒', 'Things smashed', smashed.length, listHtml(smashed, 'Nothing yet')],
       ['✺', 'Tadpole powers used', c.tadpole || 0, sm(c.tadpole ? 'The parasite approves.' : 'Resisting the urge')],
       ['⌖', 'Places explored', c.places || 0, sm('Areas walked into')],
@@ -6780,6 +6815,14 @@ var GALLERY = {
    Each player has their own word; the script turns it into who sent it (Dave W., Tom, Dave H.).
    Without a picture the message is required, because the picture is painted from it.
    SUBMIT_URL is the web app's /exec link; empty = not set up yet (the section stays hidden). */
+var INBOX_DONE = {
+ "note": "Submissions already handled. Anything sent before skipBefore was a setup test.",
+ "skipBefore": "2026-11-18T17:55:51Z",
+ "done": [
+  "20261125T235013Z-davew.json",
+  "20261126T002503Z-davew.json"
+ ]
+};   /* from _build/inbox-done.json: submissions already used by a refresh */
 var SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbz22UnGpm2AdaLjG2ZVI3WRXC-K_My9D7pdp4cSDL82ZjscXkcGcLt1-BupLbRTOyHU/exec';
 (function () {
   var f = document.getElementById('jadd'); if (!f) return;
@@ -6800,6 +6843,21 @@ var SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbz22UnGpm2AdaLjG2ZVI3W
   }
   var saved = store('jadd:word'); if (saved) { f.word.value = saved; checkWord(); }
   f.word.addEventListener('change', checkWord);
+  // "2 waiting for the next refresh": submissions the last refresh hasn't used yet (INBOX_DONE comes from the build)
+  var wait = document.getElementById('jwaiting');
+  function showWaiting() {
+    fetch(SUBMIT_URL).then(function (r) { return r.json(); }).then(function (res) {
+      if (!res.submissions) return;   // an older script version that can't list them: show nothing rather than a wrong count
+      var list = (res.submissions || []).filter(function (s) { return INBOX_DONE.done.indexOf(s.file) < 0 && (!INBOX_DONE.skipBefore || s.at >= INBOX_DONE.skipBefore); });
+      if (!list.length) { wait.hidden = false; wait.textContent = 'Nothing waiting yet. Anything you send shows up after the next refresh.'; return; }
+      var by = {}; list.forEach(function (s) { by[s.name] = (by[s.name] || 0) + 1; });
+      wait.hidden = false;
+      wait.textContent = list.length + (list.length === 1 ? ' message is' : ' messages are') + ' waiting for the next refresh (' + Object.keys(by).map(function (n) { return n + (by[n] > 1 ? ' ×' + by[n] : ''); }).join(', ') + ').';
+    }).catch(function () {});
+  }
+  showWaiting();
+  // name the newest entry so "the newest one" is unambiguous
+  setTimeout(function () { var jl = document.getElementById('jlatest'); if (jl && typeof JOURNAL !== 'undefined' && JOURNAL && JOURNAL[0]) jl.textContent = '“' + JOURNAL[0].title + '”, added at the next refresh.'; }, 0);   // JOURNAL is set by a later script
   function syncNeed() { need.hidden = !!picked; f.text.required = !picked; }
   syncNeed();
   function shrink(fl) {
@@ -6831,13 +6889,14 @@ var SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbz22UnGpm2AdaLjG2ZVI3W
     if (!picked && !text) { say("No picture, so tell us what happened: that's what gets painted.", 'bad'); f.text.focus(); return; }
     btn.disabled = true; say('Sending…');
     (picked ? shrink(picked) : Promise.resolve(null)).then(function (img) {
-      return post({ word: f.word.value.trim(), text: text, drawing: f.drawing.checked, image: img });
+      var entry = (Array.prototype.filter.call(f.entry, function (r) { return r.checked; })[0] || {}).value || 'next';
+      return post({ word: f.word.value.trim(), text: text, drawing: f.drawing.checked, image: img, entry: entry, entryTitle: entry === 'latest' && JOURNAL[0] ? JOURNAL[0].title : '' });
     }).then(function (res) {
       if (!res.ok) throw new Error(res.error || 'Not sent.');
       store('jadd:word', f.word.value.trim());
       f.text.value = ''; f.drawing.checked = false; picked = null; file.value = ''; prev.hidden = true; syncNeed();
       txt.innerHTML = '<b>Drop a screenshot here, or tap to choose</b><small>No picture? One is painted from your words, with everyone looking like themselves.</small>';
-      say('Sent, ' + res.name + '. It will be in the next entry.', 'ok');
+      say('Sent, ' + res.name + '. It will be in the next entry.', 'ok'); showWaiting();
     }).catch(function (err) { say(err.message || 'Not sent. Try again.', 'bad'); }).then(function () { btn.disabled = false; });
   });
 })();
@@ -6881,7 +6940,7 @@ var JOURNAL = [
   "story": [
    "We finished what we started at the ruins: the bandits upstairs are no longer a problem. Then we followed the road to the Emerald Grove and arrived just as a goblin raiding party hit the gate. We fought it out alongside the tieflings and a stranger with one eye and a lot of flair. Not everyone on the tiefling side made it. Somewhere in all this Astarion took down a bugbear.",
    "Inside, tempers were high: Zevlor's tieflings and a band of adventurers squared up over a goblin prisoner, and we talked them down without anyone getting stabbed. The prisoner, Sazza, we quietly set free, though someone did have to step in front of a crossbow to manage it. Astarion's opening move with her was to take a swing, so the record shows one assault on a captive goblin. Gale was impressed by the rest of us.",
-   "We saved Arabella from Kagha's snake court, caught a pack of tiefling pickpockets and got our things back, and picked up a theft warning of our own on the way. One of us made friends with a squirrel. Nettie offered help with the parasite and handed over a cup of poison, which we drank, and then she sent us after Halsin. Auntie Ethel gave us a potion and an invitation to her teahouse. That's fine. Everything's fine.",
+   "We saved Arabella from Kagha's snake court, caught a pack of tiefling pickpockets and got our things back, and then Hagra was caught twice with her hand in a tiefling's pocket and talked her way out of it. One of us made friends with a squirrel. Nettie offered help with the parasite and handed over a cup of poison, which we drank, and then she sent us after Halsin. Auntie Ethel gave us a potion and an invitation to her teahouse. That's fine. Everything's fine.",
    "Nyx sat in on Alfira's songwriting and helped her find her song. Wyll, the Blade of Frontiers, the stranger from the gate, joined us at camp. Astarion took Gale's place on the road. Withers has moved into camp, so the dead now have options.",
    "All three of us reached level 3. Nyx joined the College of Swords, Hagra took the Pact of the Chain, and Azurae picked up the Key of the Ancients and a shield. Hagra somehow came out of the grove with 476 gold, and the tadpole gave everyone their first nightmare."
   ],
@@ -6904,6 +6963,12 @@ var JOURNAL = [
     "who": "davew",
     "text": "Nyx helped a fellow bard discover a song, really long cutscene",
     "img": "journal/2026-11-25-davew-1.jpg",
+    "kind": "drawing"
+   },
+   {
+    "who": "davew",
+    "text": "Storm, Song and Steel. And Chompy",
+    "img": "journal/2026-11-26-davew-2.jpg",
     "kind": "drawing"
    }
   ]
@@ -7204,9 +7269,25 @@ b.addEventListener('click',function(){var n=L[(L.indexOf(cur())+1)%L.length];r.c
     return '<a class="q" href="' + esc(q.wiki) + '" target="_blank" rel="noopener">' + (q.img ? '<img src="' + esc(q.img) + '" alt="" loading="lazy">' : '<span></span>') +
       '<div>' + (done ? '' : kind) + '<div class="qt">' + esc(q.title) + '</div>' + (q.desc ? '<div class="qd">' + esc(q.desc) + '</div>' : '') + '</div></a>';
   }
+  // Parts of a quest sit inside it, finished ones ticked, so the list stays short as quests branch out.
+  var act = Q.active || [], fin = Q.completed || [], isAct = {}, isFin = {}, kids = {};
+  act.forEach(function (q) { isAct[q.id] = 1; }); fin.forEach(function (q) { isFin[q.id] = 1; });
+  act.concat(fin).forEach(function (q) { if (q.parent && (isAct[q.parent] || isFin[q.parent])) (kids[q.parent] = kids[q.parent] || []).push({ q: q, done: !!isFin[q.id] }); });
+  function sub(k) {
+    return '<a class="qs' + (k.done ? ' done' : '') + '" href="' + esc(k.q.wiki) + '" target="_blank" rel="noopener">' + (k.q.img ? '<img src="' + esc(k.q.img) + '" alt="" loading="lazy">' : '<span></span>') +
+      '<div><div class="qt">' + esc(k.q.title) + '</div>' + (k.q.desc && !k.done ? '<div class="qd">' + esc(k.q.desc) + '</div>' : '') + '</div></a>';
+  }
+  function group(q, done) {
+    var ks = (kids[q.id] || []).slice().sort(function (a, b) { return a.done - b.done; });   // open parts first, finished ones after
+    if (!ks.length) return card(q, done);
+    var qq = /^Main quest\. Subquests:/.test(q.desc || '') ? Object.assign({}, q, { desc: '' }) : q;   // the wiki's list of parts is redundant here
+    return '<div class="qgroup">' + card(qq, done) + '<div class="qsubs">' + ks.map(sub).join('') + '</div></div>';
+  }
+  var topAct = act.filter(function (q) { return !(q.parent && (isAct[q.parent] || isFin[q.parent])); });
+  var topFin = fin.filter(function (q) { return !(q.parent && (isAct[q.parent] || isFin[q.parent])); });
   var qa = document.getElementById('q-active'), qd = document.getElementById('q-done');
-  if (qa) qa.innerHTML = (Q.active || []).map(function (q) { return card(q, false); }).join('') || '<p class="jcamp">Nothing on the go. Suspicious.</p>';
-  if (qd) qd.innerHTML = (Q.completed || []).slice(0, 5).map(function (q) { return card(q, true); }).join('') || '<p class="jcamp">Nothing finished yet.</p>';
+  if (qa) qa.innerHTML = topAct.map(function (q) { return group(q, false); }).join('') || '<p class="jcamp">Nothing on the go. Suspicious.</p>';
+  if (qd) qd.innerHTML = topFin.slice(0, 5).map(function (q) { return group(q, true); }).join('') || '<p class="jcamp">Nothing finished yet.</p>';
 
   var XPT = [0, 0, 300, 900, 2700, 6500, 13000, 21000, 30000, 42000, 56000, 76000, 100000];
   var SUB = { CircleOfStars: 'Circle of the Stars', BladesingingSchool: 'Bladesinging', Hexblade: 'Hexblade', TrickeryDomain: 'Trickery', SwordsCollege: 'College of Swords', Swashbuckler: 'Swashbuckler' };
