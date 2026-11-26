@@ -461,7 +461,7 @@ section.collapsed .section-head h2 { color: var(--ink-dim); }
 .bslot img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,.6)); }
 .bslot svg { width: 60%; height: 60%; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .bslot .cnt { position: absolute; right: 3px; bottom: 1px; font-family: var(--display); font-size: calc(12px * var(--fs, 1)); font-weight: 600; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; font-variant-numeric: tabular-nums; }
-.bslot.uncommon { border-color: #4f8f42; } .bslot.rare { border-color: #3f6fa6; } .bslot.veryrare { border-color: #7a4fa6; }
+.bslot.rar-uncommon { border-color: #4f8f42; } .bslot.rar-rare { border-color: #3f6fa6; } .bslot.rar-veryrare { border-color: #7a4fa6; } .bslot.rar-legendary { border-color: #b8862e; } .bslot.rar-story { border-color: #a0703a; }
 .camp { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(118px * var(--fs, 1))), 1fr)); gap: 10px; margin-top: 10px; }
 .camp-label { grid-column: 1 / -1; font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
 .tip .t-count { font-family: var(--display); font-size: calc(12px * var(--fs, 1)); color: var(--gold-hi); margin-left: 6px; }
@@ -518,9 +518,12 @@ section.collapsed .section-head h2 { color: var(--ink-dim); }
 }
 .tip.pinned { pointer-events: auto; }
 .tip .t-name { font-family: var(--display); font-weight: 600; font-size: calc(18px * var(--fs, 1)); letter-spacing: .03em; line-height: 1.2; }
-.tip .t-name.common { color: #efe6d2; }
-.tip .t-name.uncommon { color: #7fd36a; }
-.tip .t-name.rare { color: #6ea6e0; }
+.tip .t-name.rar-story { color: #e0a85a; }
+.tip .t-name.rar-common { color: #efe6d2; }
+.tip .t-name.rar-uncommon { color: #7fd36a; }
+.tip .t-name.rar-rare { color: #6ea6e0; }
+.tip .t-name.rar-veryrare { color: #c79bf0; }
+.tip .t-name.rar-legendary { color: #e8b35a; }
 .tip .t-type { font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); margin-top: 3px; }
 .tip .t-big { margin-top: 10px; font-family: var(--display); font-size: calc(15px * var(--fs, 1)); color: var(--ink-dim); }
 .tip .t-big b { font-size: calc(26px * var(--fs, 1)); color: var(--gold-hi); margin-right: 6px; font-variant-numeric: tabular-nums; }
@@ -865,6 +868,8 @@ h1 { overflow-wrap: normal; min-width: 0; }
 </div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="12" r="3.5"/><path d="M11 12h10M17 12v3M20 12v2.5"/></symbol>
+  <symbol id="i-pouch" viewBox="0 0 24 24"><path d="M8 6h8l-1.5 2.5c3 1.5 5 4.5 5 8 0 2.5-3.5 4-7.5 4s-7.5-1.5-7.5-4c0-3.5 2-6.5 5-8Z"/><path d="M9.5 8.5h5"/></symbol>
   <symbol id="i-sword" viewBox="0 0 24 24"><path d="M20 4l-1 4.2L9.6 17.4 6.6 14.4 15.8 5.2Z"/><path d="M5.5 12.5l6 6"/><path d="M7.8 16.2L4 20"/></symbol>
   <symbol id="i-dagger" viewBox="0 0 24 24"><path d="M18 6l-.6 3L11 15.4 8.6 13 15 6.6Z"/><path d="M7.2 11.6l5.2 5.2"/><path d="M9.4 14.6 5 19"/></symbol>
   <symbol id="i-greatsword" viewBox="0 0 24 24"><path d="M21 3l-.8 3.6L8.4 18.4 5.6 15.6 17.4 3.8Z"/><path d="M4.4 13.6l6 6"/><path d="M6.8 17.2 3 21"/><path class="flame" d="M16 4.5c.5 1.6 2 2 2.6 3.4M12.5 8c.6 1.5 2 2 2.5 3.3"/></symbol>
@@ -2845,12 +2850,20 @@ var PARTY = {
     "stage": 0,
     "with": []
    },
-   "crimes": [],
+   "crimes": [
+    "Assault on Lae'zel (caught, warned ×2)",
+    "Freeing the goblin prisoner (caught, warned ×2)",
+    "Assault (no damage) on Lae'zel",
+    "Assault on Goblin Scout",
+    "Attacking someone helpless on Scout Captive"
+   ],
    "tadpole": 0,
-   "places": 0,
-   "waypoints": 0,
-   "spotted": [],
-   "lore": 0,
+   "places": 121,
+   "waypoints": 3,
+   "spotted": [
+    "Secret door button"
+   ],
+   "lore": 2,
    "eluded": []
   },
   "shadowheart": {
@@ -5069,11 +5082,11 @@ var PARTY = {
    "stats": "OBJ_MindflayerBulb_Spiked"
   },
   "88754118-7c80-4eba-9191-02ad5f6c213c": {
-   "name": "Rune Tablet",
-   "wiki": false,
-   "img": null,
+   "name": "Clasped Book (Moonrise Towers)",
+   "wiki": true,
+   "img": "icons/items/88754118.png",
    "rarity": "common",
-   "type": "Item",
+   "type": "Books",
    "ac": null,
    "acBonus": null,
    "damage": null,
@@ -5081,9 +5094,9 @@ var PARTY = {
    "versatile": null,
    "props": [],
    "actions": [],
-   "weight": null,
-   "price": null,
-   "quote": null,
+   "weight": "0.5 kg",
+   "price": "14 gp",
+   "quote": "This book is redolent with the enticing smell of paper and ink.",
    "desc": null,
    "special": null,
    "stealthDis": false,
@@ -5711,11 +5724,11 @@ var PARTY = {
    "stats": "CHA_CompassSpear"
   },
   "5ca50a09-548b-4134-a0c7-98f10e8d69e6": {
-   "name": "BUG Morningstar",
-   "wiki": false,
-   "img": null,
+   "name": "Morningstar",
+   "wiki": true,
+   "img": "icons/items/5ca50a09.png",
    "rarity": "common",
-   "type": "One-handed weapon",
+   "type": "Morningstars",
    "ac": null,
    "acBonus": null,
    "damage": "1d8",
@@ -5728,8 +5741,8 @@ var PARTY = {
     "Concussive Smash"
    ],
    "weight": "1.8 kg",
-   "price": null,
-   "quote": null,
+   "price": "50 gp",
+   "quote": "More of this morningstar's iron spikes are bent than not.",
    "desc": null,
    "special": null,
    "stealthDis": false,
@@ -6312,7 +6325,7 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
   function mod(s) { return Math.floor((s - 10) / 2); }
   function sgn(n) { return (n >= 0 ? '+ ' : '- ') + Math.abs(n); }
   function first(c) { return c.name.split(' ')[0]; }
-  function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', 'very rare': 'Very rare', legendary: 'Legendary' }[r] || 'Common'; }
+  function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', 'very rare': 'Very rare', legendary: 'Legendary', story: 'Story item' }[r] || 'Common'; }
   function forLine(it, slot, c) {
     if (!c || !c.stats || slot == null) return '';
     var st = c.stats, str = mod(st[0]), dex = mod(st[1]), cha = mod(st[5]);
@@ -6333,7 +6346,7 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
   }
   function tipHTML(tpl, slot, cid, count) {
     var it = IT[tpl]; if (!it) return ''; var c = CH[cid]; var ex = EXTRA[it.stats] || {};
-    var head = '<div class="t-name ' + it.rarity.replace(' ', '') + '">' + esc(it.name) + (count > 1 ? '<span class="t-count">×' + count + '</span>' : '') + '</div><div class="t-type">' + esc(it.type) + ' · ' + rarityLabel(it.rarity) + '</div>';
+    var head = '<div class="t-name rar-' + it.rarity.replace(' ', '') + '">' + esc(it.name) + (count > 1 ? '<span class="t-count">×' + count + '</span>' : '') + '</div><div class="t-type">' + esc(it.type) + ' · ' + rarityLabel(it.rarity) + '</div>';
     var x = it.img ? '<div class="t-headrow"><img src="' + it.img + '" alt=""><div>' + head + '</div></div>' : head;
     if (it.damage) x += '<div class="t-big"><b>' + esc(it.damage) + '</b>' + esc(it.dtype || '') + (ex.dmg ? ' <span class="fire">' + esc(ex.dmg) + '</span>' : '') + '</div>';
     else if (it.ac) x += '<div class="t-big"><b>' + (/Shield/.test(it.type) ? '+' + esc(it.ac) : esc(it.ac)) + '</b>Armour Class' + (/Light/.test(it.type) ? ' + Dex' : /Medium/.test(it.type) ? ' + Dex (max 2)' : '') + '</div>';
@@ -6416,7 +6429,11 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
     var lab = document.createElement('div'); lab.className = 'camp-label'; lab.textContent = 'Camp clothes'; box.appendChild(lab);
     CAMP.forEach(function (s) { box.appendChild(slotEl(cid, null, s[1], s[2], c.equip[s[0]])); });
   });
-  var TYPE_GLYPH = function (it) { return /Armour|Clothing/.test(it.type) ? 'jerkin' : /Boots|Shoes/.test(it.type) ? 'boots' : /bow/i.test(it.type) ? 'bow' : it.damage ? 'sword' : 'e-amulet'; };
+  var TYPE_GLYPH = function (it) { return /Armour|Clothing/.test(it.type) ? 'jerkin' : /Boots|Shoes/.test(it.type) ? 'boots' : /bow/i.test(it.type) ? 'bow' : it.damage ? 'sword' : /Key/i.test(it.type + ' ' + it.name) ? 'key' : /Amulet|Necklace/i.test(it.type) ? 'e-amulet' : 'pouch'; };
+  // an item with no icon of its own borrows one from another item with the same name ("TOOL Thieves Tools Closed" -> Thieves' Tools)
+  var plain = function (s) { return String(s || '').toLowerCase().replace(/^(tool|book|den|bug|toy)\s+/, '').replace(/\s+(closed|open|worn|used)$/, '').replace(/[^a-z]/g, ''); };
+  var BY_NAME = {}; Object.keys(IT).forEach(function (k) { if (IT[k].img) BY_NAME[plain(IT[k].name)] = IT[k].img; });
+  Object.keys(IT).forEach(function (k) { if (!IT[k].img && BY_NAME[plain(IT[k].name)]) IT[k].img = BY_NAME[plain(IT[k].name)]; });
   Array.prototype.forEach.call(document.querySelectorAll('.bag[data-bag]'), function (box) {
     var cid = box.getAttribute('data-bag'), c = CH[cid]; if (!c) return;
     var groups = [], byTpl = {};
@@ -6424,7 +6441,7 @@ var EXTRA = { "MAG_Fire_AlwaysDippedInFire_Greatsword": { dmg: '+ 1d4 Fire', pro
     var weight = 0;
     groups.forEach(function (g) {
       var it = IT[g.tpl]; var w = parseFloat(it.weight) || 0; if (!/Gold/.test(it.name)) weight += w * g.n;
-      var el = document.createElement('button'); el.type = 'button'; el.className = 'bslot ' + it.rarity.replace(' ', '');
+      var el = document.createElement('button'); el.type = 'button'; el.className = 'bslot rar-' + it.rarity.replace(' ', '');
       el.innerHTML = (it.img ? '<img src="' + it.img + '" alt="">' : svg(TYPE_GLYPH(it))) + (g.n > 1 ? '<span class="cnt">' + g.n + '</span>' : '');
       el.setAttribute('data-tpl', g.tpl); el.setAttribute('data-char', cid); el.setAttribute('data-count', g.n); el.setAttribute('aria-pressed', 'false');
       el.setAttribute('aria-label', it.name + (g.n > 1 ? ', ' + g.n : '') + '. Show details'); wire(el); box.appendChild(el);
@@ -6939,7 +6956,7 @@ var JOURNAL = [
   "caption": "Back on the road through the forest, with Astarion along this time.",
   "story": [
    "We finished what we started at the ruins: the bandits upstairs are no longer a problem. Then we followed the road to the Emerald Grove and arrived just as a goblin raiding party hit the gate. We fought it out alongside the tieflings and a stranger with one eye and a lot of flair. Not everyone on the tiefling side made it. Somewhere in all this Astarion took down a bugbear.",
-   "Inside, tempers were high: Zevlor's tieflings and a band of adventurers squared up over a goblin prisoner, and we talked them down without anyone getting stabbed. The prisoner, Sazza, we quietly set free, though someone did have to step in front of a crossbow to manage it. Astarion's opening move with her was to take a swing, so the record shows one assault on a captive goblin. Gale was impressed by the rest of us.",
+   "Inside, tempers were high: Zevlor's tieflings and a band of adventurers squared up over a goblin prisoner, and we talked them down without anyone getting stabbed. The prisoner, Sazza, we set free, though someone did have to step in front of a crossbow to manage it, and Nyx got a stern warning for it. Before that, both Astarion and Nyx took a swing at her, so the record shows two assaults on a captive goblin. Gale was impressed anyway.",
    "We saved Arabella from Kagha's snake court, caught a pack of tiefling pickpockets and got our things back, and then Hagra was caught twice with her hand in a tiefling's pocket and talked her way out of it. One of us made friends with a squirrel. Nettie offered help with the parasite and handed over a cup of poison, which we drank, and then she sent us after Halsin. Auntie Ethel gave us a potion and an invitation to her teahouse. That's fine. Everything's fine.",
    "Nyx sat in on Alfira's songwriting and helped her find her song. Wyll, the Blade of Frontiers, the stranger from the gate, joined us at camp. Astarion took Gale's place on the road. Withers has moved into camp, so the dead now have options.",
    "All three of us reached level 3. Nyx joined the College of Swords, Hagra took the Pact of the Chain, and Azurae picked up the Key of the Ancients and a shield. Hagra somehow came out of the grove with 476 gold, and the tadpole gave everyone their first nightmare."
