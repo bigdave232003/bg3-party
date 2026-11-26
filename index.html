@@ -824,6 +824,12 @@ html.dv15 .switcher .wrap, html.dv2 .switcher .wrap { flex-wrap: wrap; overflow-
 @media (max-width: 900px) { .fun { grid-template-columns: minmax(0, 1fr); padding: 6px 14px; } }
 html.dv15 .fun, html.dv2 .fun { grid-template-columns: minmax(0, 1fr); }
 nav.toc a.line-start::before { display: none; }
+.fung { columns: 2; column-gap: 36px; padding: 14px 22px 6px; }
+@media (max-width: 900px) { .fung { columns: 1; padding: 8px 14px 2px; } }
+html.dv15 .fung, html.dv2 .fung { columns: 1; }
+.fgrp { break-inside: avoid; margin-bottom: 18px; }
+.fgrp h3 { margin: 0 0 2px; padding-bottom: 5px; border-bottom: 1px solid var(--gold); font-family: var(--display); font-weight: 600; font-size: calc(13px * var(--fs, 1)); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+.fgrp .funr:last-child { border-bottom: 0; }
 .funr { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 9.5em) minmax(0, 1fr); gap: 4px 14px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid rgba(110,90,51,.35); overflow-wrap: normal; word-break: normal; min-width: 0; }
 .funr .fl { font-family: var(--display); font-size: calc(11px * var(--fs, 1)); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); }
 .funr .fi { display: inline-block; width: 1.5em; color: var(--gold); font-size: calc(14px * var(--fs, 1)); letter-spacing: 0; }
@@ -6704,29 +6710,37 @@ var SAVE = { time: PARTY.saveTime };
     else if (c.approval) Object.keys(c.approval).forEach(function (p) { var v = c.approval[p]; if (v > 0 && (!fan || v > fan.v)) fan = { who: first(p), v: v }; });
     var bagN = (c.bag || []).length;
     var sm = function (s) { return s ? '<small>' + esc(s) + '</small>' : ''; };
-    var tiles = [
+    var groupsOf = [
+      ['Fights', [
       ['☠', 'Kills', kills.length, listHtml(kills, 'Clean hands. For now.')],
+      ['⚒', 'Things smashed', smashed.length, listHtml(smashed, 'Nothing yet')]]],
+      ['Crime', [
       ['⚖', 'Crimes committed', crimes.length, listHtml(crimes, 'Spotless record. Suspicious.')],
       ['⚠', 'Times caught', (c.caught || []).length, listHtml(c.caught, crimes.length ? 'Never seen doing it' : 'Nothing to catch')],
       ['☘', 'Talked their way out', (c.talked || []).length, listHtml(c.talked, (c.caught || []).length ? 'Took the telling-off' : 'No need, yet')],
       ['¤', 'Bribes paid', (c.bribes || []).length, (c.bribes || []).length ? listHtml(c.bribes.map(function (b) { return 'To ' + b; }), '') :
-        sm(c.bribeAsked ? 'Asked for ' + c.bribeAsked.gold + ' gold' + (c.bribeAsked.by ? ' by ' + c.bribeAsked.by : '') + ', kept it' : 'Not a coin')],
-      ['⚒', 'Things smashed', smashed.length, listHtml(smashed, 'Nothing yet')],
+        sm(c.bribeAsked ? 'Asked for ' + c.bribeAsked.gold + ' gold' + (c.bribeAsked.by ? ' by ' + c.bribeAsked.by : '') + ', kept it' : 'Not a coin')]]],
+      ['Odds & ends', [
       ['✺', 'Tadpole powers used', c.tadpole || 0, sm(c.tadpole ? 'The parasite approves.' : 'Resisting the urge')],
+      ['⛀', 'Gold in pocket', (c.gold || 0) + ' gold', ''],
+      ['⛁', 'Pack mule', bagN + ' items', sm('In the backpack')]]],
+      ['Exploring', [
       ['⌖', 'Places explored', c.places || 0, sm('Areas walked into')],
       ['⚑', 'Waypoints found', c.waypoints || 0, ''],
       ['◉', 'Hidden things spotted', (c.spotted || []).length, listHtml(c.spotted, 'Nothing hidden found yet')],
-      ['✎', 'Lore checks passed', c.lore || 0, sm(c.lore ? 'History, Religion, Arcana and friends' : '')],
-      ['⛀', 'Gold in pocket', (c.gold || 0) + ' gold', ''],
+      ['✎', 'Lore checks passed', c.lore || 0, sm(c.lore ? 'History, Religion, Arcana and friends' : '')]]],
+      ['Romance & friends', [
       ['♥', 'Furthest base', BASES[rom.stage] || BASES[0], sm(rom.with.length ? 'With ' + rom.with.join(', ') : BASE_SUB[rom.stage] || '')],
       ['❦', 'Romance partners', rom.with.length, sm(rom.with.length ? rom.with.join(', ') : 'None yet')],
-      ['♛', PLAYERS.indexOf(id) >= 0 ? 'Biggest fan' : 'Favourite', fan ? fan.who : 'Nobody, yet', sm(fan ? 'Approval +' + fan.v : '')],
-      ['⛁', 'Pack mule', bagN + ' items', sm('In the backpack')]
+      ['♛', PLAYERS.indexOf(id) >= 0 ? 'Biggest fan' : 'Favourite', fan ? fan.who : 'Nobody, yet', sm(fan ? 'Approval +' + fan.v : '')]]],
     ];
+    var row = function (x) {
+      return '<div class="funr"><span class="fl"><span class="fi" aria-hidden="true">' + x[0] + '︎</span>' + esc(x[1]) + '</span><b>' + esc(x[2]) + '</b><span class="fd">' + (x[3] || '') + '</span></div>';
+    };
     var sec = document.createElement('section'); sec.id = id + '-fun';
     sec.innerHTML = '<div class="section-head"><span class="glyph">◆</span><h2>Fun stats</h2></div>' +
-      '<div class="fun frame">' + tiles.map(function (x) {
-        return '<div class="funr"><span class="fl"><span class="fi" aria-hidden="true">' + x[0] + '︎</span>' + esc(x[1]) + '</span><b>' + esc(x[2]) + '</b><span class="fd">' + (x[3] || '') + '</span></div>';
+      '<div class="fung frame">' + groupsOf.map(function (g) {
+        return '<div class="fgrp"><h3>' + esc(g[0]) + '</h3>' + g[1].map(row).join('') + '</div>';
       }).join('') + '</div>';
     var eq = sheet.querySelector('main .wrap > section .equip');
     var gear = (eq && eq.closest('section')) || sheet.querySelector('main .wrap > section');
