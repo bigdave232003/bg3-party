@@ -2186,7 +2186,11 @@ var PARTY = {
    "waypoints": 3,
    "spotted": [],
    "lore": 2,
-   "eluded": []
+   "eluded": [],
+   "caught": [],
+   "talked": [],
+   "bribes": [],
+   "bribeAsked": null
   },
   "hagra": {
    "id": "hagra",
@@ -2395,7 +2399,19 @@ var PARTY = {
    "lore": 2,
    "eluded": [
     "Talked their way out with Irritated Tiefling"
-   ]
+   ],
+   "caught": [
+    "Theft from Irritated Tiefling",
+    "Theft from Irritated Tiefling"
+   ],
+   "talked": [
+    "Talked round Irritated Tiefling"
+   ],
+   "bribes": [],
+   "bribeAsked": {
+    "gold": 460,
+    "by": "Irritated Tiefling"
+   }
   },
   "laezel": {
    "id": "laezel",
@@ -2451,7 +2467,11 @@ var PARTY = {
    "waypoints": 0,
    "spotted": [],
    "lore": 0,
-   "eluded": []
+   "eluded": [],
+   "caught": [],
+   "talked": [],
+   "bribes": [],
+   "bribeAsked": null
   },
   "wyll": {
    "id": "wyll",
@@ -2531,7 +2551,11 @@ var PARTY = {
    "waypoints": 0,
    "spotted": [],
    "lore": 0,
-   "eluded": []
+   "eluded": [],
+   "caught": [],
+   "talked": [],
+   "bribes": [],
+   "bribeAsked": null
   },
   "nyx": {
    "id": "nyx",
@@ -2864,7 +2888,16 @@ var PARTY = {
     "Secret door button"
    ],
    "lore": 2,
-   "eluded": []
+   "eluded": [],
+   "caught": [
+    "Assault on Lae'zel",
+    "Assault on Lae'zel",
+    "Freeing the goblin prisoner",
+    "Freeing the goblin prisoner"
+   ],
+   "talked": [],
+   "bribes": [],
+   "bribeAsked": null
   },
   "shadowheart": {
    "id": "shadowheart",
@@ -2975,7 +3008,11 @@ var PARTY = {
    "waypoints": 0,
    "spotted": [],
    "lore": 0,
-   "eluded": []
+   "eluded": [],
+   "caught": [],
+   "talked": [],
+   "bribes": [],
+   "bribeAsked": null
   },
   "gale": {
    "id": "gale",
@@ -3085,7 +3122,11 @@ var PARTY = {
    "waypoints": 0,
    "spotted": [],
    "lore": 1,
-   "eluded": []
+   "eluded": [],
+   "caught": [],
+   "talked": [],
+   "bribes": [],
+   "bribeAsked": null
   },
   "azurae": {
    "id": "azurae",
@@ -3395,7 +3436,11 @@ var PARTY = {
     "Tunnel Turret"
    ],
    "lore": 2,
-   "eluded": []
+   "eluded": [],
+   "caught": [],
+   "talked": [],
+   "bribes": [],
+   "bribeAsked": null
   }
  },
  "items": {
@@ -6632,7 +6677,8 @@ var SAVE = { time: PARTY.saveTime };
   try { el.textContent = new Date(SAVE.time * 1000).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }); } catch (e) {}
 })();
 /* FUN STATS: all from the save (PARTY, built by extract.js + fun.js). Kills/smashed from death records; crimes, tadpole uses,
-   places, waypoints and romance from the story database. The game keeps no history of downs, deaths, knock-outs, bribes or jail. */
+   places, waypoints and romance from the story database. The game keeps no history of downs, deaths, knock-outs or jail. Times caught = DB_Crime_WarningCount,
+   talked out / bribes = successful DB_CrimeBribes_PairEludes rows, bribe asked = DB_CrimeBribes_GetBribe_NPC (latest only). */
 (function () {
   if (typeof PARTY === 'undefined') return;
   var CH = PARTY.chars, PLAYERS = ['nyx', 'azurae', 'hagra'];
@@ -6661,7 +6707,10 @@ var SAVE = { time: PARTY.saveTime };
     var tiles = [
       ['☠', 'Kills', kills.length, listHtml(kills, 'Clean hands. For now.')],
       ['⚖', 'Crimes committed', crimes.length, listHtml(crimes, 'Spotless record. Suspicious.')],
-      ['☘', 'Got away with it', (c.eluded || []).length, listHtml(c.eluded, crimes.length ? 'Not yet' : 'Nothing to get away with')],
+      ['⚠', 'Times caught', (c.caught || []).length, listHtml(c.caught, crimes.length ? 'Never seen doing it' : 'Nothing to catch')],
+      ['☘', 'Talked their way out', (c.talked || []).length, listHtml(c.talked, (c.caught || []).length ? 'Took the telling-off' : 'No need, yet')],
+      ['¤', 'Bribes paid', (c.bribes || []).length, (c.bribes || []).length ? listHtml(c.bribes.map(function (b) { return 'To ' + b; }), '') :
+        sm(c.bribeAsked ? 'Asked for ' + c.bribeAsked.gold + ' gold' + (c.bribeAsked.by ? ' by ' + c.bribeAsked.by : '') + ', kept it' : 'Not a coin')],
       ['⚒', 'Things smashed', smashed.length, listHtml(smashed, 'Nothing yet')],
       ['✺', 'Tadpole powers used', c.tadpole || 0, sm(c.tadpole ? 'The parasite approves.' : 'Resisting the urge')],
       ['⌖', 'Places explored', c.places || 0, sm('Areas walked into')],
